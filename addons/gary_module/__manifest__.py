@@ -28,7 +28,8 @@
         'security/res_student_group.xml',
         'views/views.xml',
         'views/templates.xml',
-'views/menu.xml'
+        'views/menu.xml',
+        'reports/res_student_report.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

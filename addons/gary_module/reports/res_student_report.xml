@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_student_id_card">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Student Report</h2>
+            <div>
+              <p>Name: <span t-field="o.name" /></p>
+            </div>
+            <div>
+              <p>Nickname: <span t-field="o.nickname" /></p>
+            </div>
+            <div>
+              <p>School: <span t-field="o.school_id.name" /></p>
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+
+  <record id="report_student" model="ir.actions.report">
+    <!-- button 的名字 -->
+    <field name="name">列印資料</field>
+    <!-- 從什麼資料庫取得資料 -->
+    <field name="model">res.student</field>
+    <field name="report_type">qweb-pdf</field>
+    <!-- report_name　的格式 : module name + 上面 template 的 ID -->
+    <!-- 邏輯　：　report action 將資料丟入 templete 做 render -->
+    <field name="report_name">gary_module.report_student_id_card</field> 
+    <!-- 輸出的 pdf 檔名 -->
+    <field name="print_report_name">'學生資訊 %s' % (object.name) +'.pdf'</field>
+  </record>
+
+</odoo>

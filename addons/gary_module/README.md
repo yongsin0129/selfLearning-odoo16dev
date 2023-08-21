@@ -452,6 +452,94 @@ P.S. 注意 CURD 權限必須至少有一個是 True，不能以全否定的方�
     </record>
 ```
 
+## Report
+
+Odoo提供建立report的功能，透過wkhtmltopdf來輸出pdf
+
+先增加檔案 /reports/res_student_report.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_student_id_card">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Student Report</h2>
+            <div>
+              <p>Name: <span t-field="o.name" /></p>
+            </div>
+            <div>
+              <p>Nickname: <span t-field="o.nickname" /></p>
+            </div>
+            <div>
+              <p>School: <span t-field="o.school_id.name" /></p>
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+
+  <record id="report_student" model="ir.actions.report">
+    <!-- button 的名字 -->
+    <field name="name">列印資料</field>
+    <!-- 從什麼資料庫取得資料 -->
+    <field name="model">res.student</field>
+    <field name="report_type">qweb-pdf</field>
+    <!-- report_name　的格式 : module name + 上面 template 的 ID -->
+    <!-- 邏輯　：　report action 將資料丟入 templete 做 render -->
+    <field name="report_name">gary_module.report_student_id_card</field> 
+    <!-- 輸出的 pdf 檔名 -->
+    <field name="print_report_name">'學生資訊 %s' % (object.name) +'.pdf'</field>
+  </record>
+
+</odoo>
+```
+
+### Template
+
+- Odoo 的Template代表畫面，是用Qweb撰寫，將xml轉譯成html
+
+- id：自定義，不重複即可，會跟　actions.report 做 binding
+
+- t：以t開頭的為Qweb寫法，基本上一開始寫的是一樣的
+
+- t-call="web.external_layout ：提供我們基本的header與footer <t t-foreach="docs" t-as="o"> ：代表遍歷整個records，像是python的 for o in records:
+
+- t-as 是幫你的model的名稱
+
+- t-field :配上之前設定的model object可以拿到底下的field
+
+只要知道Qweb代表的意義，可以寫出基本的畫面，另外也有t-if 等邏輯判斷幫助report更加完善
+
+### Report
+report就是匯出檔案的設定
+
+- id：自定義，不重複即可
+
+- model="ir.actions.report" : report action 的寫法
+
+- model：關聯的model name
+
+- name：顯示的Action button name
+
+- report_type ：輸出模式，預設為qweb-pdf ，另外還有qweb-html ，會以網頁的方式呈現
+
+- name：串連template的設定，格式為 module.template_id
+
+- print_report_name ：輸出 pdf 檔案名稱
+
+設定好之後我們將reports加入__manifest__.py裡
+
+```
+'data': [
+        'reports/student_report.xml'
+		...
+    ],
+```
+
 ## 參考資料
 
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
