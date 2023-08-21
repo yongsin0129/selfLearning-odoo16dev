@@ -29,3 +29,7 @@ sudo ss：ss 命令用於查詢系統的網絡連接信息。它可以顯示當�
 # search id from specific ps and kill
 sudo lsof -t -i:8069
 sudo kill <PID>
+
+## 常用指令
+- 使用腳本架新增模組 `python3 odoo-bin scaffold my_module ../addons/`
+  

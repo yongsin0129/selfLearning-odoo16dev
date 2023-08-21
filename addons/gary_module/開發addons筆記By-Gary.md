@@ -101,11 +101,10 @@ class ResStudent(models.Model):
 
 [官網手冊-view](https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html)
 
-修改 views.xml 就可以在主選單看到 "學生模組" ，並且點擊後有跳轉的動作
-
-跳轉後的 tree view 可以用 <record model="ir.ui.view"></record> 來控制
-
-點擊新增後需要顯示 form view ，<form><group></group></form>    P.S. 不加 <group> 會無法顯示 column title
+- 修改 views.xml 就可以在主選單看到 "學生模組" ，並且點擊後有跳轉的動作
+- 跳轉後的 tree view 可以用 <record model="ir.ui.view"></record> 來控制
+- 點擊新增後需要顯示 form view ，<form><group></group></form>    P.S. 不加 <group> 會無法顯示 column title
+- id="my_module.menu_1" 這邊的 my_module 要改成自已 module 的名字
 
 ```python
 <odoo>
@@ -200,6 +199,10 @@ class ResStudent(models.Model):
   </data>
 </odoo>
 ```
+
+## security
+
+- 記得權限要去 __manifest__ 檔案中打開，才能讓 view 讀取 model
 
 ## 參考資料
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
