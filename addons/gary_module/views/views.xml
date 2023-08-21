@@ -46,6 +46,29 @@
       </field>
     </record>
 
+    <!-- search view -->
+
+    <record id="view_res_student_search" model="ir.ui.view">
+      <field name="name">res.student.search</field>
+      <field name="model">res.student</field>
+      <field name="arch" type="xml">
+        <search string="Student Search">
+          <!-- <field> 對應搜尋邏輯，此處我們將name與nickname兩個作為搜尋field -->
+          <field name="name" filter_domain="[('name', 'like', self)]" />
+
+          <field name="nickname" filter_domain="[('nickname', 'like', self)]" />
+
+          <!-- <filter>對應過濾邏輯，我們將is_active欄位作為過濾欄位，domain內是過濾邏輯，string則是顯示的字串 -->
+          <filter name='is_active' string="IsActive" domain="[('is_active', '=', True)]" />
+
+            <!-- <group>對應分類邏輯，我們將性別作為分類依據 -->
+          <group string="Group By">
+            <filter name='gender' string='Gender' context="{'group_by':'gender'}" />
+          </group>
+        </search>
+      </field>
+    </record>
+
     <!-- actions opening views on models -->
 
     <record model="ir.actions.act_window" id="student_action">

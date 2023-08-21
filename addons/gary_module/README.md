@@ -1,4 +1,4 @@
-# 開發addons筆記By-Gary
+# 開發 addons 筆記 By-Gary
 
 ## 架構說明
 
@@ -105,10 +105,10 @@ class ResStudent(models.Model):
 
 - 修改 views.xml 就可以在主選單看到 "學生模組" ，並且點擊後有跳轉的動作
 - 跳轉後的 tree view 可以用 <record model="ir.ui.view"></record> 來控制
-- 點擊新增後需要顯示 form view ，<form><group></group></form>    P.S. 不加 <group> 會無法顯示 column title
+- 點擊新增後需要顯示 form view ，<form><group></group></form> P.S. 不加 <group> 會無法顯示 column title
 - id="my_module.menu_1" 這邊的 my_module 要改成自已 module 的名字
 
-```python
+```xml
 <odoo>
   <data>
     <!-- explicit list view definition -->
@@ -202,9 +202,37 @@ class ResStudent(models.Model):
 </odoo>
 ```
 
+## Search View
+
+```xml
+    <!-- search view -->
+
+    <record id="view_res_student_search" model="ir.ui.view">
+      <field name="name">res.student.search</field>
+      <field name="model">res.student</field>
+      <field name="arch" type="xml">
+        <search string="Student Search">
+          <!-- <field> 對應搜尋邏輯，此處我們將name與nickname兩個作為搜尋field -->
+          <field name="name" filter_domain="[('name', 'like', self)]" />
+
+          <field name="nickname" filter_domain="[('nickname', 'like', self)]" />
+
+          <!-- <filter>對應過濾邏輯，我們將is_active欄位作為過濾欄位，domain內是過濾邏輯，string則是顯示的字串 -->
+          <filter name='is_active' string="IsActive" domain="[('is_active', '=', True)]" />
+
+            <!-- <group>對應分類邏輯，我們將性別作為分類依據 -->
+          <group string="Group By">
+            <filter name='gender' string='Gender' context="{'group_by':'gender'}" />
+          </group>
+        </search>
+      </field>
+    </record>
+```
+
 ## security
 
-- 記得權限要去 __manifest__ 檔案中打開，才能讓 view 讀取 model
+- 記得權限要去 **manifest** 檔案中打開，才能讓 view 讀取 model
 
 ## 參考資料
+
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
