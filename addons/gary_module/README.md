@@ -1,3 +1,5 @@
+# 開發addons筆記By-Gary
+
 ## 架構說明
 
 ODOO 是一個以 MVC(Model、View、Controller)架構為主體的服務
