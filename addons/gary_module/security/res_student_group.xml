@@ -1,0 +1,24 @@
+<odoo>
+  <data>
+    <record model="ir.module.category" id="module_category_education">
+      <field name="name">Education</field>
+      <field name="description">About education</field>
+    </record>
+
+    <record model="res.groups" id="group_school_teacher">
+      <field name="name">Teacher</field>
+      <field name="category_id" ref="module_category_education" />
+    </record>
+
+    <record model="res.groups" id="group_school_director">
+      <field name="name">Director</field>
+      <field name="category_id" ref="module_category_education" />
+    </record>
+
+    <record model="res.groups" id="group_school_volunteer">
+      <field name="name">Volunteer</field>
+      <field name="category_id" ref="module_category_education" />
+    </record>
+
+  </data>
+</odoo>

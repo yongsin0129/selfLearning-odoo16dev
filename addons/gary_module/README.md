@@ -233,6 +233,75 @@ class ResStudent(models.Model):
 
 - 記得權限要去 **manifest** 檔案中打開，才能讓 view 讀取 model
 
+| id                 | name        | model_id:id       | group_id:id     | perm_read | perm_write | perm_create | perm_unlink |
+| ------------------ | ----------- | ----------------- | --------------- | --------- | ---------- | ----------- | ----------- |
+| access_res_student | res.student | model_res_student | base.group_user | 1         | 1          | 1           | 1           |
+
+- id : 權限 id，不重複即可
+
+- name : 權限名稱
+
+- model*id:id :規則為 "model*" + Model name，意指對哪個 model 設定權限
+
+- group_id:id : 對哪個 group 設定權限，為設定的 XML ID，現在是設定給所有人都能讀取，此 group 在 base/security/base_group 內。
+
+- 權限設定 1 代表給予權限，反之 0 代表無法操作此命令
+
+- perm_read ：讀取 model 的權限
+
+- perm_create ：增加 model 資料的權限
+
+- perm_write：更改 model 資料的權限
+
+- perm_unlink：刪除 model 資料的權限
+
+設定完之後我們可以在 ODOO 的 Access right 內找到，我們的設定檔，記得開啟開發者模式。
+
+開發者模式 > 設定 > 技術 > 安全 - 存取權
+
+### security groups
+
+目標 : 設定主任、老師、志工三個群組
+
+在 security 底下增加 res_student_group.xml，記得**mainfest**內要填入 path
+
+```xml title="res_student_group.xml"
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_category_education">
+            <field name="name">Education</field>
+            <field name="description">About education</field>
+        </record>
+
+        <record model="res.groups" id="group_school_teacher">
+            <field name="name">Teacher</field>
+            <field name="category_id" ref="module_category_education"/>
+        </record>
+
+        <record model="res.groups" id="group_school_director">
+            <field name="name">Director</field>
+            <field name="category_id" ref="module_category_education"/>
+        </record>
+
+        <record model="res.groups" id="group_school_volunteer">
+            <field name="name">Volunteer</field>
+            <field name="category_id" ref="module_category_education"/>
+        </record>
+
+    </data>
+</odoo>
+
+```
+
+- category 的 model 為 ir.module.category 
+- id 不重複即可
+- 定義group，model固定為 res.groups
+- category_id : 設定的category record
+
+記得**mainfest**內要填入 path
+
+重新啟動後，在 Settings/Users & Companies/Groups 內便能看到三個 group
+
 ## 參考資料
 
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
