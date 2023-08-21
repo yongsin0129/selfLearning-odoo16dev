@@ -1,7 +1,5 @@
 odoo-16.0/
-addons/*
-!addons/manay-addons-folder
-!addons/my_module
+addons/example
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
