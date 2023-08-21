@@ -316,6 +316,47 @@ access_res_student_volunteer,access_res_student_volunteer,model_res_student,grou
 
 - 這邊的 group_id:id 綁定 security/res_student_group.xml 的 record id
 - 現在三個 group 已經生效，可以根據不同的角色給於不同 group 的權限
+### Security Record rules
+
+如果說Access right是針對model的CURD，那麼Record rules就是針對每筆資料去設定權限，例如我們不想讓志工層級的人看到休學學生的資料，即使他擁有讀的權限，透過domain，我們便可以設定規則。
+
+```xml
+<record model="ir.rule" id="volunteer_rule">
+    <field name="name">Volunteer Rule</field>
+    <field name="model_id" ref="model_res_student"/>
+    <field name="domain_force">[('is_active', '=', True)]</field>
+    <field name="groups" eval="[(4, ref('group_school_volunteer'))]"/> 
+    <field name="perm_read" eval="True"/>
+    <field name="perm_create" eval="False"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_unlink" eval="False"/>
+</record>
+```
+
+- model：固定是ir.rule
+
+- id：規則id，不重複即可
+
+- name：規則名稱，自定義即可
+
+- model_id：關聯之model，同之前設定access right，規則為 "model_"+ Model Name
+
+- domain_force：對 model 內資料的過濾條件，我們只希望還在學的學生出現在志工觀看名單上，另外可以用'|'或"&"去過濾複數條件
+
+- groups：此規則套用的group，這裡填入我們昨天設定的志工group id
+
+- perm_read：讀取資料權限
+
+- perm_create：建立資料權限
+
+- perm_write：修改資料權限
+
+- perm_unlink：刪除資料權限
+
+P.S. 注意CURD權限必須至少有一個是True，不能以全否定的方式設定權限
+
+重啟，我們便會看到新增的Record rules
+開發者模式 > 設定 > 技術 > 安全 - 記錄規則
 
 ## 參考資料
 
