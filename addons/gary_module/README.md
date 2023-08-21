@@ -293,10 +293,10 @@ class ResStudent(models.Model):
 
 ```
 
-- category 的 model 為 ir.module.category 
+- category 的 model 為 ir.module.category
 - id 不重複即可
-- 定義group，model固定為 res.groups
-- category_id : 設定的category record
+- 定義 group，model 固定為 res.groups
+- category_id : 設定的 category record
 
 記得**mainfest**內要填入 path
 
@@ -316,16 +316,17 @@ access_res_student_volunteer,access_res_student_volunteer,model_res_student,grou
 
 - 這邊的 group_id:id 綁定 security/res_student_group.xml 的 record id
 - 現在三個 group 已經生效，可以根據不同的角色給於不同 group 的權限
+
 ### Security Record rules
 
-如果說Access right是針對model的CURD，那麼Record rules就是針對每筆資料去設定權限，例如我們不想讓志工層級的人看到休學學生的資料，即使他擁有讀的權限，透過domain，我們便可以設定規則。
+如果說 Access right 是針對 model 的 CURD，那麼 Record rules 就是針對每筆資料去設定權限，例如我們不想讓志工層級的人看到休學學生的資料，即使他擁有讀的權限，透過 domain，我們便可以設定規則。
 
 ```xml
 <record model="ir.rule" id="volunteer_rule">
     <field name="name">Volunteer Rule</field>
     <field name="model_id" ref="model_res_student"/>
     <field name="domain_force">[('is_active', '=', True)]</field>
-    <field name="groups" eval="[(4, ref('group_school_volunteer'))]"/> 
+    <field name="groups" eval="[(4, ref('group_school_volunteer'))]"/>
     <field name="perm_read" eval="True"/>
     <field name="perm_create" eval="False"/>
     <field name="perm_write" eval="False"/>
@@ -333,17 +334,17 @@ access_res_student_volunteer,access_res_student_volunteer,model_res_student,grou
 </record>
 ```
 
-- model：固定是ir.rule
+- model：固定是 ir.rule
 
-- id：規則id，不重複即可
+- id：規則 id，不重複即可
 
 - name：規則名稱，自定義即可
 
-- model_id：關聯之model，同之前設定access right，規則為 "model_"+ Model Name
+- model*id：關聯之 model，同之前設定 access right，規則為 "model*"+ Model Name
 
 - domain_force：對 model 內資料的過濾條件，我們只希望還在學的學生出現在志工觀看名單上，另外可以用'|'或"&"去過濾複數條件
 
-- groups：此規則套用的group，這裡填入我們昨天設定的志工group id
+- groups：此規則套用的 group，這裡填入我們昨天設定的志工 group id
 
 - perm_read：讀取資料權限
 
@@ -353,10 +354,103 @@ access_res_student_volunteer,access_res_student_volunteer,model_res_student,grou
 
 - perm_unlink：刪除資料權限
 
-P.S. 注意CURD權限必須至少有一個是True，不能以全否定的方式設定權限
+P.S. 注意 CURD 權限必須至少有一個是 True，不能以全否定的方式設定權限
 
-重啟，我們便會看到新增的Record rules
+重啟，我們便會看到新增的 Record rules
 開發者模式 > 設定 > 技術 > 安全 - 記錄規則
+
+## Menu
+
+完成 Model、View、Controller(非必須)、Security 設定後，接下來我們要做的是讓主選單有我們的模組和連結到裡面。
+
+增加一個 views/menu.xml
+
+```xml
+<odoo>
+  <!-- actions opening views on models -->
+
+  <record model="ir.actions.act_window" id="student_action">
+    <field name="name">Student</field>
+    <field name="res_model">res.student</field>
+    <field name="view_mode">tree,form,kanban</field>
+  </record>
+
+  <!-- Top menu item -->
+  <!-- action="student_action" 可加可不加，app 預設連結到上面的 action : model="ir.actions.act_window"-->
+  <menuitem name="學生模組" id="menu_student_view" />
+
+  <!-- menu categories -->
+
+  <menuitem name="Menu 1" id="gary_module.menu_1" parent="menu_student_view" />
+  <menuitem name="Menu 2" id="gary_module.menu_2" parent="menu_student_view" />
+
+  <!-- actions -->
+
+  <menuitem name="List" id="gary_module.menu_1_list" parent="gary_module.menu_1"
+    action="student_action" />
+  <!-- <menuitem name="Server to list" id="gary_module" parent="gary_module.menu_2"
+    action="gary_module.action_server"/> -->
+</odoo>
+```
+### Action
+- act_window為odoo中action之一，此動作顧名思義就是單純開一個視窗，我們只要設定好相關屬性，便會依照設定執行
+
+- model：固定為ir.actions.act_window
+
+- id ：自定義，不重複即可
+
+- name ：跳轉頁面名稱
+
+- res_model：對應model
+
+- view_mode：所需要的view類型
+
+### Menu
+- `<menuitem>` ：主選單標籤
+
+- id ：自定義的menu id，不重複即可
+
+- name ：在選單顯示的名稱
+
+- action ：對應上述action id，表示執行此action
+
+如此一來我們便把Menu與windows action做連結，別忘了要將此路徑加到__manifest__.py中:
+```py
+'data': [
+        'views/menu.xml',      
+         ....
+    ],
+```
+
+另外新增一個 kanban view
+
+```xml
+ <record id="view_res_student_kanban" model="ir.ui.view">
+      <field name="name">res.student.kanban</field>
+      <field name="model">res.student</field>
+      <field name="arch" type="xml">
+        <!-- 以卡片方式呈現，以標籤包覆，而內部template以qweb撰寫。 -->
+        <kanban>
+          <field name="name" />
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_global_click">
+                <div class="oe_kanban_details">
+                  <strong class="o_kanban_record_title">
+                    <span>大名:<field name="name" />
+                    </span>
+                    <br />
+                    <span>綽號:<field name="nickname" />
+                    </span>
+                  </strong>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+```
 
 ## 參考資料
 

@@ -46,6 +46,32 @@
       </field>
     </record>
 
+    <record id="view_res_student_kanban" model="ir.ui.view">
+      <field name="name">res.student.kanban</field>
+      <field name="model">res.student</field>
+      <field name="arch" type="xml">
+        <!-- 以卡片方式呈現，以標籤包覆，而內部template以qweb撰寫。 -->
+        <kanban>
+          <field name="name" />
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_global_click">
+                <div class="oe_kanban_details">
+                  <strong class="o_kanban_record_title">
+                    <span>大名:<field name="name" />
+                    </span>
+                    <br />
+                    <span>綽號:<field name="nickname" />
+                    </span>
+                  </strong>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
     <!-- search view -->
 
     <record id="view_res_student_search" model="ir.ui.view">
@@ -61,22 +87,13 @@
           <!-- <filter>對應過濾邏輯，我們將is_active欄位作為過濾欄位，domain內是過濾邏輯，string則是顯示的字串 -->
           <filter name='is_active' string="IsActive" domain="[('is_active', '=', True)]" />
 
-            <!-- <group>對應分類邏輯，我們將性別作為分類依據 -->
+          <!-- <group>對應分類邏輯，我們將性別作為分類依據 -->
           <group string="Group By">
             <filter name='gender' string='Gender' context="{'group_by':'gender'}" />
           </group>
         </search>
       </field>
     </record>
-
-    <!-- actions opening views on models -->
-
-    <record model="ir.actions.act_window" id="student_action">
-      <field name="name">Student</field>
-      <field name="res_model">res.student</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-
 
     <!-- server action to the one above -->
     <!--
@@ -93,22 +110,6 @@
       </field>
     </record>
 -->
-
-    <!-- Top menu item -->
-    <!-- action="student_action" 可加可不加，app 預設連結到上面的 action : model="ir.actions.act_window"-->
-    <menuitem name="學生模組" id="menu_student_view" />
-
-    <!-- menu categories -->
-
-    <menuitem name="Menu 1" id="gary_module.menu_1" parent="menu_student_view" />
-    <menuitem name="Menu 2" id="gary_module.menu_2" parent="menu_student_view" />
-
-    <!-- actions -->
-
-    <menuitem name="List" id="gary_module.menu_1_list" parent="gary_module.menu_1"
-      action="student_action" />
-    <!-- <menuitem name="Server to list" id="gary_module" parent="gary_module.menu_2"
-    action="gary_module.action_server"/> -->
 
   </data>
 </odoo>
