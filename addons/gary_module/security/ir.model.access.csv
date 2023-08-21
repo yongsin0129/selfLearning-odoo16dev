@@ -1,2 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_gary_module_gary_module,gary_module.gary_module,model_res_student,base.group_user,1,1,1,1
+
+access_res_student_director,access_res_student_director,model_res_student,group_school_director,1,1,1,1,
+
+access_res_student_teacher,access_res_student_teacher,model_res_student,group_school_teacher,1,1,1,0
+
+access_res_student_volunteer,access_res_student_volunteer,model_res_student,group_school_volunteer,1,0,0,0

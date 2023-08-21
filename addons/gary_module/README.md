@@ -265,7 +265,7 @@ class ResStudent(models.Model):
 
 在 security 底下增加 res_student_group.xml，記得**mainfest**內要填入 path
 
-```xml title="res_student_group.xml"
+```xml title="security/res_student_group.xml"
 <odoo>
     <data>
         <record model="ir.module.category" id="module_category_education">
@@ -301,6 +301,21 @@ class ResStudent(models.Model):
 記得**mainfest**內要填入 path
 
 重新啟動後，在 Settings/Users & Companies/Groups 內便能看到三個 group
+
+重寫 ir.model.access.csv
+
+```csv
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_res_student_director,access_res_student,res.student,model_res_student,group_school_director,1,1,1,1,
+
+access_res_student_teacher,access_res_student_teacher,model_res_student,group_school_teacher,1,1,1,0
+
+access_res_student_volunteer,access_res_student_volunteer,model_res_student,group_school_volunteer,1,0,0,0
+```
+
+- 這邊的 group_id:id 綁定 security/res_student_group.xml 的 record id
+- 現在三個 group 已經生效，可以根據不同的角色給於不同 group 的權限
 
 ## 參考資料
 
