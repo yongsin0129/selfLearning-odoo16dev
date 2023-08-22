@@ -867,6 +867,40 @@ def _init_score(self):
 
 reference : [Cron Job Not Working As Expected. Version 16](https://www.odoo.com/zh_TW/forum/bang-zhu-1/cron-job-not-working-as-expected-version-16-213625)
 
+## 額外補充
+
+### odoo16 env
+
+ORM 存儲各種上下文數據，包括 database cursor（用於數據庫查詢），當前用戶（用於訪問權限驗證），當前上下文（用於存儲任意元數據）和緩存。
+每個 record set 都有一個 environment，可以使用 env 進行訪問，提供對以下內容的訪問：
+
+當前用戶（user）
+指標（cr）
+超級用戶標誌（su）
+上下文（context）
+
+example : 
+```
+> > > self.env['sale.order']
+sale.order()
+
+> > > self.env['sale.order'].search([('state','=','draft')])
+sale.order(4,7,9,17,33,)
+```
+
+- env.ref(xml_id, raise_if_not_found=True)
+
+The record matching the XML id will be returned:
+
+example : 
+```
+> > > self.env.ref('base.user_admin')
+res.users(2,)
+```
+[ODOO的重要对象ENVIRONMENT (ENV) 简析](https://www.sunpop.cn/odoo_environment_env/)
+
+[Odoo 16 Development Book - Working With env Variable](https://www.cybrosys.com/odoo/odoo-books/odoo-16-development/server-side-development/working-with-env-variable/)
+
 ## 參考資料
 
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
