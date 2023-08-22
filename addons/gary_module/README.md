@@ -867,6 +867,70 @@ def _init_score(self):
 
 reference : [Cron Job Not Working As Expected. Version 16](https://www.odoo.com/zh_TW/forum/bang-zhu-1/cron-job-not-working-as-expected-version-16-213625)
 
+
+## 流水號
+
+圖文較多，有需要時直接參考 gary 文章 [Day21 Let's ODOO: 流水號](https://ithelp.ithome.com.tw/articles/10278172)
+
+## 繼承 Model 來增加欄位
+
+>繼承Model來新增Field和更改Views裡面的屬性，用這種方法可以省去自己建立一個Module，並且可以直接使用內部方法。
+
+e.g: 在company底下增加預算欄位
+
+1. 增加 /models/res_company.py
+```py
+# -*- coding: utf-8 -*-
+from odoo import models, fields, api, _
+
+class Company(models.Model):
+    _inherit = 'res.company'
+
+    budget = fields.Monetary(string="Budget")
+```
+
+!!! 繼承 res.company ，並且增加想要的欄位即可，欄位會增加在res_company的表裡面，
+!!! 記住不要設定model name否則會新增另一張表。
+
+2. 匯入剛剛寫的model在/models/init.py
+```py
+from . import res_company
+```
+3. 新增檔案 /views/res_company_views.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_form_inherit_gary" model="ir.ui.view">
+        <field name="name">res.company.form.inherit.gary</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page/group/group/field[@name='website']" position="after">
+                <field name="budget"/>
+            </xpath>
+            <xpath expr="//notebook/page/group/group/field[@name='vat']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+```
+
+> 透過xpath去尋找website field位置，並用 after 就會把插入的field放在website之後
+> 除此之外，下面也寫一個用attributes 的範例 (消失不顯示)
+> 可以修改特定的field屬性，其他還有before 、replace 用法。
+
+4. 將views加入__manifest__.py裡
+```
+'data': [
+	'views/res_company_views.xml',
+	...
+]
+```
+
+重啟後，我們就可以看到新增欄位在 website 欄位後方，vat (稅) 欄位也消失不見了
+
 ## 額外補充
 
 ### odoo16 env

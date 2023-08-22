@@ -33,7 +33,8 @@
         'data/res_student.xml',
         'data/res.student.csv',
         'data/student_paperformat.xml',
-        'data/res_student_cron.xml'
+        'data/res_student_cron.xml',
+        'views/res_company_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
