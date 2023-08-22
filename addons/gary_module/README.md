@@ -668,6 +668,135 @@ student_westing,"Westing Ting","Westing","male","2000-01-01",False
 
 >重新啟動以後我們在 Setting → 技術 -> 報表 -> 紙張格式 內可以看到我們設定的名字，點選後並儲存
 
+## controller
+
+>對URL endpoint處理，以下用兩支API來做範例：
+
+```py
+import json
+
+from odoo import _
+from odoo.http import Controller, Response, request, route
+from odoo.tools import date_utils
+
+class StudtentController(Controller):
+    
+    @route('/student/all', methods=['GET'], type='http', auth='public', cors='*', csrf=False)
+    def get_student_list(self):
+        data = []
+        students = request.env['res.student'].sudo().search([])
+        for student in students:
+            val = {
+                'id': student.id,
+                'name': student.name,
+                'nickname': student.nickname,
+                'gender': student.gender
+            }
+            data.append(val)
+        result = {'data': data}
+        body = json.dumps(result, default=date_utils.json_default)
+        return Response(
+            body, status=200,
+            headers=[('Content-Type', 'application/json'), ('Content-Length', len(body))]
+        )   
+
+    @route('/student', methods=['POST'], type='json', auth='public', cors='*', csrf=False)
+    def create_student(self):
+        student_data = json.loads(request.httprequest.data)
+        val = {
+            'name': student_data.get('name'),
+            'nickname': student_data.get('nickname'),
+            'gender': student_data.get('gender'),
+            'birthday': student_data.get('birthday')
+        }
+
+        student_obj = request.env['res.student'].sudo()
+        student_obj.create(val)
+        result = {'code': 200, 'message': 'Created Successfully'}
+        body = json.dumps(result, default=date_utils.json_default)
+        return Response(
+            body, status=200,
+            headers=[('Content-Type', 'application/json'), ('Content-Length', len(body))]
+        )
+```
+### @route 裝飾器 (端點、參數)
+
+- 第一個參數代表指定的endpoint，所以request url 就是 `http://<localhost:8069>/student/all`
+- methods：代表requests method，這裡是陣列也可以寫入多個requests method，透過ODOO內的request.httprequest.method 分辨後再做想要做的事，以第一隻API為例我們只限定於GET method。
+- type: 只有json和http兩種，差別在於content type是不是application/json，來限制使用者請求，若不符規定則會返回錯誤。
+- auth: 有user、public、none三種，user限定需要使用者在登入狀態，常用在頁面引導，而這邊使用的API則是不需要經由登入認證故寫為public ，
+- cors: 開通跨域的參數
+- crsf: 預設為True ，也就是crsf token認證，這邊我們用API寫法時要改為False
+
+### First API
+
+>查詢學生資料，透過request.env['res.student'] ，尋找此model底下資料
+>在search內沒有加上domain所以會找出所有資料
+>另外我們可以控制return給使用者的參數，這裡只給id、名字、綽號、性別，性別是會給當初設定的Key值
+>最後要注意的是，返回的值必須為JSON Object。
+
+### Second API
+
+- URL endpoint: `http://<localhost:8069>/student`
+- request body
+```json 
+{
+	"name": "黃小華",
+	"nickname": "阿華",
+	"gender": "male",
+	"birthday": "2020-02-01"
+}
+```
+
+
+## Logging
+
+>於controllers/main.py 內匯入 logging，並增加log：
+
+```py
+
+# 初始化 logger
+import logging
+_logger = logging.getLogger(__name__)
+
+
+class StudentController(Controller):
+
+	@route('/student', methods=['POST'], type='json', auth='public', cors='*', csrf=False)
+	    def create_student(self):
+
+          # 印出自己想要的層級與字串
+          # info、debug、error、warning、critical
+	        _logger.info('---------> %s \n', request.httprequest.data)
+
+          # 原本的 create_student 內容
+	        student_data = json.loads(request.httprequest.data)
+	        val = {
+	            'name': student_data.get('name'),
+	            'nickname': student_data.get('nickname'),
+	            'gender': student_data.get('gender'),
+	            'birthday': student_data.get('birthday')
+	        }	
+	
+	        student_obj = request.env['res.student'].sudo()
+	        student_obj.create(val)
+	        result = {'code': 200, 'message': 'Created Successfully'}
+	        body = json.dumps(result, default=date_utils.json_default)
+	        return Response(
+	            body, status=200,
+	            headers=[('Content-Type', 'application/json'), ('Content-Length', len(body))]
+	        )
+```
+
+>寫好以後別忘了在 odoo.conf 內設定路徑，否則只有在terminal才會看到
+
+```
+logfile = /var/log/odoo/odoo.log
+...
+```
+
+>如此一來，當我們打API的時候便會顯示log，並會儲存於指定檔案位置:
+
 ## 參考資料
 
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
