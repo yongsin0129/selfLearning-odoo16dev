@@ -1,0 +1,3 @@
+"id","name","nickname","gender","birthday","is_active"
+student_peter,"Peter Chen","Peter","male","1999-09-09",True
+student_westing,"Westing Ting","Westing","male","2000-01-01",False

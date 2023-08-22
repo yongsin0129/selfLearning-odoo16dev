@@ -29,7 +29,9 @@
         'views/views.xml',
         'views/templates.xml',
         'views/menu.xml',
-        'reports/res_student_report.xml'
+        'reports/res_student_report.xml',
+        'data/res_student.xml',
+        'data/res.student.csv'
     ],
     # only loaded in demonstration mode
     'demo': [

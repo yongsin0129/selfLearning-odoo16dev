@@ -539,6 +539,72 @@ report就是匯出檔案的設定
 		...
     ],
 ```
+## 製作假資料 Data Files
+
+>通常我們在寫module的時候，會需要一些初始資料或是固定需要的資料，我們可以定義資料在創立Model的時候一併創立資料，就不需要一項一項新增或匯入，我們來寫一個範例。 By gary
+
+odoo 提供兩種方式匯入假資料
+
+- xml
+- csv
+
+### xml
+
+新增檔案 /data/res_student.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+          <record id="student_gary" model="res.student">
+            <field name="name">GaryWu</field>
+            <field name="nickname">Gary</field>
+            <field name="birthday">1991-07-30</field>
+            <field name="gender">male</field>
+            <field name="is_active">True</field>
+          </record>
+        
+          <record id="student_flynn" model="res.student">
+            <field name="name">FlynnSun</field>
+            <field name="nickname">Flynn</field>
+            <field name="birthday">1991-06-19</field>
+            <field name="gender">male</field>
+            <field name="is_active">False</field>
+          </record>
+    </data>
+</odoo>
+```
+- `<data noupdate='1'>` ： 設成1的時候，當我們在安裝module時便會自動把這些資料帶入，
+
+- id ：自定義id，不重複即可
+
+- model：關聯model，填入model name
+
+- field ：填入model field name，並填入對應的值。
+
+### csv
+
+透過CSV增加，要注意的是檔名必須為model name.csv
+
+data/res.student.csv
+
+```csv
+"id","name","nickname","gender","birthday","is_active"
+student_peter,"Peter Chen","Peter","male","1999-09-09",True
+student_westing,"Westing Ting","Westing","male","2000-01-01",False
+```
+
+依照慣例記得把檔案加入__manifest__.py中
+
+```py
+'data': [
+        'data/res_student.xml'
+        'data/res.student.csv'
+		...
+    ],
+```
+
+>同樣的寫法還有Demo Data，不過在寫Demo data要注意的是，必須把Demo data的選項打勾，這樣安裝的時候才會匯入並且__manifest__.py內要寫在demo裡而不是data裡。
 
 ## 參考資料
 
