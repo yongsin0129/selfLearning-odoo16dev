@@ -1,5 +1,6 @@
 odoo-16.0/
 addons/example
+.vscode/launch.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
