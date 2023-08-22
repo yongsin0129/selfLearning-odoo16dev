@@ -1,5 +1,7 @@
 # 開發addons筆記By-Su-sir
 
+本學習根據 蘇sir 影片，非常感謝 蘇sir 用心教學
+
 ## step 0
 
 使用腳本架新增模組

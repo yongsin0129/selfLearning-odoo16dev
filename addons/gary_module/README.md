@@ -1,5 +1,9 @@
 # 開發 addons 筆記 By-Gary
 
+[Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
+
+本學習根據 gary 文章，非常感謝 gary 大大的用心教學
+
 ## 架構說明
 
 ODOO 是一個以 MVC(Model、View、Controller)架構為主體的服務
@@ -936,6 +940,36 @@ reference :
 
 - [odoo16-official view](https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html#inheritance-specs)
 - [odoo16里面的常用方法 - 继承修改xml](https://blog.51cto.com/melon0809/6317120)
+
+## Currency
+
+>當使用銷售或是產品的模組，有時候會針對各種貨幣來做銷售單，造成統計問題，所以Odoo提供貨幣換算功能!!
+
+[Day23 Let's ODOO: Currency](https://ithelp.ithome.com.tw/articles/10279112)
+
+## Discuss
+
+>透過創立群組，並以標記的形式我們可以更明確的溝通與合作，我們來介紹基本的使用場景
+
+>透過Odoo的Discuss，我們可不用另外用其他的辦公軟體，只要我們在Odoo上建立好相關資訊，所有通知、問題回報、相關討論...等等，都能在Odoo裡面完成。
+
+[Day24 Let's ODOO: Discuss](https://ithelp.ithome.com.tw/articles/10279553)
+
+## System Parameters
+
+> 設定 > 技術 > 系統參數
+
+> 顧名思義就是系統參數，裡面存放著許多系統用的資料，如資料庫創立時間、UUID、預設template等等
+> 我們在開啟開發者模式的時候可以透過Odoo介面設定
+> 也可以透過self.env['ir.config.parameter'] 來增刪修改
+
+文章介紹三種使用場景
+
+- Global Parameter
+- Url Domain : Odoo在發邀請函或是附帶連結時，常常會發現domain是純IP，這時候就要去設定相關的System parameter
+- Report url : 設定完web.base.url或是某些情況下會發現要影印report時會報錯，這時候我們就要來檢查report url是不是有問題
+
+[Day25 Let's ODOO: System Parameters](https://ithelp.ithome.com.tw/articles/10279951)
 
 ## 額外補充
 
