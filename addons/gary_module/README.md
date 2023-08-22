@@ -909,7 +909,8 @@ from . import res_company
             <xpath expr="//notebook/page/group/group/field[@name='website']" position="after">
                 <field name="budget"/>
             </xpath>
-            <xpath expr="//notebook/page/group/group/field[@name='vat']" position="attributes">
+            <!-- 直接 field 做匹配就好，不用上面的寫法也可以有一樣的結果 -->
+            <xpath expr="//field[@name='vat']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
         </field>
@@ -930,6 +931,11 @@ from . import res_company
 ```
 
 重啟後，我們就可以看到新增欄位在 website 欄位後方，vat (稅) 欄位也消失不見了
+
+reference : 
+
+- [odoo16-official view](https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html#inheritance-specs)
+- [odoo16里面的常用方法 - 继承修改xml](https://blog.51cto.com/melon0809/6317120)
 
 ## 額外補充
 
