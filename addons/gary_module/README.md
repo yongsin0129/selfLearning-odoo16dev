@@ -797,6 +797,76 @@ logfile = /var/log/odoo/odoo.log
 
 >如此一來，當我們打API的時候便會顯示log，並會儲存於指定檔案位置:
 
+## Scheduled Actions
+
+>定時任務 : 每半年學生的成績就要歸零重新計算
+
+首先回到 models/res_student.xml 
+
+在我們一開始建立的 class:ResStudent 新增一個方法：
+
+```py
+# 方法單純就是將兩項成績設為零，而平均成績我們是用計算的，所以不用設定。
+def _init_score(self):
+    for record in self:
+        record.math_score = 0.0
+        record.chinese_score = 0.0
+```
+```py
+# 上面的方式，self 並不是自已，所以得到的是空物件，需要使用 env 去找資料 !!
+def _init_score(self):
+    students = self.env['res.student'].sudo().search([])
+    for student in students:
+        student.math_score = 0.0
+        student.chinese_score = 0.0
+```
+
+並增加檔案/data/res_student_cron.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="student_cron" model="ir.cron">
+      <field name="name">Student Score Init Cron Job</field>
+      <field name="user_id" ref="base.user_root" />
+      <!-- 這邊的 model 名字設定 跟前面不一樣，需要特別注意 -->
+      <field name="model_id" ref="model_res_student" />
+      <field name='interval_number'>1</field>
+      <field name='interval_type'>minutes</field>
+      <field name="numbercall">-1</field>
+      <field name="doall" eval="False" />
+      <field name="code">model._init_score()</field>
+      <field name="state">code</field>
+    </record>
+  </data>
+</odoo>
+```
+
+- id：自定義，不重複即可
+
+- model：固定為ir.cron
+
+- name：cron job名稱
+
+- model_id：關聯model，寫法為 "model" + Model Name
+
+- interval_type：執行單位，分別有 months、weeks、days、hours、minutes 。
+
+- interval_number ：填入數字，配合interval_type ，本範例代表六個月執行一次。
+
+- numbercall ：總共執行幾次，如果是-1，代表不斷執行。
+
+- doall ：布林值，如果沒執行到重啟時會不會執行。
+
+- state、code：以code的方式執行，參照為model內的哪個方法。
+
+重啟後 : 設定 > 技術 > 自動化 > 安排的動作  就可以看到設定的自動化了
+
+上面的 cron job 是一分鐘，測試完畢後記得改回較長的時間，避免浪費資源
+
+reference : [Cron Job Not Working As Expected. Version 16](https://www.odoo.com/zh_TW/forum/bang-zhu-1/cron-job-not-working-as-expected-version-16-213625)
+
 ## 參考資料
 
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)

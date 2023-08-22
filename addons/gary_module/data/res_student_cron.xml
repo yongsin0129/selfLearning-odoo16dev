@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="student_cron" model="ir.cron">
+      <field name="name">Student Score Init Cron Job</field>
+      <field name="user_id" ref="base.user_root" />
+      <field name="model_id" ref="model_res_student" />
+      <field name='interval_number'>6</field>
+      <field name='interval_type'>months</field>
+      <field name="numbercall">-1</field>
+      <field name="doall" eval="False" />
+      <field name="code">model._init_score()</field>
+      <field name="state">code</field>
+    </record>
+  </data>
+</odoo>

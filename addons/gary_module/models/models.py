@@ -45,3 +45,9 @@ class ResStudent(models.Model):
                 'is_leadership': False
             })
         return super(ResStudent, self).create(values)
+
+    def _init_score(self):
+        students = self.env['res.student'].sudo().search([])
+        for student in students:
+            student.math_score = 0.0
+            student.chinese_score = 0.0

@@ -32,7 +32,8 @@
         'reports/res_student_report.xml',
         'data/res_student.xml',
         'data/res.student.csv',
-        'data/student_paperformat.xml'
+        'data/student_paperformat.xml',
+        'data/res_student_cron.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
