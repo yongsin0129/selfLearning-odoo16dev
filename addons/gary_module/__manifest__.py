@@ -31,7 +31,8 @@
         'views/menu.xml',
         'reports/res_student_report.xml',
         'data/res_student.xml',
-        'data/res.student.csv'
+        'data/res.student.csv',
+        'data/student_paperformat.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

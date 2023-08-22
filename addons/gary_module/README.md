@@ -606,6 +606,68 @@ student_westing,"Westing Ting","Westing","male","2000-01-01",False
 
 >同樣的寫法還有Demo Data，不過在寫Demo data要注意的是，必須把Demo data的選項打勾，這樣安裝的時候才會匯入並且__manifest__.py內要寫在demo裡而不是data裡。
 
+## Paper Format - A4 B5 or other
+
+>生成report時候想要自己自定義的紙張格式，如直橫向、上下左右間距...等等，Odoo可以透過設定paper format來達到需求
+
+增加/data/student_paperformat.xml
+
+```xml
+<odoo>
+    <data>
+        <record id="paperformat_gary" model="report.paperformat">
+            <field name="name">GARY PAPER</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">50</field>
+            <field name="margin_bottom">65</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">45</field>
+            <field name="dpi">90</field>
+        </record>
+    </data>
+</odoo>
+```
+- id：自定義，不重複即可
+
+- model：固定為 report.paperformat
+
+- format：預定格式，預設為A4也可以填入A0 to A9, B0 to B10, Legal, Letter, Tabloid,…等等
+
+- dpi：輸出解析度，預設為90
+
+- orientation：Landscape或Portrait，代表直向或橫向
+
+- margin_top ：與上方邊距
+
+- margin_bottom ：與下方邊距
+
+- margin_left ：與左邊距
+
+- margin_right ：與右邊距
+
+- page_height ：紙張長度
+
+- page_width：紙張寬度
+
+- header_line ：布林值，要不要顯示header line
+
+- header_spacing ：與header距離
+
+```py title="__manifest__"
+'data': [
+        'data/student_paperformat.xml'
+		...
+    ],
+```
+
+>重新啟動以後我們在 Setting → 技術 -> 報表 -> 紙張格式 內可以看到我們設定的名字，點選後並儲存
+
 ## 參考資料
 
 [Let's ODOO 開發與應用 30 天挑戰系列 By Gary](https://ithelp.ithome.com.tw/users/20130896/ironman/3979)
