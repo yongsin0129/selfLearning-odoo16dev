@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_twturbiks_first_demo_twturbiks_first_demo,twturbiks_first_demo.twturbiks_first_demo,model_twturbiks_first_demo_twturbiks_first_demo,base.group_user,1,1,1,1
