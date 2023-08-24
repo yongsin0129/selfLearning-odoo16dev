@@ -2,6 +2,9 @@ odoo-16.0/
 addons/example
 .vscode/launch.json
 
+# 為了讓 addons 內的 module 在開發的時候可以讀取到 odoo 定義的 fn ，copy 一份進入 addons 幫助開發
+addons/odoo/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
