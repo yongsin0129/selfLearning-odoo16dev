@@ -14,6 +14,30 @@
       </field>
     </record>
 
+    <record id="view_form_twturbiks_first_demo_list" model="ir.ui.view">
+      <field name="name">twturbiks_first_demo list form</field>
+      <field name="model">twturbiks_first_demo.twturbiks_first_demo</field>
+      <field name="arch" type="xml">
+        <form string="twturbiks_first_demo">
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="value"/>
+              <field name="value2"/>
+              <field name="description"/>
+              <field name="name_track_always"/>
+              <field name="is_done_track_onchange"/>
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="activity_ids" widget="mail_activity"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
 
     <!-- actions opening views on models -->
 
@@ -51,10 +75,8 @@
 
     <!-- actions -->
 
-    <menuitem name="List" id="twturbiks_first_demo.menu_1_list" parent="twturbiks_first_demo.menu_1"
-              action="twturbiks_first_demo.action_window"/>
-    <menuitem name="Server to list" id="twturbiks_first_demo" parent="twturbiks_first_demo.menu_2"
-              action="twturbiks_first_demo.action_server"/>
+    <menuitem name="List" id="twturbiks_first_demo.menu_1_list" parent="twturbiks_first_demo.menu_1" action="twturbiks_first_demo.action_window"/>
+    <menuitem name="Server to list" id="twturbiks_first_demo" parent="twturbiks_first_demo.menu_2" action="twturbiks_first_demo.action_server"/>
 
   </data>
 </odoo>
