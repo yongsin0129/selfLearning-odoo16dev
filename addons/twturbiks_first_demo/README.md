@@ -12,19 +12,19 @@ odoo 中的 model 主要有幾個, 分別是 AbstractModel、Model、TransientMo
 
 1. manifest 的依賴要有　mail 
 
-``` py
+``` python
     'depends': ['base','mail'],
 ```
 
 2. model 必需繼承　mail 的相關屬性
 
-```py
+```python
 _inherit = ["mail.thread", "mail.activity.mixin"]  # 集成消息模型 增加消息记录通知功能
 ```
 
 3. model field attribute 要設定
 
-```py
+```python
   name = fields.Char(tracking=True)
   
   # track_visibility="always"
