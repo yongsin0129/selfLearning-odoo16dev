@@ -87,6 +87,10 @@ class twturbiks_first_demo(models.Model):
         if self.field_onchange_demo:
             self.field_onchange_demo_set = "set {}".format(self.field_onchange_demo)
 
+    # 測試 report 的 template (q-web) 呼叫自定義 field 功能用的 def
+    def print_hello(self):
+        return "hello"
+
 
 # ==============================================================================
 

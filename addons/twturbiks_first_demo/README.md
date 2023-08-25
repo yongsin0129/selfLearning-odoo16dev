@@ -358,7 +358,7 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
     ],
 ```
 
-### data , demo
+## data , demo
 
 - data 是安裝 module 時也會一起安裝的資料
 - demo 是建立資料庫時有有勾選 demo data 才會顯示
@@ -395,3 +395,78 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
     </data>
 </odoo>
 ```
+
+## report
+
+使用 Qweb 撰寫
+
+[official - QWeb Templates](https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/frontend/qweb.html) 
+[csdn - odoo Qweb 语法简要记录](https://blog.csdn.net/tsoTeo/article/details/103905169)
+
+> reports/report.xml
+
+```xml title="reports/report.xml"
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <template id="report_twturbiks_first_demo">
+    <t t-call="web.html_container">
+      <!-- t-as="o" 這邊的 o 可以換成自已喜歡的變數 -->
+      <!-- o 表示 ORM 的 object -->
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Odoo Report</h2>
+            <div>
+              <strong>Name:</strong>
+              <p t-field="o.name" />
+            </div>
+            <div>
+              <strong>Name_track_always:</strong>
+              <p t-field="o.name_track_always" />
+            </div>
+            <div>
+              <strong>start datetime:</strong>
+              <p t-field="o.start_datetime" />
+            </div>
+            <div>
+              <strong>stop datetime:</strong>
+              <p t-field="o.stop_datetime" t-options='{"format": "Y/MM/dd"}' />
+            </div>
+            <!-- 可以自已定義 def 做 trigger -->
+            <!-- 因為有 () ，所以需要用 t-esc 跳脫 -->
+            <div>
+              <strong>custom def field</strong>
+              <p t-esc="o.print_hello()" />
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+
+  <!-- 這邊的 name ， 對應上面 template 的 id-->
+  <report id="action_report_demo" string="Demo Report"
+    model="twturbiks_first_demo.twturbiks_first_demo" report_type="qweb-pdf"
+    name="twturbiks_first_demo.report_twturbiks_first_demo"
+    file="twturbiks_first_demo.report_twturbiks_first_demo"
+    print_report_name="'Demo Report - %s' % ((object.name).replace('/', ''))" />
+
+</odoo>
+```
+> 記得 model 要新增 print 的方法
+```python
+    # 測試 report 的 template (q-web) 呼叫自定義 field 功能用的 def
+    def print_hello(self):
+        return "hello"
+```
+
+> 記得 manifest 要新增
+```python title="__manifest__.py"
+'data': [
+        ......
+        'reports/report.xml',
+        ......
+    ],
+```
+

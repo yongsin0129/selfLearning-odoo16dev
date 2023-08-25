@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <template id="report_twturbiks_first_demo">
+    <t t-call="web.html_container">
+      <!-- t-as="o" 這邊的 o 可以換成自已喜歡的變數 -->
+      <!-- o 表示 ORM 的 object -->
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Odoo Report</h2>
+            <div>
+              <strong>Name:</strong>
+              <p t-field="o.name" />
+            </div>
+            <div>
+              <strong>Name_track_always:</strong>
+              <p t-field="o.name_track_always" />
+            </div>
+            <div>
+              <strong>start datetime:</strong>
+              <p t-field="o.start_datetime" />
+            </div>
+            <div>
+              <strong>stop datetime:</strong>
+              <p t-field="o.stop_datetime" t-options='{"format": "Y/MM/dd"}' />
+            </div>
+            <!-- 可以自已定義 def 做 trigger -->
+            <!-- 因為有 () ，所以需要用 t-esc 跳脫 -->
+            <div>
+              <strong>custom def field</strong>
+              <p t-esc="o.print_hello()" />
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+
+  <!-- 這邊的 name ， 對應上面 template 的 id-->
+  <report id="action_report_demo" string="Demo Report"
+    model="twturbiks_first_demo.twturbiks_first_demo" report_type="qweb-pdf"
+    name="twturbiks_first_demo.report_twturbiks_first_demo"
+    file="twturbiks_first_demo.report_twturbiks_first_demo"
+    print_report_name="'Demo Report - %s' % ((object.name).replace('/', ''))" />
+
+</odoo>
