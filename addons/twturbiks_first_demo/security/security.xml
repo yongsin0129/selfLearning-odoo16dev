@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<odoo>
+
+  <!-- 第一區 定義一個 category 權限 -->
+  <!-- model="ir.module.category" -->
+  <record id="module_twturbiks_first_demo" model="ir.module.category">
+    <field name="name">twturbiks_first_demo category</field>
+  </record>
+
+  <!-- 第二區 繼承第一區 category : base user -->
+  <!-- model="res.groups" -->
+  <!-- record id 對應到 security csv 的 group id -->
+  <record id="twturbiks_first_demo_group_user" model="res.groups">
+    <field name="name">User</field>
+    <field name="category_id" ref="module_twturbiks_first_demo"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+  </record>
+
+  <!-- 第三區 繼承第一區 category 及 線性繼承 base user : manager -->
+  <!-- model="res.groups" -->
+  <record id="twturbiks_first_demo_group_manager" model="res.groups">
+    <field name="name">Manager</field>
+    <field name="category_id" ref="module_twturbiks_first_demo"/>
+    <field name="implied_ids" eval="[(4, ref('twturbiks_first_demo_group_user'))]"/>
+    <field name="users" eval="[(4, ref('base.user_root')),
+                  (4, ref('base.user_admin'))]"/>
+  </record>
+
+</odoo>

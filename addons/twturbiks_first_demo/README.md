@@ -172,6 +172,8 @@ onchange , depends 差異補充說明
 
 ### form view
 
+如果都沒寫, 系統會自己產生對應的 form view
+
 ```xml
     <record id="view_form_twturbiks_first_demo_list" model="ir.ui.view">
       <field name="name">twturbiks_first_demo list form</field>
@@ -204,6 +206,11 @@ onchange , depends 差異補充說明
       </field>
     </record>
 ```
+
+注意最後一段的 message_follower_ids activity_ids message_ids,
+
+這並不是我們所建立的 field, 而是繼承 mail.thread mail.activity.mixin 所擁有的,
+
 ### search view
 
 ```xml
@@ -263,3 +270,91 @@ onchange , depends 差異補充說明
     <menuitem name="List" id="twturbiks_first_demo.menu_1_list" parent="twturbiks_first_demo.menu_1" action="twturbiks_first_demo.action_window"/>
     <menuitem name="Server to list" id="twturbiks_first_demo" parent="twturbiks_first_demo.menu_2" action="twturbiks_first_demo.action_server"/>
 ```
+
+## security 
+
+### category 定義
+```xml title="security/security.xml"
+<?xml version="1.0" ?>
+<odoo>
+
+  <!-- 第一區 定義一個 category 權限 -->
+  <!-- model="ir.module.category" -->
+  <record id="module_twturbiks_first_demo" model="ir.module.category">
+    <field name="name">twturbiks_first_demo category</field>
+  </record>
+
+  <!-- 第二區 繼承第一區 category : base user -->
+  <!-- model="res.groups" -->
+  <!-- record id 對應到 security csv 的 group id -->
+  <!-- category_id 對後到上面新增加的 ir.module.category -->
+  <record id="twturbiks_first_demo_group_user" model="res.groups">
+    <field name="name">User</field>
+    <field name="category_id" ref="module_twturbiks_first_demo"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+  </record>
+
+  <!-- 第三區 繼承第一區 category 及 線性繼承 base user : manager ，表示 manger 有 user 所有的權限-->
+  <!-- model="res.groups" -->
+  <record id="twturbiks_first_demo_group_manager" model="res.groups">
+    <field name="name">Manager</field>
+    <field name="category_id" ref="module_twturbiks_first_demo"/>
+    <field name="implied_ids" eval="[(4, ref('twturbiks_first_demo_group_user'))]"/>
+    <field name="users" eval="[(4, ref('base.user_root')),
+                  (4, ref('base.user_admin'))]"/>
+  </record>
+
+</odoo>
+```
+
+>權限設定通常都是設定一位 user , 一位 manage (admin)
+
+implied_ids 也就是繼承, 裡面的數字分別代表不同的意思,
+
+- (0, _ , {'field': value}) creates a new record and links it to this one.
+- (1, id, {'field': value}) updates the values on an already linked record.
+- (2, id, _) removes the link to and deletes the id related record.
+- (3, id, _) removes the link to, but does not delete, the id related record. This is usually what you will use to delete related records on many-to-many fields.
+- (4, id, _) links an already existing record.
+- (5, _, _) removes all the links, without deleting the linked records.
+- (6, _, [ids]) replaces the list of linked records with the provided list.
+
+_ 也可以改成 0 or False,
+
+尾巴不相關的可以忽略, 像是 (4, id, _) 也可以寫成 (4, id).
+
+group_id 的部份可以空白, 下面這個例子代表這個 Access Rights 沒特別指定 group (但通常比較少這樣使用)
+
+```excel
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_demo_test,Test Access,model_demo_odoo_tutorial,,1,1,1,1
+```
+這樣 odoo 後台的 設定 -> 技術 -> 安全 -> Access Rights 查詢, 他會顯示黃色的.
+
+補充說明 : 使用線性繼承，可在 設定 -> 管理使用者 點擊使用者後看到權限設定是下拉選單
+如果不是線性繼承，是單獨的 checkbox
+
+### 權限 CRUD 設定
+
+```excel title="security/ir.model.access.csv"
+
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_twturbiks_first_demo_user,twturbiks_first_demo User Access,model_twturbiks_first_demo_twturbiks_first_demo,twturbiks_first_demo_group_user,1,0,0,0
+access_twturbiks_first_demo_manager,twturbiks_first_demo Manager Access,model_twturbiks_first_demo_twturbiks_first_demo,twturbiks_first_demo_group_manager,1,1,1,1
+
+```
+
+model_id:id 格式 model_{model _name}
+group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id 
+
+### manifest
+
+```python
+    "data": [
+      ...
+        "security/security.xml",
+        "security/ir.model.access.csv",
+      ...
+    ],
+```
+
