@@ -1,4 +1,4 @@
-odoo 手把手建立第一個 addons
+## 手把手建立第一個 addons - twturbiks
 
 參考 : 沈弘哲大大的 [odoo 手把手建立第一個 addons](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/master/demo_odoo_tutorial)
 
@@ -403,9 +403,6 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
 
 使用 Qweb 撰寫
 
-[official - QWeb Templates](https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/frontend/qweb.html) 
-[csdn - odoo Qweb 语法简要记录](https://blog.csdn.net/tsoTeo/article/details/103905169)
-
 > reports/report.xml
 
 ```xml title="reports/report.xml"
@@ -534,3 +531,48 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
         ...
     ],
 ```
+### render in odoo website 的模版
+
+補充說明 : [Odoo Controller Website 教學](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/master/demo_odoo_tutorial#odoo-controller-website-%E6%95%99%E5%AD%B8) 讓 render 有 odoo website 的模版
+
+
+## Odoo Qweb 教學
+
+[official - QWeb Templates](https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/frontend/qweb.html) 
+[csdn - odoo Qweb 语法简要记录](https://blog.csdn.net/tsoTeo/article/details/103905169)
+
+> report view
+```xml
+<template id="report_demo_odoo_tutorial">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    ......
+                    <div>
+                        <strong>start datetime:</strong>
+                        <p t-field="o.start_datetime"/>
+                    </div>
+                    <div>
+                        <strong>stop datetime:</strong>
+                        <p t-field="o.stop_datetime" t-options='{"format": "Y/MM/dd"}'/>
+                    </div>
+                    <div>
+                        <strong>custom start datetime:</strong>
+                        <p t-esc="o.get_custom_portal_date()"/>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+```
+> model
+```python
+    def get_custom_portal_date(self):
+        str_time = datetime.strftime(self.start_datetime, '%Y/%m/%d')
+        return '>{}<'.format(str_time)
+```
+
+- 透過 t-options='{"format": "Y/MM/dd"}' 來改變日期格式.
+- 透過 model 的方式設定新的邏輯 t-esc="o.get_custom_portal_date()"

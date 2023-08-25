@@ -3,6 +3,7 @@ from odoo import http
 
 
 class TwturbiksFirstDemo(http.Controller):
+    # user 表示需要登入才可以使用這個 route
     @http.route("/demo/odoo", auth="user")
     def list2(self, **kwargs):
         obj = http.request.env["twturbiks_first_demo.twturbiks_first_demo"]
