@@ -576,3 +576,10 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
 
 - 透過 t-options='{"format": "Y/MM/dd"}' 來改變日期格式.
 - 透過 model 的方式設定新的邏輯 t-esc="o.get_custom_portal_date()"
+
+## 附錄
+### 說明 odoo manifest 中的 auto_install
+
+不懂，且用不到的時候，一律設定 False
+
+細項說明 : [twturbiks - 說明 auto_install](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/master/demo_odoo_tutorial#%E8%AA%AA%E6%98%8E-odoo-manifest-%E4%B8%AD%E7%9A%84-auto_install)
