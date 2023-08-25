@@ -358,3 +358,40 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
     ],
 ```
 
+### data , demo
+
+- data 是安裝 module 時也會一起安裝的資料
+- demo 是建立資料庫時有有勾選 demo data 才會顯示
+
+```xml title="demo/demo.xml"
+<odoo>
+    <data>
+
+          <record id="object0" model="twturbiks_first_demo.twturbiks_first_demo">
+            <field name="name">Object 0</field>
+            <field name="value">0</field>
+          </record>
+
+          <record id="object1" model="twturbiks_first_demo.twturbiks_first_demo">
+            <field name="name">Object 1</field>
+            <field name="value">10</field>
+          </record>
+
+          <record id="object2" model="twturbiks_first_demo.twturbiks_first_demo">
+            <field name="name">Object 2</field>
+            <field name="value">20</field>
+          </record>
+
+          <record id="object3" model="twturbiks_first_demo.twturbiks_first_demo">
+            <field name="name">Object 3</field>
+            <field name="value">30</field>
+          </record>
+
+          <record id="object4" model="twturbiks_first_demo.twturbiks_first_demo">
+            <field name="name">Object 4</field>
+            <field name="value">40</field>
+          </record>
+
+    </data>
+</odoo>
+```
