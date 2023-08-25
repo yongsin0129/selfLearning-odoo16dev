@@ -445,12 +445,23 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
     </t>
   </template>
 
-  <!-- 這邊的 name ， 對應上面 template 的 id-->
-  <report id="action_report_demo" string="Demo Report"
-    model="twturbiks_first_demo.twturbiks_first_demo" report_type="qweb-pdf"
-    name="twturbiks_first_demo.report_twturbiks_first_demo"
-    file="twturbiks_first_demo.report_twturbiks_first_demo"
-    print_report_name="'Demo Report - %s' % ((object.name).replace('/', ''))" />
+  <!-- odoo15 之前是用 report tage , odoo16 之後需要用 record tag -->
+  <record id="action_report_demo" model="ir.actions.report">
+    <!-- button 的名字 -->
+    <field name="name">列印 demo 資料</field>
+
+    <!-- 從什麼資料庫取得資料 -->
+    <field name="model">twturbiks_first_demo.twturbiks_first_demo</field>
+
+    <field name="report_type">qweb-pdf</field>
+
+    <!-- report_name　的格式 : module name + 上面 template 的 ID -->
+    <!-- 邏輯　：　report action 將資料丟入 templete 做 render -->
+    <field name="report_name">twturbiks_first_demo.report_twturbiks_first_demo</field>
+
+    <!-- 輸出的 pdf 檔名 -->
+    <field name="print_report_name">'Demo Report - %s' % ((object.name).replace('/', ''))</field>
+  </record>
 
 </odoo>
 ```
