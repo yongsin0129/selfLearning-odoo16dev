@@ -469,4 +469,54 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
         ......
     ],
 ```
+## controller
 
+>記得 controller , model 都不需要加入 `__manifest__.py` ，它們加入在 `__init__.py` 中
+
+> controllers/controllers.py
+```python
+    @http.route("/demo/odoo", auth="user")
+    def list2(self, **kwargs):
+        # 用 env 取得 ORM object ，再用 search method 取得 objs
+        obj = http.request.env["twturbiks_first_demo.twturbiks_first_demo"]
+        objs = obj.search([])
+
+        # 使用外部連結 call template
+        # 格式 `<module name>.<template id> , { 代入的值 }`
+        return http.request.render(
+            "twturbiks_first_demo.twturbiks_first_demo_template", {"objs": objs}
+        )
+```
+
+> views/twturbiks_first_demo_template.xml
+```xml 
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <!-- template id 為外部識別的重要指標 -->
+  <template id="twturbiks_first_demo_template" name="twturbiks_first_demo_List">
+
+    <!-- 這邊也可以用 <t t-call="web.html_container"> 先做一層包裝 -->
+    <!-- <t t-call="web.html_container"> -->
+    <div id="wrap" class="container">
+      <h1>twturbiks_first_demo.template</h1>
+      <t t-foreach="objs" t-as="obj">
+        <div class="row">
+          <span t-field="obj.name" />, <span t-field="obj.is_done_track_onchange" />, <span
+            t-field="obj.name_track_always" />
+        </div>
+      </t>
+    </div>
+    <!-- /t -->
+  </template>
+</odoo>
+```
+> manifest
+
+```py
+    "data": [
+        ...
+        "views/twturbiks_first_demo_template.xml",
+        ...
+    ],
+```

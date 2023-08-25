@@ -22,6 +22,7 @@
         "security/ir.model.access.csv",
         "views/views.xml",
         "views/templates.xml",
+        "views/twturbiks_first_demo_template.xml",
         "reports/report.xml",
     ],
     # only loaded in demonstration mode
