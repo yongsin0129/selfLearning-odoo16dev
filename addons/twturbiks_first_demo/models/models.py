@@ -15,10 +15,9 @@ class twturbiks_first_demo(models.Model):
     description = fields.Text()
 
     # track_visibility='always' 和 track_visibility='onchange'
-    is_done_track_onchange = fields.Boolean(
-        string="Is Done?", default=False, track_visibility="onchange"
-    )
-    name_track_always = fields.Char(string="track_name", track_visibility="always")
+    # odoo14 之後可以直接簡寫成 tracking="true"
+    is_done_track_onchange = fields.Boolean("Is Done?", default=False, tracking=True)
+    name_track_always = fields.Char("track_name", tracking=True)
 
     # default, 設定為當天的時間,當建立一筆資料時, 會顯示當下的時間,
     start_datetime = fields.Datetime("Start DateTime", default=fields.Datetime.now())

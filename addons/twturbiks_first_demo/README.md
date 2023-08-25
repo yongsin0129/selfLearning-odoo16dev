@@ -33,6 +33,9 @@ _inherit = ["mail.thread", "mail.activity.mixin"]  # 集成消息模型 增加�
   # 以下兩種也可以
   # track_visibility="always"
   # track_visibility="onchange"
+  
+  # In V14 the value change tracking system has been changed.
+  # Now track_visibility='true' could be simply changed to tracking=True
 ```
 
 4. 視圖 form 需增加 chatter 欄位
