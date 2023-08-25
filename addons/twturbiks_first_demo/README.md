@@ -577,6 +577,89 @@ group_id:id 格式 在 security.xml 內 , model="res.groups" 的 record id
 - 透過 t-options='{"format": "Y/MM/dd"}' 來改變日期格式.
 - 透過 model 的方式設定新的邏輯 t-esc="o.get_custom_portal_date()"
 
+## Testing
+
+- TransactionCase : 每個 function 執行完畢後都會 roll back, 每個 function 都是獨立的不互相影響.
+- SingleTransactionCase : 全部 function 執行完畢後才會 roll back, function 會互相影響.
+- SavepointCase : 使用在比較大型以及複雜的測試, 通常會搭配 setUpClass() 使用, 不另外介紹,需要用到時使用關鍵字查看 source code 如何規劃
+
+1. 在工作目錄下建立 tests 資料夾，注意，主目錄的 init.py 不需要引入
+2. 建立 `tests/__init__.py`
+3. tests 資料夾底下的 testing 都必須是 test_ 開頭的,
+4. 建立 `tests/test_transactioncase.py`
+5. `tests/__init__.py` import `from . import test_transactioncase`
+6. 撰寫 test
+
+```python title="tests/test_transactioncase.py"
+from odoo.exceptions import AccessError, UserError, ValidationError
+from odoo.tests.common import TransactionCase, tagged
+
+
+# @tagged('-standard', 'nice')
+class TestDemoOdooTransactionCase(TransactionCase):
+    # setup
+    def setUp(self, *args, **kwargs):
+        """setUp"""
+        super(TestDemoOdooTransactionCase, self).setUp(*args, **kwargs)
+        print("Run setUp")
+
+    # 第一個測試
+    def test_hello_world(self):
+        print("--------------第一個測試-----------------")
+        """test_hello_world"""
+        self.assertEqual(0, 0, "test hello world")
+
+    # 第二個測試
+    def test_datetime_validation(self):
+        print("--------------第二個測試-----------------")
+        """test_datetime_validation"""
+        values = {
+            "name": "hello",
+            "start_datetime": "2020-02-01",
+            "stop_datetime": "2020-01-01",
+        }
+        with self.assertRaises(ValidationError):
+            self.env["twturbiks_first_demo.twturbiks_first_demo"].create(values)
+
+    # 第三個測試
+    def test_field_compute_demo(self):
+        print("--------------第三個測試-----------------")
+        """test_field_compute_demo"""
+        values = {
+            "name": "hello",
+            "input_number": 2,
+            "start_datetime": "2020-02-01",
+            "stop_datetime": "2020-04-01",
+        }
+        data = self.env["twturbiks_first_demo.twturbiks_first_demo"].create(values)
+        self.assertEqual(data.field_compute_demo, data.input_number * 1000)
+```
+7. 執行方法為 `--test-enable` e.g. `python3 odoo-bin -i my_module -d my_db -c ./config/odoo.conf --test-enable`
+
+
+如果換成 SingleTransactionCase
+
+```python
+# 只需要換 class 裡面繼承的部份就可以測試了
+from odoo.tests.common import SingleTransactionCase
+
+class TestDemoOdooTransactionCase(SingleTransactionCase):
+```
+
+### test tag 用法
+
+`@tagged("-standard", "nice")`
+
+如果沒有特別設定, odoo defaults 為 standard,
+
++ - 則代表啟用或不改用(排除), 像上面這個例子, 代表只有在 nice tag 才會生效, 在 standard 中不會生效的,
+
+`python3 odoo-bin -i my_module -d my_db -c ./config/odoo.conf --test-enable --test-tags=nice` 
+
+`python3 odoo-bin -i my_module -d my_db -c ./config/odoo.conf --test-enable --test-tags=standard,nice`
+
+[official - Testing Odoo](https://www.odoo.com/documentation/16.0/developer/reference/backend/testing.html)
+
 ## 附錄
 ### 說明 odoo manifest 中的 auto_install
 
