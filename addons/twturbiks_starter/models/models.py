@@ -67,6 +67,16 @@ class twturbiks_starter(models.Model):
     gender = fields.Selection(string="Gender", related="employee_id.gender")
 
     """
+    tutorial 5 One2Many
+
+    為了下方的 model "demo.sheet" , 一定要建立一個 Many2one
+
+    """
+
+    sheet_id = fields.Many2one("demo.sheet", string="sheet id")
+
+    """
+
     API
     """
 
@@ -76,9 +86,43 @@ class twturbiks_starter(models.Model):
             record.value2 = float(record.value) / 100
 
 
+"""
+Many2Many2 使用到的 model
+"""
+
+
 class DemoTag(models.Model):
     _name = "demo.tag"
     _description = "Demo Tags"
 
     name = fields.Char(string="Tag Name", index=True, required=True)
     active = fields.Boolean(default=True, help="Set active.")
+
+
+"""
+One2Many 使用到的 model
+
+一個 sheet 會對應到很多個 twturbiks_starter.twturbiks_starter 的資料
+
+概念 : 很多張出差單，都屬於同一張 sheet 來展示
+
+新開一個 model 就記得要設定 security
+
+"""
+
+
+class DemoExpenseSheetTutorial(models.Model):
+    _name = "demo.sheet"
+    _description = "Demo Sheet Tutorial"
+
+    name = fields.Char("Expense Demo Report Summary", required=True)
+
+    # 也就是說如果你要建立 One2many, 一定也要有一個 Many2one,
+    # 但如果建立 Many2one 則不一定要建立 One2many.
+    # One2many 是一個虛擬的欄位, 你在資料庫中是看不到它的存在
+
+    expense_line_ids = fields.One2many(
+        "twturbiks_starter.twturbiks_starter",  # 代表關連的 model (必填)
+        "sheet_id",  # 代表所關連 model 的 field (必填)
+        string="Expense Lines",
+    )
