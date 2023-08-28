@@ -13,6 +13,7 @@
           <field name="user_id" />
           <field name="employee_id" />
           <field name="tag_ids" widget="many2many_tags" />
+          <field name="gender" />
         </tree>
       </field>
     </record>
@@ -29,6 +30,7 @@
             <field name="user_id" />
             <field name="employee_id" />
             <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
+            <field name="gender" />
           </group>
         </form>
       </field>
