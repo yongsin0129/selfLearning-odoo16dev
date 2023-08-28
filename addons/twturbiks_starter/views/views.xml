@@ -10,10 +10,27 @@
           <field name="name" />
           <field name="value" />
           <field name="value2" />
+          <field name="user_id" />
+          <field name="employee_id" />
         </tree>
       </field>
     </record>
 
+    <record model="ir.ui.view" id="twturbiks_starter.form">
+      <field name="name">twturbiks_starter form</field>
+      <field name="model">twturbiks_starter.twturbiks_starter</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="name" />
+            <field name="value" />
+            <field name="value2" />
+            <field name="user_id" />
+            <field name="employee_id" />
+          </group>
+        </form>
+      </field>
+    </record>
 
     <!-- actions opening views on models -->
 
