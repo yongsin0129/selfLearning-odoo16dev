@@ -12,6 +12,7 @@
           <field name="value2" />
           <field name="user_id" />
           <field name="employee_id" />
+          <field name="tag_ids" widget="many2many_tags" />
         </tree>
       </field>
     </record>
@@ -27,6 +28,7 @@
             <field name="value2" />
             <field name="user_id" />
             <field name="employee_id" />
+            <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
           </group>
         </form>
       </field>

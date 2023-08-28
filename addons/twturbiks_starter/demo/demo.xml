@@ -26,5 +26,21 @@
       <field name="value">40</field>
     </record>
 
+    <!-- demo.tag data  -->
+
+    <record id="tag1" model="demo.tag">
+      <field name="name">tag1</field>
+      <field name="active">True</field>
+    </record>
+
+    <record id="tag2" model="demo.tag">
+      <field name="name">tag2</field>
+      <field name="active">True</field>
+    </record>
+
+    <record id="tag3" model="demo.tag">
+      <field name="name">tag3</field>
+      <field name="active">True</field>
+    </record>
   </data>
 </odoo>
