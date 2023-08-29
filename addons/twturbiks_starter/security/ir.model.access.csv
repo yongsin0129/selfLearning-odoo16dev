@@ -1,6 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_twturbiks_starter_twturbiks_starter,twturbiks_starter.twturbiks_starter,model_twturbiks_starter_twturbiks_starter,base.group_user,1,1,1,1
+access_twturbiks_starter_main,twturbiks_starter main,model_twturbiks_starter_main,base.group_user,1,1,1,1
 
-access_demo_expense_tag,Demo Expense Tag,model_demo_tag,base.group_user,1,1,1,1
+access_twturbiks_starter_tag,twturbiks_starter Tag,model_twturbiks_starter_tag,base.group_user,1,1,1,1
 
-access_demo_expense_sheet,Demo Expense sheet,model_demo_sheet,base.group_user,1,1,1,1
+access_twturbiks_starter_sheet,twturbiks_starter sheet,model_twturbiks_starter_sheet,base.group_user,1,1,1,1

@@ -4,10 +4,10 @@
   <!-- APP menu -->
   <menuitem name="twturbiks_starter" id="twturbiks_starter.menu_root" />
 
-  <!-- actions opening views on models -->
+  <!-- actions opening views on main models -->
   <record model="ir.actions.act_window" id="twturbiks_starter.action_window">
     <field name="name">twturbiks_starter window</field>
-    <field name="res_model">twturbiks_starter.twturbiks_starter</field>
+    <field name="res_model">twturbiks_starter.main</field>
     <field name="view_mode">tree,form</field>
   </record>
 
@@ -20,10 +20,10 @@
   <menuitem name="open main model" id="open_main_model" action="twturbiks_starter.action_window"
     parent="twturbiks_starter.menu_root" />
 
-  <!-- actions opening form on demo_sheet -->
+  <!-- actions opening form on sheet model -->
   <record model="ir.actions.act_window" id="twturbiks_starter.action_window2">
     <field name="name">demo_sheet window</field>
-    <field name="res_model">demo.sheet</field>
+    <field name="res_model">twturbiks_starter.sheet</field>
     <field name="view_mode">tree,form</field>
   </record>
 

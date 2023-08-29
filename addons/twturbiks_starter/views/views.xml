@@ -4,7 +4,7 @@
 
     <record model="ir.ui.view" id="twturbiks_starter.list">
       <field name="name">twturbiks_starter list</field>
-      <field name="model">twturbiks_starter.twturbiks_starter</field>
+      <field name="model">twturbiks_starter.main</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name" />
@@ -21,7 +21,7 @@
     <!-- main model form -->
     <record model="ir.ui.view" id="twturbiks_starter.form">
       <field name="name">twturbiks_starter form</field>
-      <field name="model">twturbiks_starter.twturbiks_starter</field>
+      <field name="model">twturbiks_starter.main</field>
       <field name="arch" type="xml">
         <form>
           <group>
@@ -41,7 +41,7 @@
     <!-- sheet model list -->
     <record model="ir.ui.view" id="demo_sheet_list">
       <field name="name">demo_sheet list</field>
-      <field name="model">demo.sheet</field>
+      <field name="model">twturbiks_starter.sheet</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name" />
@@ -52,7 +52,7 @@
     <!-- sheet model form -->
     <record id="view_form_demo_expense_sheet_tutorial" model="ir.ui.view">
       <field name="name">Demo Expense Sheet Tutorial Form</field>
-      <field name="model">demo.sheet</field>
+      <field name="model">twturbiks_starter.sheet</field>
       <field name="arch" type="xml">
         <form string="Demo Expense Sheet Tutorial">
           <sheet>

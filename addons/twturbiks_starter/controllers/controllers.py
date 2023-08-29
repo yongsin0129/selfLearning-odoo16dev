@@ -13,14 +13,12 @@ class TwturbiksStarter(http.Controller):
             "twturbiks_starter.listing",
             {
                 "root": "/twturbiks_starter/twturbiks_starter",
-                "objects": http.request.env[
-                    "twturbiks_starter.twturbiks_starter"
-                ].search([]),
+                "objects": http.request.env["twturbiks_starter.main"].search([]),
             },
         )
 
     @http.route(
-        '/twturbiks_starter/twturbiks_starter/objects/<model("twturbiks_starter.twturbiks_starter"):obj>',
+        '/twturbiks_starter/twturbiks_starter/objects/<model("twturbiks_starter.main"):obj>',
         auth="public",
     )
     def object(self, obj, **kw):

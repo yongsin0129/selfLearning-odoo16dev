@@ -3,9 +3,9 @@
 from odoo import api, fields, models
 
 
-class twturbiks_starter(models.Model):
-    _name = "twturbiks_starter.twturbiks_starter"
-    _description = "twturbiks_starter.twturbiks_starter"
+class DemoMain(models.Model):
+    _name = "twturbiks_starter.main"
+    _description = "twturbiks_starter.main is module main model"
 
     name = fields.Char()
     value = fields.Integer()
@@ -49,7 +49,7 @@ class twturbiks_starter(models.Model):
     column2 (str) : <可選> 自定義第二欄位 relation table 中 column 2 的名字
     """
 
-    tag_ids = fields.Many2many("demo.tag", "", "", "", string="Tags")
+    tag_ids = fields.Many2many("twturbiks_starter.tag", "", "", "", string="Tags")
 
     """
     tutorial 4 Many2Many
@@ -73,7 +73,7 @@ class twturbiks_starter(models.Model):
 
     """
 
-    sheet_id = fields.Many2one("demo.sheet", string="sheet id")
+    sheet_id = fields.Many2one("twturbiks_starter.sheet", string="sheet id")
 
     """
 
@@ -92,7 +92,7 @@ Many2Many2 使用到的 model
 
 
 class DemoTag(models.Model):
-    _name = "demo.tag"
+    _name = "twturbiks_starter.tag"
     _description = "Demo Tags"
 
     name = fields.Char(string="Tag Name", index=True, required=True)
@@ -102,7 +102,7 @@ class DemoTag(models.Model):
 """
 One2Many 使用到的 model
 
-一個 sheet 會對應到很多個 twturbiks_starter.twturbiks_starter 的資料
+一個 sheet 會對應到很多個 twturbiks_starter.main 的資料
 
 概念 : 很多張出差單，都屬於同一張 sheet 來展示
 
@@ -112,7 +112,7 @@ One2Many 使用到的 model
 
 
 class DemoExpenseSheetTutorial(models.Model):
-    _name = "demo.sheet"
+    _name = "twturbiks_starter.sheet"
     _description = "Demo Sheet Tutorial"
 
     name = fields.Char("Expense Demo Report Summary", required=True)
@@ -122,7 +122,7 @@ class DemoExpenseSheetTutorial(models.Model):
     # One2many 是一個虛擬的欄位, 你在資料庫中是看不到它的存在
 
     expense_line_ids = fields.One2many(
-        "twturbiks_starter.twturbiks_starter",  # 代表關連的 model (必填)
+        "twturbiks_starter.main",  # 代表關連的 model (必填)
         "sheet_id",  # 代表所關連 model 的 field (必填)
         string="Expense Lines",
     )
