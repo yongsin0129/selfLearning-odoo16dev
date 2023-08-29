@@ -1,28 +1,42 @@
 <odoo>
-  <data>
+  <data noupdate="1">
+
+    <!-- 
+      
+      noupdate="1" data 可以被更動，每次 update 不會將 data 還原成 底下的預設值
+
+      noupdate="0" data 不可以被更動，每次 update 都會將 data 還原成 底下的預設值
+
+
+      forcecreate="0" 每一個 record data 預設是不能被刪除，如果 update 的時候發現 data 被刪掉，就會直接加回來，如果不希望這個預設行為
+      則需要在 record tag 後面加上 forcecreate="0"
+
+      ref : https://www.odoo.com/zh_TW/forum/bang-zhu-1/data-noupdate-0-1-in-security-xml-13546
+
+    -->
 
     <record id="object10" model="twturbiks_starter.main">
-      <field name="name">Object 0</field>
+      <field name="name">Object 10</field>
       <field name="value">0</field>
     </record>
 
     <record id="object11" model="twturbiks_starter.main">
-      <field name="name">Object 1</field>
+      <field name="name">Object 11</field>
       <field name="value">10</field>
     </record>
 
-    <record id="object12" model="twturbiks_starter.main">
-      <field name="name">Object 2</field>
+    <record id="object12" model="twturbiks_starter.main" forcecreate="0">
+      <field name="name">Object 12</field>
       <field name="value">20</field>
     </record>
 
     <record id="object13" model="twturbiks_starter.main">
-      <field name="name">Object 3</field>
+      <field name="name">Object 13</field>
       <field name="value">30</field>
     </record>
 
     <record id="object14" model="twturbiks_starter.main">
-      <field name="name">Object 4</field>
+      <field name="name">Object 14</field>
       <field name="value">40</field>
     </record>
 

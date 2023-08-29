@@ -297,3 +297,34 @@ access_twturbiks_starter_sheet,twturbiks_starter sheet,model_twturbiks_starter_s
     parent="twturbiks_starter.menu_2"
     action="twturbiks_starter.open_sheet" />
 ```
+## demo and data
+
+### noupdate and forcecreate
+
+noupdate="1" data 可以被更動，每次 update 不會將 data 還原成 底下的預設值
+
+noupdate="0" data 不可以被更動，每次 update 都會將 data 還原成 底下的預設值
+
+forcecreate="0" 每一個 record data 預設是不能被刪除，如果 update 的時候發現 data 被刪掉，就會直接加回來，如果不希望這個預設行為
+則需要在 record tag 後面加上 forcecreate="0"
+
+ref : https://www.odoo.com/zh_TW/forum/bang-zhu-1/data-noupdate-0-1-in-security-xml-13546
+
+```xml title="demo/demo.xml"
+<odoo>
+  <data noupdate="1">
+
+    ...
+
+    <record id="object12" model="twturbiks_starter.main" forcecreate="0">
+      <field name="name">Object 12</field>
+      <field name="value">20</field>
+    </record>
+
+    ...
+
+  </data>
+</odoo>
+
+```
+
