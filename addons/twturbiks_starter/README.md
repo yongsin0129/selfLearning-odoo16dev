@@ -1,0 +1,299 @@
+## odoo 入門篇 - twturbiks
+
+參考 : 沈弘哲大大的 [odoo 入門篇](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/master/demo_expense_tutorial_v1)
+
+## Many2one
+
+### model
+```python title="models/models.py"
+class DemoMain(models.Model):
+    _name = "twturbiks_starter.main"
+    _description = "this is main model of this module "
+
+    name = fields.Char()
+    value = fields.Integer()
+    value2 = fields.Float(compute="_value_pc", store=True)
+    description = fields.Text()
+
+    """
+    tutorial 1 Many2one
+
+    default=lambda self: self.env.user
+    這行會在 obj 建立的時候，預設是現在的 user 身份
+    """
+
+    user_id = fields.Many2one("res.users", default=lambda self: self.env.user)
+
+    """
+    tutorial 2 Many2one
+
+    做關連之前需要先確認 table 是否存在
+    manifest 的 depends 中要加入 hr_contract 
+    """
+
+    employee_id = fields.Many2one("hr.employee", string="Employee")
+```
+### security
+```csv title="security/ir.model.access.csv"
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_twturbiks_starter_main,twturbiks_starter main,model_twturbiks_starter_main,base.group_user,1,1,1,1
+```
+### view
+```xml title="views/views.xml"
+    <!-- main model list -->
+    <record model="ir.ui.view" id="twturbiks_starter.list">
+      <field name="name">twturbiks_starter list</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="value" />
+          <field name="value2" />
+          <field name="user_id" />
+          <field name="employee_id" />
+          <field name="tag_ids" widget="many2many_tags" />
+          <field name="gender" />
+          <field name="sheet_id" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- main model form -->
+    <record model="ir.ui.view" id="twturbiks_starter.form">
+      <field name="name">twturbiks_starter form</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="name" />
+            <field name="value" />
+            <field name="value2" />
+            <field name="user_id" />
+            <field name="employee_id" />
+            <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
+            <field name="gender" />
+            <field name="sheet_id" />
+          </group>
+        </form>
+      </field>
+    </record>
+```
+### menu
+```xml title="views/menu.xml"
+  <!-- menu 慣例 : -->
+  <!-- 1. 先寫 action , 定義 ID -->
+  <!-- 2. 再寫 menu ， 套用上面的 ID-->
+
+  <!-- APP menu region -->
+  <!-- 主選單 : 不需要寫 action-->
+  <menuitem name="twturbiks_starter" id="twturbiks_starter.menu_root" />
+
+  <!--  -->
+  <!-- menu 1     main model-->
+  <!--  -->
+  <!-- action for open main model -->
+  <record model="ir.actions.act_window" id="twturbiks_starter.open_main">
+    <field name="name">twturbiks_starter main model</field>
+    <field name="res_model">twturbiks_starter.main</field>
+    <field name="view_mode">tree,form,kanban</field>
+  </record>
+
+  <!-- 單層 Menu for open main model -->
+  <menuitem name="Menu 1" id="twturbiks_starter.menu_1" action="twturbiks_starter.open_main"
+    parent="twturbiks_starter.menu_root" sequence="1" />
+```
+
+## many2many
+
+### model
+
+```python title="models/models.py"
+    """
+    tutorial 3 Many2Many
+
+    1. 建立 Many2many 之前, 一定要先定義一個 model !! (本例子使用 DemoTag )
+    2. security/ir.model.access.csv 記得要設定
+
+    https://www.odoo.com/documentation/master/developer/reference/backend/orm.html#odoo.fields.Many2many
+
+    參數說明 : 
+    comodel_name : 就是這個欄位的 model 是跟那一個 model 做 Many2many 的關係
+
+    relation (str) : <可選> 因為 Many2many 會在 db 建立一個表，我們可以自定義它的名字
+
+    column1 (str) : <可選> 自定義第二欄位 relation table 中 column 1 的名字
+
+    column2 (str) : <可選> 自定義第二欄位 relation table 中 column 2 的名字
+    """
+
+    tag_ids = fields.Many2many("twturbiks_starter.tag", "", "", "", string="Tags")
+
+    """
+    tutorial 4 Many2Many
+    
+    使用 Selection 對應上方的 employee_id
+
+    1. fields.Selection 下拉選單 :
+    e.g. gender = fields.Selection(string="Gender", selection=[("a", "A"), ("b", "B")])
+
+    2. 特別的是 related : employee_id 從上面的 Mayn2one 對應到  "hr.employee" , 所以會去找裡面的 gender field
+    note : hr.employee 的 gender 欄位，屬性就是 Selection , 所以用 char 會報格式不對的 error
+
+    """
+
+    gender = fields.Selection(string="Gender", related="employee_id.gender")
+
+
+    """
+    Many2Many 使用到的 model
+
+    注意 : Many2Many 會在 DB 產生一個新的表來關連兩個 model
+    """
+
+
+class DemoTag(models.Model):
+    _name = "twturbiks_starter.tag"
+    _description = "Demo Tags"
+
+    name = fields.Char(string="Tag Name", index=True, required=True)
+    active = fields.Boolean(default=True, help="Set active.")
+```
+
+### security
+
+```csv title="security/ir.model.access.csv"
+access_twturbiks_starter_tag,twturbiks_starter Tag,model_twturbiks_starter_tag,base.group_user,1,1,1,1
+```
+
+### view
+
+沒有寫單獨寫 tag 的 view , tag field 應用在 main model 之中
+
+### menu 
+
+沒有單獨 view , 就不需要用到 menu
+
+## one2many
+
+### model
+```python title="models/models.py"
+    """
+    tutorial 5 One2Many
+
+    為了下方的 model "demo.sheet" , 一定要建立一個 Many2one    
+
+    """
+
+    sheet_id = fields.Many2one("twturbiks_starter.sheet", string="sheet id")
+
+
+"""
+One2Many 使用到的 model
+
+一個 sheet 會對應到很多個 twturbiks_starter.main 的資料
+
+舉例 : 很多張出差單，都屬於同一張 sheet 來展示
+
+本例 : 多個 main object ， 都屬於同一張 sheet
+
+注意 : 新開一個 model 就記得要設定 security
+
+注意 : One2Many 是一個虛擬欄位，在 twturbiks_starter.sheet table 中是看不到 main_object_ids 的欄位
+
+補充: 程式先寫 Many2one，再寫 One2many 這樣才知道One2many 的 inverse_name 要寫誰。
+"""
+
+
+class DemoExpenseSheetTutorial(models.Model):
+    _name = "twturbiks_starter.sheet"
+    _description = "Demo Sheet Tutorial"
+
+    name = fields.Char("Sheet Report", required=True)
+
+    # 也就是說如果你要建立 One2many, 一定也要有一個 Many2one,
+    # 但如果建立 Many2one 則不一定要建立 One2many.
+    # One2many 是一個虛擬的欄位, 你在資料庫中是看不到 main_object_ids 的存在, 只能在 Many2One 看到 sheet_id
+
+    main_object_ids = fields.One2many(
+        "twturbiks_starter.main",  # 代表關連的 model (必填)
+        "sheet_id",  # 代表所關連 model 的 field (必填)
+        string="Main Object Lines",
+    )
+
+```
+
+### security
+
+```csv
+access_twturbiks_starter_sheet,twturbiks_starter sheet,model_twturbiks_starter_sheet,base.group_user,1,1,1,1
+```
+
+### view
+
+```xml title="views/views.xml"
+    <!-- sheet model list -->
+    <record model="ir.ui.view" id="demo_sheet_list">
+      <field name="name">demo_sheet list</field>
+      <field name="model">twturbiks_starter.sheet</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- sheet model form -->
+    <record id="view_form_demo_expense_sheet_tutorial" model="ir.ui.view">
+      <field name="name">Demo Expense Sheet Tutorial Form</field>
+      <field name="model">twturbiks_starter.sheet</field>
+      <field name="arch" type="xml">
+        <form string="main object Sheet Tutorial">
+          <sheet>
+            <group>
+              <!-- sheet model 的第一個欄位 -->
+              <field name="name" />
+            </group>
+
+            <!-- 這邊用 notebook tag -->
+            <notebook>
+              <!-- notebook tag 的顯示名字 -->
+              <page string="main object page1">
+                <!-- sheet model 的第二個欄位 -->
+                <field name="main_object_ids">
+                  <!-- tree 的 editable 也可以寫 bottom ，這樣新增的資料就會加到最下面 -->
+                  <tree editable="top">
+                    <field name="name" />
+                    <field name="value" />
+                    <field name="employee_id" />
+                    <field name="tag_ids" widget="many2many_tags" />
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+```
+
+### menu
+
+```xml title="views/menu.xml"
+  <!--  -->
+  <!-- menu 2     sheet model-->
+  <!--  -->
+  <!-- action for open sheet model -->
+  <record model="ir.actions.act_window" id="twturbiks_starter.open_sheet">
+    <field name="name">twturbiks_starter sheet model</field>
+    <field name="res_model">twturbiks_starter.sheet</field>
+    <field name="view_mode">kanban,tree,form</field>
+  </record>
+
+  <!-- 多層 Menu for open sheet model-->
+  <menuitem name="Menu 2" id="twturbiks_starter.menu_2" parent="twturbiks_starter.menu_root"
+    sequence="2" />
+  <menuitem name="open_sheet" id="twturbiks_starter.menu_2_open_sheet"
+    parent="twturbiks_starter.menu_2"
+    action="twturbiks_starter.open_sheet" />
+```
