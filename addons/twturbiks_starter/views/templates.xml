@@ -1,6 +1,7 @@
 <odoo>
   <data>
 
+    <!-- template for controller to show list -->
     <template id="listing">
       <ul>
         <li t-foreach="objects" t-as="object">
@@ -10,6 +11,8 @@
         </li>
       </ul>
     </template>
+
+    <!-- template for controller to show object -->
     <template id="object">
       <h1>
         <t t-esc="object.display_name" />

@@ -5,7 +5,7 @@ from odoo import api, fields, models
 
 class DemoMain(models.Model):
     _name = "twturbiks_starter.main"
-    _description = "twturbiks_starter.main is module main model"
+    _description = "this is main model of this module "
 
     name = fields.Char()
     value = fields.Integer()
@@ -37,10 +37,9 @@ class DemoMain(models.Model):
     2. security/ir.model.access.csv 記得要設定
 
     https://www.odoo.com/documentation/master/developer/reference/backend/orm.html#odoo.fields.Many2many
-    參數說明 : 
-    Parameters
-    comodel_name : 就是這個欄位的 model 是跟那一個 model 做 Many2many 的關係
 
+    參數說明 : 
+    comodel_name : 就是這個欄位的 model 是跟那一個 model 做 Many2many 的關係
 
     relation (str) : <可選> 因為 Many2many 會在 db 建立一個表，我們可以自定義它的名字
 
@@ -87,7 +86,9 @@ class DemoMain(models.Model):
 
 
 """
-Many2Many2 使用到的 model
+Many2Many 使用到的 model
+
+注意 : Many2Many 會在 DB 產生一個新的表來關連兩個 model
 """
 
 
@@ -104,9 +105,11 @@ One2Many 使用到的 model
 
 一個 sheet 會對應到很多個 twturbiks_starter.main 的資料
 
-概念 : 很多張出差單，都屬於同一張 sheet 來展示
+舉例 : 很多張出差單，都屬於同一張 sheet 來展示
 
-新開一個 model 就記得要設定 security
+本例 : 多個 main object ， 都屬於同一張 sheet
+
+注意 : 新開一個 model 就記得要設定 security
 
 """
 
@@ -115,7 +118,7 @@ class DemoExpenseSheetTutorial(models.Model):
     _name = "twturbiks_starter.sheet"
     _description = "Demo Sheet Tutorial"
 
-    name = fields.Char("Expense Demo Report Summary", required=True)
+    name = fields.Char("Sheet Report", required=True)
 
     # 也就是說如果你要建立 One2many, 一定也要有一個 Many2one,
     # 但如果建立 Many2one 則不一定要建立 One2many.
@@ -124,5 +127,5 @@ class DemoExpenseSheetTutorial(models.Model):
     expense_line_ids = fields.One2many(
         "twturbiks_starter.main",  # 代表關連的 model (必填)
         "sheet_id",  # 代表所關連 model 的 field (必填)
-        string="Expense Lines",
+        string="Main Object Lines",
     )
