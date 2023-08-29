@@ -15,6 +15,7 @@
           <field name="tag_ids" widget="many2many_tags" />
           <field name="gender" />
           <field name="sheet_id" />
+          <field name="description" />
         </tree>
       </field>
     </record>
@@ -33,6 +34,7 @@
             <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
             <field name="gender" />
             <field name="sheet_id" />
+            <field name="description" />
           </group>
         </form>
       </field>
@@ -80,6 +82,31 @@
 
           </sheet>
         </form>
+      </field>
+    </record>
+
+
+    <!-- search view -->
+    <record id="view_filter_twturbiks_starter_main" model="ir.ui.view">
+      <field name="name">twturbiks_starter main Filter</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <search string="twturbiks_starter main model Filter">
+          <!-- 文字搜尋欄 -->
+          <field name="name" string="Name" />
+          <field name="description" string="description" />
+
+          <!-- 過濾欄 -->
+          <filter name='value' string="value > 10" domain="[('value', '>', 10)]" />
+
+          <!-- 分組欄 -->
+          <group expand="0" string="Group By">
+            <filter string="Sheet" name="sheet" domain="[]" context="{'group_by': 'sheet_id'}" />
+            <filter string="Employee" name="employee" domain="[]"
+              context="{'group_by': 'employee_id'}" />
+          </group>
+
+        </search>
       </field>
     </record>
 
