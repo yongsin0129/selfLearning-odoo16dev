@@ -57,14 +57,18 @@
         <form string="main object Sheet Tutorial">
           <sheet>
             <group>
+              <!-- sheet model 的第一個欄位 -->
               <field name="name" />
             </group>
 
             <!-- 這邊用 notebook tag -->
             <notebook>
+              <!-- notebook tag 的顯示名字 -->
               <page string="main object page1">
+                <!-- sheet model 的第二個欄位 -->
                 <field name="main_object_ids">
-                  <tree>
+                  <!-- tree 的 editable 也可以寫 bottom ，這樣新增的資料就會加到最下面 -->
+                  <tree editable="top">
                     <field name="name" />
                     <field name="value" />
                     <field name="employee_id" />
