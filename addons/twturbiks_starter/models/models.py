@@ -68,7 +68,7 @@ class DemoMain(models.Model):
     """
     tutorial 5 One2Many
 
-    為了下方的 model "demo.sheet" , 一定要建立一個 Many2one
+    為了下方的 model "demo.sheet" , 一定要建立一個 Many2one    
 
     """
 
@@ -111,6 +111,9 @@ One2Many 使用到的 model
 
 注意 : 新開一個 model 就記得要設定 security
 
+注意 : One2Many 是一個虛擬欄位，在 twturbiks_starter.sheet table 中是看不到 main_object_ids 的欄位
+
+補充: 程式先寫 Many2one，再寫 One2many 這樣才知道One2many 的 inverse_name 要寫誰。
 """
 
 
@@ -122,9 +125,9 @@ class DemoExpenseSheetTutorial(models.Model):
 
     # 也就是說如果你要建立 One2many, 一定也要有一個 Many2one,
     # 但如果建立 Many2one 則不一定要建立 One2many.
-    # One2many 是一個虛擬的欄位, 你在資料庫中是看不到它的存在
+    # One2many 是一個虛擬的欄位, 你在資料庫中是看不到 main_object_ids 的存在, 只能在 Many2One 看到 sheet_id
 
-    expense_line_ids = fields.One2many(
+    main_object_ids = fields.One2many(
         "twturbiks_starter.main",  # 代表關連的 model (必填)
         "sheet_id",  # 代表所關連 model 的 field (必填)
         string="Main Object Lines",
