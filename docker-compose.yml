@@ -12,6 +12,13 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - odoo-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - odoo
 
 volumes:
   odoo-db-data:
+
+
+networks:
+  odoo:
+    driver: bridge

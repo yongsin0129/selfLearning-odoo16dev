@@ -328,3 +328,161 @@ ref : https://www.odoo.com/zh_TW/forum/bang-zhu-1/data-noupdate-0-1-in-security-
 
 ```
 
+## XML Button
+
+使用 xml button 呼叫 model method ( ex : form view ...) 
+
+### model method 定義 
+
+[tutorial : odoo16 all actions list](https://www.cybrosys.com/blog/type-of-actions-in-odoo-16-erp)
+
+在 main model 中新增一個方法 , 透過 main obj 可以查到自已所屬的 sheet
+
+```python title="models/models.py"
+
+    # 在 main obj 中，連結到歸屬的 sheet
+    def show_sheet_of_thisObj(self):
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "twturbiks_starter.sheet",
+            "view_mode": "form",
+            "res_id": self.sheet_id.id,
+        }
+
+```
+
+在 sheet model 中新增一個方法 ，透過 sheet ID 找旗下所有的 objs
+
+```python title="models/models.py"
+
+    # 在 sheet 中，連結到歸屬於自已的 main objs
+    def show_all_main_objs(self):
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "twturbiks_starter.main",
+            "view_mode": "tree,form",
+            "view_id": False,
+            "name": "all_main_objs",
+            "domain": [("sheet_id", "=", self.id)],
+        }
+
+```
+
+參數說明 : 
+
+- type : 執行的 action
+- view_mode : window 中可以顯示的 view 種類
+- view_id : is an optional database ID or false
+- domain :- It is used to filter the domain to implicitly add to all view search queries.
+to open the form view of a specific product in a new dialog:
+
+補充 : 文件中有一個參數 views :- It is the list of view_type and view_id pairs. 但使用上好像沒有 view_type 的作用
+
+### view 
+
+[official doc. odoo16-btn](https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html#list)
+
+需要再往下拉一點才會看到 button tag 的說明
+
+```xml title="views/views.xml"
+    <!-- main model form -->
+    <record model="ir.ui.view" id="twturbiks_starter.form">
+      <field name="name">twturbiks_starter form</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+
+        <!-- button 會出現在 header 的位置 -->
+        <!-- <xpath expr="//header" position="inside">
+          <button
+            class="btn btn-primary"
+            name="open_form_view"
+            string="SHEET ID" type="object"
+            attrs="{'invisible':[('sheet_id','=', False)]}" />
+        </xpath> -->
+
+        <form>
+          <sheet>
+
+            <!-- button 出現在 sheet 的右上角位置 -->
+            <div class="oe_button_box" name="button_box">
+              <!-- 重要參數 1. name : 對應 model 的自定義 fn  2.type="object" 表示呼叫 model method-->
+              <button
+                type="object"
+                name="show_sheet_of_thisObj"
+                string="show SHEET"
+                attrs="{'invisible':[('sheet_id','=', False)]}"
+                class="oe_stat_button"
+                icon="fa-bars" />
+            </div>
+            <group>
+              <field name="name" />
+              <field name="value" />
+              <field name="value2" />
+              <field name="user_id" />
+              <field name="employee_id" />
+              <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
+              <field name="gender" />
+              <field name="sheet_id" />
+              <field name="description" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- sheet model form -->
+    <record id="view_form_demo_expense_sheet_tutorial" model="ir.ui.view">
+      <field name="name">Demo Expense Sheet Tutorial Form</field>
+      <field name="model">twturbiks_starter.sheet</field>
+      <field name="arch" type="xml">
+        <form string="main object Sheet Tutorial">
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <!-- 參數 : 1. name: 對應 model 的自定義 fn 2. main_object_ids 對應下方 notebook 的 field 
+              ，表示無資料時不顯示 btn 3.type="object" 表示呼叫 model method -->
+              <button
+                type="object"
+                name="show_all_main_objs"
+                string="show all main objs"
+                attrs="{'invisible':[('main_object_ids','=', False)]}"
+                class="oe_stat_button"
+                icon="fa-bars" />
+            </div>
+            <group>
+              <!-- sheet model 的第一個欄位 -->
+              <field name="name" />
+            </group>
+
+            <!-- 這邊用 notebook tag -->
+            <notebook>
+              <!-- notebook tag 的顯示名字 -->
+              <page string="main object page1">
+                <!-- sheet model 的第二個欄位 -->
+                <field name="main_object_ids">
+                  <!-- tree 的 editable 也可以寫 bottom ，這樣新增的資料就會加到最下面 -->
+                  <tree editable="top">
+                    <field name="name" />
+                    <field name="value" />
+                    <field name="employee_id" />
+                    <field name="tag_ids" widget="many2many_tags" />
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+```
+
+重要參數說明 :
+
+- type : indicates how it clicking it affects Odoo:
+  - object : call a method on the list’s model. The button’s name is the method, which is called with the current row’s record id and the current context.
+  - action : load an execute an ir.actions, the button’s name is the database id of the action. The context is expanded with the list’s model (as active_model), the current row’s record (active_id) and all the records currently loaded in the list (active_ids, may be just a subset of the database records matching the current search)
+
+- name : see type
+- args : see type
+- attrs : dynamic attributes based on record values. A mapping of attributes to domains, domains are evaluated in the context of the current row’s record, if True the corresponding attribute is set on the cell. Possible attribute is invisible (hides the button).

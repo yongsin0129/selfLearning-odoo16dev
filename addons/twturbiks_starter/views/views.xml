@@ -24,18 +24,41 @@
       <field name="name">twturbiks_starter form</field>
       <field name="model">twturbiks_starter.main</field>
       <field name="arch" type="xml">
+        <!-- button 會出現在 header 的位置 -->
+        <!-- <xpath expr="//header" position="inside">
+          <button
+            class="btn btn-primary"
+            name="open_form_view"
+            string="SHEET ID" type="object"
+            attrs="{'invisible':[('sheet_id','=', False)]}" />
+        </xpath> -->
         <form>
-          <group>
-            <field name="name" />
-            <field name="value" />
-            <field name="value2" />
-            <field name="user_id" />
-            <field name="employee_id" />
-            <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
-            <field name="gender" />
-            <field name="sheet_id" />
-            <field name="description" />
-          </group>
+          <sheet>
+            <!-- button 出現在 sheet 的右上角位置 -->
+            <div class="oe_button_box" name="button_box">
+              <!-- 重要參數 1. name : 對應 model 的自定義 fn  2.type="object" 表示呼叫 model method-->
+              <!-- odoo16-btn
+              https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html#list -->
+              <button
+                type="object"
+                name="show_sheet_of_thisObj"
+                string="show SHEET"
+                attrs="{'invisible':[('sheet_id','=', False)]}"
+                class="oe_stat_button"
+                icon="fa-bars" />
+            </div>
+            <group>
+              <field name="name" />
+              <field name="value" />
+              <field name="value2" />
+              <field name="user_id" />
+              <field name="employee_id" />
+              <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
+              <field name="gender" />
+              <field name="sheet_id" />
+              <field name="description" />
+            </group>
+          </sheet>
         </form>
       </field>
     </record>
@@ -58,6 +81,17 @@
       <field name="arch" type="xml">
         <form string="main object Sheet Tutorial">
           <sheet>
+            <div class="oe_button_box" name="button_box">
+              <!-- 參數 : 1. name: 對應 model 的自定義 fn 2. main_object_ids 對應下方 notebook 的 field 
+              ，表示無資料時不顯示 btn 3.type="object" 表示呼叫 model method -->
+              <button
+                type="object"
+                name="show_all_main_objs"
+                string="show all main objs"
+                attrs="{'invisible':[('main_object_ids','=', False)]}"
+                class="oe_stat_button"
+                icon="fa-bars" />
+            </div>
             <group>
               <!-- sheet model 的第一個欄位 -->
               <field name="name" />

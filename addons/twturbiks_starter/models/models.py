@@ -84,6 +84,16 @@ class DemoMain(models.Model):
         for record in self:
             record.value2 = float(record.value) / 100
 
+    # 在 main obj 中，連結到歸屬的 sheet
+    # odoo16 actions list : https://www.cybrosys.com/blog/type-of-actions-in-odoo-16-erp
+    def show_sheet_of_thisObj(self):
+        return {
+            "type": "ir.actions.act_window",
+            "view_mode": "form",
+            "res_model": "twturbiks_starter.sheet",
+            "res_id": self.sheet_id.id,
+        }
+
 
 """
 Many2Many 使用到的 model
@@ -132,3 +142,14 @@ class DemoExpenseSheetTutorial(models.Model):
         "sheet_id",  # 代表所關連 model 的 field (必填)
         string="Main Object Lines",
     )
+
+    # 在 sheet 中，連結到歸屬於自已的所有 main objs
+    def show_all_main_objs(self):
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "twturbiks_starter.main",
+            "view_mode": "tree,form",
+            "name": "all_main_objs",
+            "view_id": False,
+            "domain": [("sheet_id", "=", self.id)],
+        }
