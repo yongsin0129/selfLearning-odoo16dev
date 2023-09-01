@@ -153,3 +153,36 @@ class DemoExpenseSheetTutorial(models.Model):
             "view_id": False,
             "domain": [("sheet_id", "=", self.id)],
         }
+
+    # name_get()
+    # 自定義 這個 model 在頁面顯示 title 名字
+    # e.g. 建立一個名字為 foo 的 sheet , 頁面顯示是 2023-09-01-foo
+    # 當頁面要看到 many2one 的時候就會觸發
+    # 但因為 db 只會存 name (也就是 foo)，前面的自定義文字不會存入，所以想要搜尋時是看不到的，需要實作這個功能，如下 _name_search()
+    def name_get(self):
+        names = []
+        for record in self:
+            # 兩種寫法都行
+            # name = "%s-%s" % (record.create_date.date(), record.name)
+            name = "{}_{}".format(record.create_date.date(), record.name)
+            names.append((record.id, name))
+        return names
+
+    # ref : https://blog.csdn.net/qq_29654325/article/details/119797528 => name_search 的结果，其实是 name_get() 的返回值
+    # 查看 many2one 的時候就會觸發
+    @api.model
+    def name_search(self, name="", args=None, operator="ilike", limit=100):
+        if args is None:
+            args = []
+
+        domain = args + [
+            "|",
+            "|",
+            ("id", operator, name),
+            ("name", operator, name),
+            ("create_date", operator, name),
+        ]
+        # domain = args + [("create_date", operator, name)]
+        # domain = args + [("id", operator, name)]
+        return self.search(domain, limit=limit).name_get()
+        # return self.search(domain, limit=limit).name_get() # 原作用繼承寫法，不過直接使用 self 看起來一樣 ？

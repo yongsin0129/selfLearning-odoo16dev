@@ -486,3 +486,118 @@ to open the form view of a specific product in a new dialog:
 - name : see type
 - args : see type
 - attrs : dynamic attributes based on record values. A mapping of attributes to domains, domains are evaluated in the context of the current row’s record, if True the corresponding attribute is set on the cell. Possible attribute is invisible (hides the button).
+
+## ORM method : name_get , name_search
+
+[odoo系统中 name_search 和 name_get 用法](https://blog.51cto.com/melon0809/5389459)
+[odoo name_get](https://www.cnblogs.com/smarttony/p/11910963.html)
+
+### name_get
+
+透過 重写 name_get 方法, 返回 更多資料給畫面 (自定義組合的名稱)
+
+e.g. 
+
+- 每一個 record 想要增加流水號 or 日期時間與 name 結合使用 ( 2023-09-01-foo )
+
+```python title="models/models.py"
+    # 當頁面要看到 many2one 的時候就會觸發
+    # 注意 : db 只會存 name (也就是 foo)，組合文字不會存入，所以想要搜尋時是看不到的 !!
+    # Tip : 如果使用現有 field 來做組合文字，可以透過重寫 name_search 來做到 search 組合文字
+    def name_get(self):
+        names = []
+        for record in self:
+            # 兩種寫法都行
+            # name = "%s-%s" % (record.create_date.date(), record.name)
+            name = "{}_{}".format(record.create_date.date(), record.name)
+            names.append((record.id, name))
+        return names
+```
+
+### name_search
+
+原始的 name_search 只會 search name field , 可以透過 重写 name_get 方法, 增加搜尋的彈性
+
+e.g. 上面建立的 sheet 頁面顯示是 2023-09-01-foo , 但輸入 09-01 確找不到，因為 model 沒有這個 name 
+
+所以我們 overwrite 原有 orm 的 name_search method , 在 domain 中新增想查找的條件
+
+```python title="models/models.py"
+    # 查看 many2one 的時候就會觸發
+    @api.model
+    def name_search(self, name="", args=None, operator="ilike", limit=100):
+        if args is None:
+            args = []
+
+        domain = args + [
+            "|", # 這邊記得
+            "|", # 這邊記得 有第三個條件時就需要加第二個 | 
+            ("id", operator, name),
+            ("name", operator, name),
+            ("create_date", operator, name),
+        ]
+        # domain = args + [("create_date", operator, name)]
+        # domain = args + [("id", operator, name)]
+        return self.search(domain, limit=limit).name_get()
+        # return self.search(domain, limit=limit).name_get() # 原作用繼承寫法，不過直接使用 self 看起來一樣 ？
+```
+補充 : "|" 符号是用于组合搜索条件的逻辑运算符。它的作用是将多个搜索条件组合在一起，并且只要满足其中一个条件即可返回结果。
+
+#### domain 設定補充
+
+[[SOLVED] What does "=ilike" in domain operator used for?](https://www.odoo.com/zh_TW/forum/bang-zhu-1/solved-what-does-ilike-in-domain-operator-used-for-58261)
+
+- [('name', 'like', 'dog')]
+
+    This will find recods with name 'dog', 'dogs', 'bulldog', ... but not 'Dog'.
+
+- [('name', '=like', 'dog')]
+
+    This will find records with name 'dog' (it's almost exactly like the '=' operator).
+
+- [('name', 'ilike', 'dog')]
+
+    This is the most universal search. It will find records with name 'dog', 'DOGS', 'Bulldog', etc..
+
+- ['name', '=ilike', 'dog')]
+
+    This will find records with name 'dog', 'DOG', 'Dog', 'DOg', DoG', 'dOG', 'doG' and 'dOg'.
+
+
+#### 原碼補充
+
+ref : https://blog.csdn.net/qq_29654325/article/details/119797528 => name_search 的结果，其实是 name_get() 的返回值
+
+1. call name_search 在原碼中就是 call _name_search
+```
+        ids = self._name_search(name, args, operator, limit=limit)
+        return self.browse(ids).sudo().name_get()
+```
+2. _name_search 會 call _search 後返回 ids
+3. 最後 name_search 再利用 browse(ids) call name_get()
+
+
+``` 
+    def browse(self, ids=None):
+        """ browse([ids]) -> records
+
+        Returns a recordset for the ids provided as parameter in the current
+        environment.
+
+        .. code-block:: python
+
+            self.browse([7, 18, 12])
+            res.partner(7, 18, 12)
+
+        :param ids: id(s)
+        :type ids: int or iterable(int) or None
+        :return: recordset
+        """
+        if not ids:
+            ids = ()
+        elif ids.__class__ is int:
+            ids = (ids,)
+        else:
+            ids = tuple(ids)
+        return self.__class__(self.env, ids, ids)
+```
