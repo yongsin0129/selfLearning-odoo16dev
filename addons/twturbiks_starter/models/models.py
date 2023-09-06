@@ -73,7 +73,9 @@ class DemoMain(models.Model):
 
     """
 
-    sheet_id = fields.Many2one("twturbiks_starter.sheet", string="sheet id")
+    sheet_id = fields.Many2one(
+        "twturbiks_starter.sheet", string="sheet id", auto_join=True
+    )
 
     """
 

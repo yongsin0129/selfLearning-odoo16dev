@@ -902,8 +902,11 @@ Odoo shell，也被稱為Odoo命令行界面（CLI），是由Odoo提供的一�
 完整版
 `python3 odoo-bin shell -d twturbiks -w odoo -r odoo --db_port=5432 --db_host=localhost --addons-path='/home/twtrubiks/odoo/addons`
 
+
+
 -d : 讀取的 db 名字
 -c : 裡面已經設定帳號密碼 host port addons 所以可以用簡化版
+--log-level=debug_sql : 開啟 raw sql 
 
 以下只介紹簡單的 CRUD
 
@@ -970,3 +973,73 @@ odoo.exceptions.MissingError: Record does not exist or has been deleted.
 
 [沈沈弘哲大大-odoo shell](https://github.com/twtrubiks/odoo-demo-addons-tutorial#shell)
 
+## auto_join
+
+### 單 table 查詢
+```shell
+>>> self.env['twturbiks_starter.main'].search([('sheet_id','in',[2])])
+twturbiks_starter.main(8, 9)
+```
+```sql
+select
+	"twturbiks_starter_main".id
+from
+	"twturbiks_starter_main"
+where
+	(("twturbiks_starter_main"."active" = true)
+		and ("twturbiks_starter_main"."sheet_id" in (2)))
+order by
+	"twturbiks_starter_main"."id"
+```
+
+### 跳第二個 table 查詢
+
+目前的 auto_join 為預設的 false
+
+使用子查詢，先到  twturbiks_starter_sheet 裡面查 id = 2 
+
+```shell
+>>> self.env['twturbiks_starter.main'].search([('sheet_id.id','=','2')])
+twturbiks_starter.main(8, 9)
+```
+```sql
+select
+	"twturbiks_starter_main".id
+from
+	"twturbiks_starter_main"
+
+-- 這邊的 where 使用子查詢，先到  twturbiks_starter_sheet 裡面查一遍
+where
+	(("twturbiks_starter_main"."active" = true)
+		and ("twturbiks_starter_main"."sheet_id" in (
+		select
+			"twturbiks_starter_sheet".id
+		from
+			"twturbiks_starter_sheet"
+		where
+			("twturbiks_starter_sheet"."id" = '2'))))
+order by
+	"twturbiks_starter_main"."id"
+```
+
+### 跳第二個 table 查詢 (auto_join=True)
+
+使用 left join 先把 table 組合起來，再查 sheet_id = 2
+
+```shell
+>>> self.env['twturbiks_starter.main'].search([('sheet_id.id','=','2')])
+twturbiks_starter.main(8, 9)
+```
+```sql
+select
+	"twturbiks_starter_main".id
+from
+	"twturbiks_starter_main"
+left join "twturbiks_starter_sheet" as "twturbiks_starter_main__sheet_id" on
+	("twturbiks_starter_main"."sheet_id" = "twturbiks_starter_main__sheet_id"."id")
+where
+	(("twturbiks_starter_main"."active" = true)
+		and ("twturbiks_starter_main__sheet_id"."id" = '2'))
+order by
+	"twturbiks_starter_main"."id"
+```
