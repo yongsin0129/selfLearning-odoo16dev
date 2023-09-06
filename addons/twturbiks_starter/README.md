@@ -703,3 +703,90 @@ class DemoExpenseSheetTutorial(models.Model):
 
 - 新增會實例化一筆新的 main obj record , 而 link 不會。
 - self.env.ref("外部連結") 外部連結對應到的是已經實例化的 XML ID
+
+## view : tree view 上做 CRUD 的限制
+
+### menu
+```xml title="views/menu.xml"
+  <!--  -->
+  <!-- menu 3     main model but no create-->
+  <!--  -->
+
+  <!-- action for open main model -->
+  <record model="ir.actions.act_window" id="twturbiks_starter.open_main_no_create">
+    <field name="name">twturbiks_starter main model no create</field>
+    <field name="res_model">twturbiks_starter.main</field>
+    <field name="view_mode">tree</field>
+    <!-- ref="twturbiks_starter.list_no_create" : 這個 action 要連結 view id 
+      id 的寫法 : twturbiks_starter.list_no_create or list_no_create 都可以
+      最多一個 "點" , 這個點的前面必需是一個已經安裝的 module name ,如果沒有點，則會 search 此 module 內的 id
+    -->
+    <field name="view_id" ref="twturbiks_starter.list_no_create" />
+  </record>
+
+  <!-- 單層 Menu for open main model no create -->
+  <menuitem name="Menu 3 no create" id="twturbiks_starter.menu_3"
+    action="twturbiks_starter.open_main_no_create"
+    parent="twturbiks_starter.menu_root" sequence="3" />
+```
+
+- view_id
+specific view added to the views list in case its type is part of the view_mode list and not already filled by one of the views in view_ids
+
+These are mostly used when defining actions from Data Files:
+
+```xml
+<record model="ir.actions.act_window" id="test_action">
+    <field name="name">A Test Action</field>
+    <field name="res_model">some.model</field>
+    <field name="view_mode">graph</field>
+    <field name="view_id" ref="my_specific_view"/>
+</record>
+```
+will use the “my_specific_view” view even if that’s not the default view for the model.
+
+The server-side composition of the views sequence is the following:
+
+1. get each (id, type) from view_ids (ordered by sequence)
+
+2. if view_id is defined and its type isn’t already filled, append its (id, type)
+
+3. for each unfilled type in view_mode, append (False, type)
+
+參考資料
+
+- ir.actions.act_window 的文檔
+    https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/backend/actions.html?highlight=act_window#window-actions-ir-actions-act-window
+    
+- view_id 的文檔 :
+    https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/backend/views.html#methods
+
+### view
+
+```xml title="views/views.xml"
+
+    <!-- main model list no create-->
+    <record model="ir.ui.view" id="twturbiks_starter.list_no_create">
+      <field name="name">twturbiks_starter list no create</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <!-- 重點在這段
+        0 false
+        1 true 
+        可以混寫 ，目前的寫法表示 : 不能新增、刪除，可以修改        
+        -->
+        <tree string="no_create_tree" create="0" delete="false" edit="1" editable="top"> 
+          <field name="name" />
+          <field name="value" />
+          <field name="value2" />
+          <field name="user_id" />
+          <field name="employee_id" />
+          <field name="tag_ids" widget="many2many_tags" />
+          <field name="gender" />
+          <field name="sheet_id" />
+          <field name="description" />
+        </tree>
+      </field>
+    </record>
+
+```

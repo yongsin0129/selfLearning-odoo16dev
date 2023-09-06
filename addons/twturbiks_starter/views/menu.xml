@@ -40,4 +40,29 @@
     parent="twturbiks_starter.menu_2"
     action="twturbiks_starter.open_sheet" />
 
+  <!--  -->
+  <!-- menu 3     main model but no create-->
+  <!--  -->
+
+  <!-- action for open main model -->
+  <record model="ir.actions.act_window" id="twturbiks_starter.open_main_no_create">
+    <field name="name">twturbiks_starter main model no create</field>
+    <field name="res_model">twturbiks_starter.main</field>
+    <field name="view_mode">tree</field>
+    <!-- ref : 這個 action 要連結到那一個 view id 
+      id 的寫法 : twturbiks_starter.list_no_create or list_no_create 都可以
+      最多一個 "點" , 這個點的前面必需是一個已經安裝的 module name
+      如果沒有點，則會 search 此 module 內的 id
+    -->
+    <!--
+      view_id 的文檔 :
+    https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/backend/views.html#methods -->
+    <field name="view_id" ref="twturbiks_starter.list_no_create" />
+  </record>
+
+  <!-- 單層 Menu for open main model no create -->
+  <menuitem name="Menu 3 no create" id="twturbiks_starter.menu_3"
+    action="twturbiks_starter.open_main_no_create"
+    parent="twturbiks_starter.menu_root" sequence="3" />
+
 </odoo>

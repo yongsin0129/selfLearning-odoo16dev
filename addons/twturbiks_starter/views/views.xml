@@ -1,5 +1,6 @@
 <odoo>
   <data>
+
     <!-- main model list -->
 
     <record model="ir.ui.view" id="twturbiks_starter.list">
@@ -151,6 +152,26 @@
           </group>
 
         </search>
+      </field>
+    </record>
+
+    <!-- main model list no create-->
+
+    <record model="ir.ui.view" id="twturbiks_starter.list_no_create">
+      <field name="name">twturbiks_starter list no create</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <tree string="no_create_tree" create="0" delete="false" edit="1" editable="top">
+          <field name="name" />
+          <field name="value" />
+          <field name="value2" />
+          <field name="user_id" />
+          <field name="employee_id" />
+          <field name="tag_ids" widget="many2many_tags" />
+          <field name="gender" />
+          <field name="sheet_id" />
+          <field name="description" />
+        </tree>
       </field>
     </record>
 
