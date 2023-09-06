@@ -11,6 +11,7 @@ class DemoMain(models.Model):
     value = fields.Integer()
     value2 = fields.Float(compute="_value_pc", store=True)
     description = fields.Text()
+    active = fields.Boolean("Active", default=True)
 
     """
     tutorial 1 Many2one

@@ -36,6 +36,8 @@
         </xpath> -->
         <form>
           <sheet>
+            <widget name="web_ribbon" title="封存" bg_color="bg-danger"
+              attrs="{'invisible': [('active', '=', True)]}" />
             <!-- button 出現在 sheet 的右上角位置 -->
             <div class="oe_button_box" name="button_box">
               <!-- 重要參數 1. name : 對應 model 的自定義 fn  2.type="object" 表示呼叫 model method-->
@@ -59,6 +61,7 @@
               <field name="gender" />
               <field name="sheet_id" />
               <field name="description" />
+              <field name="active" invisible="0" />
             </group>
           </sheet>
         </form>

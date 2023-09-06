@@ -790,3 +790,54 @@ The server-side composition of the views sequence is the following:
     </record>
 
 ```
+
+## Active Archive Ribbon
+
+### model
+```python title="models/models.py"
+class DemoMain(models.Model):
+    _name = "twturbiks_starter.main"
+    _description = "this is main model of this module "
+
+    ...
+    active = fields.Boolean("Active", default=True)
+    ...
+
+```
+
+[What Is Automatic & Reserved Fields in Odoo 16](https://www.cybrosys.com/blog/what-is-automatic-and-reserved-fields-in-odoo-16)
+
+保留 fields : id
+
+- View fields 
+
+create_date,write_date,create_uid,write_uid
+
+- Access Log Fields
+
+name,active,State,company_id,
+
+### view
+
+```xml title="views/views.xml"
+    <!-- main model form -->
+    <record model="ir.ui.view" id="twturbiks_starter.form">
+      <field name="name">twturbiks_starter form</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <widget name="web_ribbon" title="封存" bg_color="bg-danger"
+              attrs="{'invisible': [('active', '=', True)]}" />
+              ...
+            <group>
+              ...
+              <field name="active" invisible="0" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+```
+
+就算 model 有 active 的 field , 但 form 如果沒有寫進去，一樣不會出現封存的動作 button
