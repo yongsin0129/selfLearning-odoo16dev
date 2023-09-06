@@ -601,3 +601,105 @@ ref : https://blog.csdn.net/qq_29654325/article/details/119797528 => name_search
             ids = tuple(ids)
         return self.__class__(self.env, ids, ids)
 ```
+
+## 使用 ORM 對 One2many M2X 欄位做 CRUD
+
+### view
+
+先把四個 button 都先寫好
+
+```xml title="views/views.xml"
+          ...
+      <field name="arch" type="xml">
+        <form string="main object Sheet Tutorial">
+          <header>
+            # 新增一筆 main obj 並與 sheet 做關連
+            <button name="add_demo_main_obj_record" string="add demo main obj record" type="object" />
+            # 關連一筆已經實例化的 main obj
+            <button name="link_demo_main_obj_record" string="link demo main obj record"
+              type="object" />
+            # 將 sheet 的關連表　取代為　新的關連表
+            <button name="replace_demo_main_obj_record" string="replace main obj record"
+              type="object" />
+            # 將 sheet 的關連表全部洗掉，變為空
+            <button name="unlink_demo_main_obj_record" string="unlink main obj record"
+              type="object" />
+          </header>
+          <sheet>
+          ...
+```
+
+### model method
+
+```python 
+class DemoExpenseSheetTutorial(models.Model):
+    _name = "twturbiks_starter.sheet"
+    _description = "Demo Sheet Tutorial"
+
+    name = fields.Char("Sheet Report", required=True)
+
+    main_object_ids = fields.One2many(
+        "twturbiks_starter.main",  # 代表關連的 model (必填)
+        "sheet_id",  # 代表所關連 model 的 field (必填)
+        string="Main Object Lines",
+    )
+
+    ...
+
+    # 透過 button 來新建一筆 main obj 資料
+    def add_demo_main_obj_record(self):
+        # (0, _ , {'field': value}) creates a new record and links it to this one.
+
+        # ref 會使用外部連結，找到 record XML ID
+        # 補充 :　並不是對應到 demo or data folder 內 record 的 XML ID，而是對應到已經被　ORM 創造出來，有 XML ID 的 RECORD
+        data_1 = self.env.ref("twturbiks_starter.object14")
+
+        tag_data_1 = self.env.ref("twturbiks_starter.tag12")
+        tag_data_2 = self.env.ref("twturbiks_starter.tag13")
+
+        # 將 ref 抓到的資料放入 dict.
+        for record in self:
+            # creates a new record
+            val = {
+                "name": data_1.name,
+                "value": data_1.value,
+                "employee_id": data_1.employee_id,
+                "tag_ids": [(6, 0, [tag_data_1.id, tag_data_2.id])],
+            }
+
+            # 讓自已 sheet 的 one2many 新增一筆 record , 並有自已的 ID ，此 ID 非 XML ID
+            # main_object_ids 對應的是 twturbiks_starter.main model
+            self.main_object_ids = [(0, 0, val)]
+
+    def link_demo_main_obj_record(self):
+        # (4, id, _) links an already existing record.
+
+        #  必需 link 已經存在的 record (已經創造出來有 XML ID 的 record)
+        data_1 = self.env.ref("twturbiks_starter.object14")
+
+        for record in self:
+            # link already existing record
+            self.main_object_ids = [(4, data_1.id, 0)]
+
+    def replace_demo_main_obj_record(self):
+        # (6, _, [ids]) replaces the list of linked records with the provided list.
+
+        data_1 = self.env.ref("twturbiks_starter.object11")
+        data_2 = self.env.ref("twturbiks_starter.object13")
+
+        for record in self:
+            # replace multi record
+            self.main_object_ids = [(6, 0, [data_1.id, data_2.id])]
+
+    def unlink_demo_main_obj_record(self):
+        # (5, , ) removes all the links, without deleting the linked records.
+
+        for record in self:
+            # unlink multi record but without deleting
+            self.main_object_ids = [(5, 0, 0)]
+```
+
+筆記 : 
+
+- 新增會實例化一筆新的 main obj record , 而 link 不會。
+- self.env.ref("外部連結") 外部連結對應到的是已經實例化的 XML ID

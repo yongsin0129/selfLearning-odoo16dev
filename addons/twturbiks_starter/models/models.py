@@ -186,3 +186,55 @@ class DemoExpenseSheetTutorial(models.Model):
         # domain = args + [("id", operator, name)]
         return self.search(domain, limit=limit).name_get()
         # return self.search(domain, limit=limit).name_get() # 原作用繼承寫法，不過直接使用 self 看起來一樣 ？
+
+    # 透過 button 來新建一筆 main obj 資料
+    def add_demo_main_obj_record(self):
+        # (0, _ , {'field': value}) creates a new record and links it to this one.
+
+        # ref 會使用外部連結，找到 record XML ID
+        # 補充 :　並不是對應到 demo or data folder 內 record 的 XML ID，而是對應到已經被　ORM 創造出來，有 XML ID 的 RECORD
+        data_1 = self.env.ref("twturbiks_starter.object14")
+
+        tag_data_1 = self.env.ref("twturbiks_starter.tag12")
+        tag_data_2 = self.env.ref("twturbiks_starter.tag13")
+
+        # 將 ref 抓到的資料放入 dict.
+        for record in self:
+            # creates a new record
+            val = {
+                "name": data_1.name,
+                "value": data_1.value,
+                "employee_id": data_1.employee_id,
+                "tag_ids": [(6, 0, [tag_data_1.id, tag_data_2.id])],
+            }
+
+            # 讓自已 sheet 的 one2many 新增一筆 record , 並有自已的 ID ，此 ID 非 XML ID
+            # main_object_ids 對應的是 twturbiks_starter.main model
+            self.main_object_ids = [(0, 0, val)]
+
+    def link_demo_main_obj_record(self):
+        # (4, id, _) links an already existing record.
+
+        #  必需 link 已經存在的 record (已經創造出來有 XML ID 的 record)
+        data_1 = self.env.ref("twturbiks_starter.object14")
+
+        for record in self:
+            # link already existing record
+            self.main_object_ids = [(4, data_1.id, 0)]
+
+    def replace_demo_main_obj_record(self):
+        # (6, _, [ids]) replaces the list of linked records with the provided list.
+
+        data_1 = self.env.ref("twturbiks_starter.object11")
+        data_2 = self.env.ref("twturbiks_starter.object13")
+
+        for record in self:
+            # replace multi record
+            self.main_object_ids = [(6, 0, [data_1.id, data_2.id])]
+
+    def unlink_demo_main_obj_record(self):
+        # (5, , ) removes all the links, without deleting the linked records.
+
+        for record in self:
+            # unlink multi record but without deleting
+            self.main_object_ids = [(5, 0, 0)]

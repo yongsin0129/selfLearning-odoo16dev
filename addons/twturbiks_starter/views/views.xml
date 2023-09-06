@@ -19,6 +19,7 @@
         </tree>
       </field>
     </record>
+
     <!-- main model form -->
     <record model="ir.ui.view" id="twturbiks_starter.form">
       <field name="name">twturbiks_starter form</field>
@@ -80,6 +81,15 @@
       <field name="model">twturbiks_starter.sheet</field>
       <field name="arch" type="xml">
         <form string="main object Sheet Tutorial">
+          <header>
+            <button name="add_demo_main_obj_record" string="add demo main obj record" type="object" />
+            <button name="link_demo_main_obj_record" string="link demo main obj record"
+              type="object" />
+            <button name="replace_demo_main_obj_record" string="replace main obj record"
+              type="object" />
+            <button name="unlink_demo_main_obj_record" string="unlink main obj record"
+              type="object" />
+          </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
               <!-- 參數 : 1. name: 對應 model 的自定義 fn 2. main_object_ids 對應下方 notebook 的 field 
