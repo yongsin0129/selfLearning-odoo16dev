@@ -1,0 +1,197 @@
+<odoo>
+  <data>
+
+    <!-- main model list -->
+
+    <record model="ir.ui.view" id="twturbiks_starter.list">
+      <field name="name">twturbiks_starter list</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="value" />
+          <field name="value2" />
+          <field name="user_id" />
+          <field name="employee_id" />
+          <field name="tag_ids" widget="many2many_tags" />
+          <field name="gender" />
+          <field name="sheet_id" />
+          <field name="description" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- main model form -->
+    <record model="ir.ui.view" id="twturbiks_starter.form">
+      <field name="name">twturbiks_starter form</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <!-- button 會出現在 header 的位置 -->
+        <!-- <xpath expr="//header" position="inside">
+          <button
+            class="btn btn-primary"
+            name="open_form_view"
+            string="SHEET ID" type="object"
+            attrs="{'invisible':[('sheet_id','=', False)]}" />
+        </xpath> -->
+        <form>
+          <sheet>
+            <widget name="web_ribbon" title="封存" bg_color="bg-danger"
+              attrs="{'invisible': [('active', '=', True)]}" />
+            <!-- button 出現在 sheet 的右上角位置 -->
+            <div class="oe_button_box" name="button_box">
+              <!-- 重要參數 1. name : 對應 model 的自定義 fn  2.type="object" 表示呼叫 model method-->
+              <!-- odoo16-btn
+              https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html#list -->
+              <button
+                type="object"
+                name="show_sheet_of_thisObj"
+                string="show SHEET"
+                attrs="{'invisible':[('sheet_id','=', False)]}"
+                class="oe_stat_button"
+                icon="fa-bars" />
+            </div>
+            <group>
+              <field name="name" />
+              <field name="value" />
+              <field name="value2" />
+              <field name="user_id" />
+              <field name="employee_id" />
+              <field name="tag_ids" widget="many2many_tags" /> <!-- widget -->
+              <field name="gender" />
+              <field name="sheet_id" />
+              <field name="description" />
+              <field name="active" invisible="0" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- sheet model list -->
+    <record model="ir.ui.view" id="demo_sheet_list">
+      <field name="name">demo_sheet list</field>
+      <field name="model">twturbiks_starter.sheet</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- sheet model form -->
+    <record id="view_form_demo_expense_sheet_tutorial" model="ir.ui.view">
+      <field name="name">Demo Expense Sheet Tutorial Form</field>
+      <field name="model">twturbiks_starter.sheet</field>
+      <field name="arch" type="xml">
+        <form string="main object Sheet Tutorial">
+          <header>
+            <button name="add_demo_main_obj_record" string="add demo main obj record" type="object" />
+            <button name="link_demo_main_obj_record" string="link demo main obj record"
+              type="object" />
+            <button name="replace_demo_main_obj_record" string="replace main obj record"
+              type="object" />
+            <button name="unlink_demo_main_obj_record" string="unlink main obj record"
+              type="object" />
+          </header>
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <!-- 參數 : 1. name: 對應 model 的自定義 fn 2. main_object_ids 對應下方 notebook 的 field 
+              ，表示無資料時不顯示 btn 3.type="object" 表示呼叫 model method -->
+              <button
+                type="object"
+                name="show_all_main_objs"
+                string="show all main objs"
+                attrs="{'invisible':[('main_object_ids','=', False)]}"
+                class="oe_stat_button"
+                icon="fa-bars" />
+            </div>
+            <group>
+              <!-- sheet model 的第一個欄位 -->
+              <field name="name" />
+            </group>
+
+            <!-- 這邊用 notebook tag -->
+            <notebook>
+              <!-- notebook tag 的顯示名字 -->
+              <page string="main object page1">
+                <!-- sheet model 的第二個欄位 -->
+                <field name="main_object_ids">
+                  <!-- tree 的 editable 也可以寫 bottom ，這樣新增的資料就會加到最下面 -->
+                  <tree editable="top">
+                    <field name="name" />
+                    <field name="value" />
+                    <field name="employee_id" />
+                    <field name="tag_ids" widget="many2many_tags" />
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <!-- search view -->
+    <record id="view_filter_twturbiks_starter_main" model="ir.ui.view">
+      <field name="name">twturbiks_starter main Filter</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <search string="twturbiks_starter main model Filter">
+          <!-- 文字搜尋欄 -->
+          <field name="name" string="Name" />
+          <field name="description" string="description" />
+
+          <!-- 過濾欄 -->
+          <filter name='value' string="value > 10" domain="[('value', '>', 10)]" />
+
+          <!-- 分組欄 -->
+          <group expand="0" string="Group By">
+            <filter string="Sheet" name="sheet" domain="[]" context="{'group_by': 'sheet_id'}" />
+            <filter string="Employee" name="employee" domain="[]"
+              context="{'group_by': 'employee_id'}" />
+          </group>
+
+          <searchpanel>
+            <field name="user_id" select="multi" icon="fa-address-card" enable_counters="1"
+              color="#fc03d7" />
+            <field name="employee_id" select="multi" icon="fa-building" enable_counters="1" />
+            <field name="sheet_id" icon="fa-users" enable_counters="1" />
+
+            <!-- error example 只有 store=true (一般或多對多) 對 "groupby" 參數有效 -->
+            <field name="gender" icon="fa-cutlery" enable_counters="1" color="#d10202" />
+
+            <!-- error example 僅支援類別多對一選擇的類型 , but (found type 整數) -->
+            <!-- <field name="value" icon="fa-users" enable_counters="1" /> -->
+
+            <!-- error example 僅支援 m2one , not m2x-->
+            <!-- <field name="tag_ids" icon="fa-users" /> -->
+          </searchpanel>
+        </search>
+      </field>
+    </record>
+
+    <!-- main model list no create-->
+
+    <record model="ir.ui.view" id="twturbiks_starter.list_no_create">
+      <field name="name">twturbiks_starter list no create</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <tree string="no_create_tree" create="0" delete="false" edit="1" editable="top">
+          <field name="name" />
+          <field name="value" />
+          <field name="value2" />
+          <field name="user_id" />
+          <field name="employee_id" />
+          <field name="tag_ids" widget="many2many_tags" />
+          <field name="gender" />
+          <field name="sheet_id" />
+          <field name="description" />
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>

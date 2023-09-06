@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <!-- menu 慣例 : -->
+  <!-- 1. 先寫 action , 定義 ID -->
+  <!-- 2. 再寫 menu ， 套用上面的 ID-->
+
+  <!-- APP menu region -->
+  <!-- 主選單 : 不需要寫 action-->
+  <menuitem name="twturbiks_starter" id="twturbiks_starter.menu_root" />
+
+  <!--  -->
+  <!-- menu 1     main model-->
+  <!--  -->
+  <!-- action for open main model -->
+  <record model="ir.actions.act_window" id="twturbiks_starter.open_main">
+    <field name="name">twturbiks_starter main model</field>
+    <field name="res_model">twturbiks_starter.main</field>
+    <field name="view_mode">tree,form,kanban</field>
+  </record>
+
+  <!-- 單層 Menu for open main model -->
+  <menuitem name="Menu 1" id="twturbiks_starter.menu_1" action="twturbiks_starter.open_main"
+    parent="twturbiks_starter.menu_root" sequence="1" />
+
+  <!--  -->
+  <!-- menu 2     sheet model-->
+  <!--  -->
+  <!-- action for open sheet model -->
+  <record model="ir.actions.act_window" id="twturbiks_starter.open_sheet">
+    <field name="name">twturbiks_starter sheet model</field>
+    <field name="res_model">twturbiks_starter.sheet</field>
+    <field name="view_mode">kanban,tree,form</field>
+  </record>
+
+  <!-- 多層 Menu for open sheet model-->
+  <menuitem name="Menu 2" id="twturbiks_starter.menu_2" parent="twturbiks_starter.menu_root"
+    sequence="2" />
+  <menuitem name="open_sheet" id="twturbiks_starter.menu_2_open_sheet"
+    parent="twturbiks_starter.menu_2"
+    action="twturbiks_starter.open_sheet" />
+
+  <!--  -->
+  <!-- menu 3     main model but no create-->
+  <!--  -->
+
+  <!-- action for open main model -->
+  <record model="ir.actions.act_window" id="twturbiks_starter.open_main_no_create">
+    <field name="name">twturbiks_starter main model no create</field>
+    <field name="res_model">twturbiks_starter.main</field>
+    <field name="view_mode">tree</field>
+    <!-- ref : 這個 action 要連結到那一個 view id 
+      id 的寫法 : twturbiks_starter.list_no_create or list_no_create 都可以
+      最多一個 "點" , 這個點的前面必需是一個已經安裝的 module name
+      如果沒有點，則會 search 此 module 內的 id
+    -->
+    <!--
+      view_id 的文檔 :
+    https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/backend/views.html#methods -->
+    <field name="view_id" ref="twturbiks_starter.list_no_create" />
+  </record>
+
+  <!-- 單層 Menu for open main model no create -->
+  <menuitem name="Menu 3 no create" id="twturbiks_starter.menu_3"
+    action="twturbiks_starter.open_main_no_create"
+    parent="twturbiks_starter.menu_root" sequence="3" />
+
+</odoo>
