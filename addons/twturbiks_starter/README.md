@@ -841,3 +841,47 @@ name,active,State,company_id,
 ```
 
 就算 model 有 active 的 field , 但 form 如果沒有寫進去，一樣不會出現封存的動作 button
+
+## search panel
+
+search panel 只支援 many2one 跟 selection fields.
+
+```xml title="views/views.xml"
+    <!-- search view -->
+    <record id="view_filter_twturbiks_starter_main" model="ir.ui.view">
+      <field name="name">twturbiks_starter main Filter</field>
+      <field name="model">twturbiks_starter.main</field>
+      <field name="arch" type="xml">
+        <search string="twturbiks_starter main model Filter">
+          ...
+
+          <searchpanel>
+            <field name="user_id" select="multi" icon="fa-address-card" enable_counters="1"
+              color="#fc03d7" />
+            <field name="employee_id" select="multi" icon="fa-building" enable_counters="1" />
+            <field name="sheet_id" icon="fa-users" enable_counters="1" />
+
+            <!-- error example 只有 store=true (一般或多對多) 對 "groupby" 參數有效 -->
+            <field name="gender" icon="fa-cutlery" enable_counters="1" color="#d10202" />
+
+            <!-- error example 僅支援類別多對一選擇的類型 , but (found type 整數) -->
+            <!-- <field name="value" icon="fa-users" enable_counters="1" /> -->
+
+            <!-- error example 僅支援 m2one , not m2x-->
+            <!-- <field name="tag_ids" icon="fa-users" /> -->
+          </searchpanel>
+        </search>
+      </field>
+    </record>
+
+```
+
+- select="multi" 是否可以多選.
+
+- enable_counters="1" 是否顯示數量.
+
+- icon="fa-building" icon 圖示顯示.
+    https://fontawesome.com/icons
+
+- color="#d10202" color 顯示.
+    [hexcolor seletor](https://g.co/kgs/ksx4DS)

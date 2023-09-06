@@ -154,6 +154,21 @@
               context="{'group_by': 'employee_id'}" />
           </group>
 
+          <searchpanel>
+            <field name="user_id" select="multi" icon="fa-address-card" enable_counters="1"
+              color="#fc03d7" />
+            <field name="employee_id" select="multi" icon="fa-building" enable_counters="1" />
+            <field name="sheet_id" icon="fa-users" enable_counters="1" />
+
+            <!-- error example 只有 store=true (一般或多對多) 對 "groupby" 參數有效 -->
+            <field name="gender" icon="fa-cutlery" enable_counters="1" color="#d10202" />
+
+            <!-- error example 僅支援類別多對一選擇的類型 , but (found type 整數) -->
+            <!-- <field name="value" icon="fa-users" enable_counters="1" /> -->
+
+            <!-- error example 僅支援 m2one , not m2x-->
+            <!-- <field name="tag_ids" icon="fa-users" /> -->
+          </searchpanel>
         </search>
       </field>
     </record>

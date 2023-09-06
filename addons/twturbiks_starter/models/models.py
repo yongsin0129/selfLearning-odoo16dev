@@ -64,7 +64,7 @@ class DemoMain(models.Model):
 
     """
 
-    gender = fields.Selection(string="Gender", related="employee_id.gender")
+    gender = fields.Selection(string="Gender", related="employee_id.gender", store=True)
 
     """
     tutorial 5 One2Many
