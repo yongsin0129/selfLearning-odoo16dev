@@ -881,7 +881,11 @@ search panel 只支援 many2one 跟 selection fields.
 - enable_counters="1" 是否顯示數量.
 
 - icon="fa-building" icon 圖示顯示.
-    https://fontawesome.com/icons
+    [fontawesome v4](https://fontawesome.com/v4/icons/)
+
+    因為 odoo16 原生只支援 V4 ，如果需要用到 v5 icon ，使用下面的升級 module
+    [odoo module : Web Font Awesome 5.3](https://apps.odoo.com/apps/modules/16.0/exaly_font_awesome/)
+    [fontawesome v5](https://fontawesome.com/icons)
 
 - color="#d10202" color 顯示.
     [hexcolor seletor](https://g.co/kgs/ksx4DS)
