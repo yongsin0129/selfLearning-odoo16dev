@@ -889,3 +889,84 @@ search panel 只支援 many2one 跟 selection fields.
 
 - color="#d10202" color 顯示.
     [hexcolor seletor](https://g.co/kgs/ksx4DS)
+
+## odoo shell
+
+Odoo shell，也被稱為Odoo命令行界面（CLI），是由Odoo提供的一個命令行工具，允許您使用Python命令與Odoo實例進行交互。它提供了一種執行Python代碼並與Odoo環境進行交互的方式，包括訪問和操作數據庫中的數據，運行查詢以及執行各種管理任務。
+
+### 指令
+
+簡化版
+`python3 odoo-bin shell -d twturbiks_starter -c config/odoo.conf`
+
+完整版
+`python3 odoo-bin shell -d twturbiks -w odoo -r odoo --db_port=5432 --db_host=localhost --addons-path='/home/twtrubiks/odoo/addons`
+
+-d : 讀取的 db 名字
+-c : 裡面已經設定帳號密碼 host port addons 所以可以用簡化版
+
+以下只介紹簡單的 CRUD
+
+#### search (R)
+
+```shell
+>>> self.env['res.partner'].search([])
+res.partner(65, 66, 44, 45, 51, 52, 14, 26, 33, 27, 61, 62, 10, 35, 18, 19, 58, 59, 64, 63, 11, 20, 22, 31, 23, 54, 48, 50, 15, 34, 49, 42, 41, 57, 60, 47, 12, 21, 25, 37, 24, 36, 30, 38, 43, 46, 13, 29, 28, 55, 53, 56, 9, 17, 32, 16, 1, 39, 40, 8, 7, 3)
+
+>>> self.env['res.partner'].search([('id','in',[11,20])])
+res.partner(11, 20)
+
+>>> self.env['res.partner'].browse([11, 20])
+res.partner(11, 20)
+
+>>> recordsets = self.env['res.partner'].browse([11, 20])
+>>> recordsets
+res.partner(11, 20)
+
+>>> recordsets.ids
+[11, 20]
+```
+
+#### create (C)
+
+```shell
+>>> partner = self.env['res.partner']
+>>> partner.search([])
+res.partner(65, 66, 44, 45, 51, 52, 14, 26, 33, 27, 61, 62, 10, 35, 18, 19, 58, 59, 64, 63, 11, 20, 22, 31, 23, 54, 48, 50, 15, 34, 49, 42, 41, 57, 60, 47, 12, 21, 25, 37, 24, 36, 30, 38, 43, 46, 13, 29, 28, 55, 53, 56, 9, 17, 32, 16, 1, 39, 40, 8, 7, 3)
+
+>>> partner.create({'name': 'yongsin0129', 'is_company': True})
+res.partner(67,)
+
+>>> partner.browse(67).name
+'yongsin0129'
+```
+
+#### write (U)
+
+```shell
+>>> partner.browse(67).write({'name':'yongsin0130'})
+True
+>>> partner.browse(67).name
+'yongsin0130'
+```
+#### delete (D)
+
+```shell
+>>> partner.browse(67).unlink()
+2023-09-06 06:27:53,855 81197 INFO twturbiks_starter odoo.models.unlink: User #1 deleted mail.message records with IDs: [209] 
+2023-09-06 06:27:53,898 81197 INFO twturbiks_starter odoo.models.unlink: User #1 deleted res.partner records with IDs: [67] 
+True
+
+raise MissingError("\n".join([
+odoo.exceptions.MissingError: Record does not exist or has been deleted.
+(Record: res.partner(67,), User: 1)
+```
+
+注意 : 當更新 One2many 和 Many2many 時, 要使用比較特別的語言 0-6 的那個指令
+
+### 參考資料
+
+[What is Odoo Shell & How to Access It in Odoo 16](https://www.cybrosys.com/blog/what-is-odoo-shell-and-how-to-access-it-in-odoo-16)
+
+[沈沈弘哲大大-odoo shell](https://github.com/twtrubiks/odoo-demo-addons-tutorial#shell)
+
