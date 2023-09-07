@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_twturbiks_inheritance_demo_prototype,twturbiks_inheritance.demo_prototype,model_demo_prototype,base.group_user,1,1,1,1
+access_twturbiks_inheritance_demo_delegation,twturbiks_inheritance.demo_delegation,model_demo_delegation,base.group_user,1,1,1,1

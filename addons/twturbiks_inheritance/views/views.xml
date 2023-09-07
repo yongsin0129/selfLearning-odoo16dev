@@ -1,0 +1,84 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record id="view_expenses_tree_custom" model="ir.ui.view">
+      <field name="name">hr.expense.tree.custom</field>
+      <field name="model">hr.expense</field>
+      <field name="inherit_id" ref="hr_expense.view_expenses_tree" />
+      <field name="arch" type="xml">
+        <field name="date" position="after">
+          <!-- <field name="test_field" groups="product.group_sale_pricelist" readonly="1"/> -->
+          <field name="test_field" />
+        </field>
+
+        <!-- xpath the same result -->
+        <!--views/views.xml
+      <xpath expr="//field[@name='date']" position="after">
+          <field name="test_field" />
+      </xpath>
+      -->
+
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+
+    <record id="hr_expense_view_form_custom" model="ir.ui.view">
+      <field name="name">hr.expense.view.form.custom</field>
+      <field name="model">hr.expense</field>
+      <field name="inherit_id" ref="hr_expense.hr_expense_view_form" />
+      <field name="arch" type="xml">
+        <field name="employee_id" position="after">
+          <field name="test_field" />
+        </field>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <!-- 不需要寫 menu action , 因為這個 class inherit 不會產生新的 model-->
+
+    <!--
+    <record model="ir.actions.act_window" id="twturbiks_inheritance.action_window">
+      <field name="name">twturbiks_inheritance window</field>
+      <field name="res_model">twturbiks_inheritance.twturbiks_inheritance</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="twturbiks_inheritance.action_server">
+      <field name="name">twturbiks_inheritance server</field>
+      <field name="model_id" ref="model_twturbiks_inheritance_twturbiks_inheritance"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="twturbiks_inheritance" id="twturbiks_inheritance.menu_root" />
+
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="twturbiks_inheritance.menu_1"
+    parent="twturbiks_inheritance.menu_root"/>
+    <menuitem name="Menu 2" id="twturbiks_inheritance.menu_2"
+    parent="twturbiks_inheritance.menu_root"/>
+-->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="twturbiks_inheritance.menu_1_list" parent="twturbiks_inheritance.menu_1"
+              action="twturbiks_inheritance.action_window"/>
+    <menuitem name="Server to list" id="twturbiks_inheritance" parent="twturbiks_inheritance.menu_2"
+              action="twturbiks_inheritance.action_server"/>
+-->
+  </data>
+</odoo>

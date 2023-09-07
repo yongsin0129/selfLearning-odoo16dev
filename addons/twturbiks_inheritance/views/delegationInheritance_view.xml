@@ -1,0 +1,63 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record id="view_tree_demo_delegation_tutorial" model="ir.ui.view">
+      <field name="name">Demo Delegation Tutorial List</field>
+      <field name="model">demo.delegation</field>
+      <field name="arch" type="xml">
+        <tree>
+          <!-- res.partner -->
+          <field name="partner_id" invisible="1" attrs="{'required': [('id', '!=', False)]}" />
+          <field name="name" />
+          <field name="company_id" />
+          <!-- res.partner -->
+
+          <!-- demo.delegation -->
+          <field name="first_name" />
+          <!-- demo.delegation -->
+        </tree>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+
+    <record id="view_form_demo_delegation_tutorial" model="ir.ui.view">
+      <field name="name">Demo Delegation Tutorial Form</field>
+      <field name="model">demo.delegation</field>
+      <field name="arch" type="xml">
+        <form string="Demo Delegation Tutorial">
+          <sheet>
+            <group>
+              <!-- res.partner -->
+              <field name="name" />
+              <field name="company_id" />
+              <!-- res.partner -->
+
+              <!-- demo.delegation -->
+              <field name="partner_id" invisible="1" attrs="{'required': [('id', '!=', False)]}" />
+              <field name="first_name" />
+              <!-- demo.delegation -->
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="twturbiks_inheritance.action_window_delegation">
+      <field name="name">twturbiks_inheritance_delegation window</field>
+      <field name="res_model">demo.delegation</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- actions -->
+
+    <menuitem name="delegation" id="twturbiks_inheritance.menu_2"
+      parent="twturbiks_inheritance.menu_root"
+      action="twturbiks_inheritance.action_window_delegation" />
+
+  </data>
+</odoo>
