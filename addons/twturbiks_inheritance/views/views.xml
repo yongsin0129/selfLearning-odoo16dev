@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="twturbiks_inheritance.list">
+      <field name="name">twturbiks_inheritance list</field>
+      <field name="model">twturbiks_inheritance.twturbiks_inheritance</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="twturbiks_inheritance.action_window">
+      <field name="name">twturbiks_inheritance window</field>
+      <field name="res_model">twturbiks_inheritance.twturbiks_inheritance</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="twturbiks_inheritance.action_server">
+      <field name="name">twturbiks_inheritance server</field>
+      <field name="model_id" ref="model_twturbiks_inheritance_twturbiks_inheritance"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="twturbiks_inheritance" id="twturbiks_inheritance.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="twturbiks_inheritance.menu_1" parent="twturbiks_inheritance.menu_root"/>
+    <menuitem name="Menu 2" id="twturbiks_inheritance.menu_2" parent="twturbiks_inheritance.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="twturbiks_inheritance.menu_1_list" parent="twturbiks_inheritance.menu_1"
+              action="twturbiks_inheritance.action_window"/>
+    <menuitem name="Server to list" id="twturbiks_inheritance" parent="twturbiks_inheritance.menu_2"
+              action="twturbiks_inheritance.action_server"/>
+-->
+  </data>
+</odoo>
