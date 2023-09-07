@@ -880,6 +880,13 @@ reference : [Cron Job Not Working As Expected. Version 16](https://www.odoo.com/
 
 >繼承Model來新增Field和更改Views裡面的屬性，用這種方法可以省去自己建立一個Module，並且可以直接使用內部方法。
 
+>odoo 繼承有三種模式，細節可以看沈弘哲文章
+-  class inheritance
+-  prototype inheritance
+-  delegation inheritance
+
+以下的方式為 class inheritance
+
 e.g: 在company底下增加預算欄位
 
 1. 增加 /models/res_company.py
@@ -940,6 +947,7 @@ reference :
 
 - [odoo16-official view](https://www.odoo.com/documentation/16.0/developer/reference/backend/views.html#inheritance-specs)
 - [odoo16里面的常用方法 - 继承修改xml](https://blog.51cto.com/melon0809/6317120)
+- [twturbiks-odoo 繼承 - class inheritance](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/14.0/demo_class_inheritance)
 
 ## Currency
 
