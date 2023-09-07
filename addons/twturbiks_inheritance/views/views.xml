@@ -63,9 +63,9 @@
 -->
 
     <!-- Top menu item -->
-    <!--
-    <menuitem name="twturbiks_inheritance" id="twturbiks_inheritance.menu_root"/>
--->
+
+    <menuitem name="twturbiks_inheritance" id="twturbiks_inheritance.menu_root" />
+
     <!-- menu categories -->
     <!--
     <menuitem name="Menu 1" id="twturbiks_inheritance.menu_1"

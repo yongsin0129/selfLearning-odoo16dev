@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class ClassInheritance(models.Model):
@@ -20,3 +20,16 @@ class PrototypeInheritance(models.Model):
     # 在這裡面的修改, 都不會去影響到 'mail.thread'(父類別).
 
     test_field = fields.Char("test_field")
+
+
+class DelegationInheritance(models.Model):
+    _name = "demo.delegation"
+    _description = "Demo DelegationInheritance"
+    _inherits = {"res.partner": "partner_id"}
+
+    # partner_id 為子項跟父項的連結點
+    partner_id = fields.Many2one(
+        "res.partner", string="Partner", required=True, ondelete="cascade"
+    )
+
+    first_name = fields.Char("First Name", size=32)

@@ -42,13 +42,10 @@
     </record>
 
 
-    <!-- Top menu item -->
-
-    <menuitem name="twturbiks_inheritance" id="twturbiks_inheritance.menu_root" />
-
     <!-- actions -->
 
-    <menuitem name="List" id="twturbiks_inheritance.menu_1" parent="twturbiks_inheritance.menu_root"
+    <menuitem name="prototype" id="twturbiks_inheritance.menu_1"
+      parent="twturbiks_inheritance.menu_root"
       action="twturbiks_inheritance.action_window_prototype" />
     <!-- <menuitem name="Server to list" id="twturbiks_inheritance"
     action="twturbiks_inheritance.action_server"/> -->

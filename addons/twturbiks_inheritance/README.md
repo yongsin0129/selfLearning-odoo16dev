@@ -27,12 +27,25 @@ odoo 的繼承有三種
     1. 繼承 mail.thread 這類的 models.AbstractModel (history track 用途)
 
 - delegation inheritance
-    - 特性
-    1. 產生一個全新的 table (但只有新增的欄位 e.g. attr2 , attr3 , attr1 會在父項)
-       補充: 新增資料時，父項也會新增資料 e.g. attr1
-    2. 
-    - 使用場景
+    - 官方說明
+    The second inheritance mechanism (delegation) allows to link every record of a model to a record in a parent model, and provides transparent access to the fields of the parent record.
 
+    ```python
+    class DelegationInheritance(models.Model):
+      _name = 'new'
+      _inherits = 'obj1'
+
+      # new instances contain am embedded.            
+      # obj1 instance with synchronized values.
+    ```
+
+    - 特性
+    1. 產生一個全新的 table (但只有新增的欄位 e.g. attr2 , attr3 , 然後 attr1 會在父項)
+       補充: 新增資料時，父項也會新增資料 e.g. attr1，而父項看不到 attr2 , attr3 ，子項看的到 attr1
+
+    - 使用場景
+    1. 委派最重要的目的就是避免在很多的 table 中建立重複的資料. (達到共用的效果)
+    2. odoo 中的例子 第一個範例為 res.users 以及 res.partner，第二個範例為 product.product 以及 product.template，原始項可看沈弘哲文章
 
 ## class inheritance
 
@@ -171,6 +184,88 @@ access_twturbiks_inheritance_demo_prototype,twturbiks_inheritance.demo_prototype
 ```
 
 ## delegation inheritance
+
+### model
+
+```python
+class DelegationInheritance(models.Model):
+    _name = "demo.delegation"
+    _description = "Demo DelegationInheritance"
+    _inherits = {"res.partner": "partner_id"}
+
+    # partner_id 為子項跟父項的連結點
+    partner_id = fields.Many2one(
+        "res.partner", string="Partner", required=True, ondelete="cascade"
+    )
+
+    first_name = fields.Char("First Name", size=32)
+```
+
+### security
+
+```csv
+access_twturbiks_inheritance_demo_delegation,twturbiks_inheritance.demo_delegation,model_demo_delegation,base.group_user,1,1,1,1
+```
+
+### view
+
+```xml
+    <!-- explicit list view definition -->
+
+    <record id="view_tree_demo_delegation_tutorial" model="ir.ui.view">
+      <field name="name">Demo Delegation Tutorial List</field>
+      <field name="model">demo.delegation</field>
+      <field name="arch" type="xml">
+        <tree>
+          <!-- res.partner -->
+          <field name="partner_id" invisible="1" attrs="{'required': [('id', '!=', False)]}" />
+          <field name="name" />
+          <field name="company_id" />
+          <!-- res.partner -->
+
+          <!-- demo.delegation -->
+          <field name="first_name" />
+          <!-- demo.delegation -->
+        </tree>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+
+    <record id="view_form_demo_delegation_tutorial" model="ir.ui.view">
+      <field name="name">Demo Delegation Tutorial Form</field>
+      <field name="model">demo.delegation</field>
+      <field name="arch" type="xml">
+        <form string="Demo Delegation Tutorial">
+          <sheet>
+            <group>
+              <!-- res.partner -->
+              <field name="name" />
+              <field name="company_id" />
+              <!-- res.partner -->
+
+              <!-- demo.delegation -->
+              <field name="partner_id" invisible="1" attrs="{'required': [('id', '!=', False)]}" />
+              <field name="first_name" />
+              <!-- demo.delegation -->
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+```
+
+### manifest
+
+
+```python
+    "data": [
+        ...
+        "views/delegationInheritance_view.xml",
+        ...
+    ],
+
+```
 
 ## 參考資料
 
