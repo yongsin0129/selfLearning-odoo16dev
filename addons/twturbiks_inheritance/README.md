@@ -6,7 +6,7 @@ odoo 的繼承有三種
 
 ![odoo inheritance](https://camo.githubusercontent.com/82f2060d30d8be1fa42fceb5638094d9e4849be5e8dca6c9e70a1fde7faa55c5/68747470733a2f2f692e696d6775722e636f6d2f32615138424e682e706e67)
 
-- class inheritance
+- class inheritance (沿用 _name)
     - 特性
     1. 不會產生新的 table
     2. 
@@ -19,12 +19,12 @@ odoo 的繼承有三種
     5. 覆蓋掉一個已經存在的 model 中的 method.
 
 
-- prototype inheritance
+- prototype inheritance (定義一個 new _name)
     - 特性
     1. 產生一個全新的 table (包含 attr1)
-    2. 
+    2. 此類別會擁有父類別的所有特性, 在此類別中的任何修改, 都不會去影響到父類別.
     - 使用場景
-
+    1. 繼承 mail.thread 這類的 models.AbstractModel (history track 用途)
 
 - delegation inheritance
     - 特性
@@ -101,6 +101,74 @@ class ClassInheritance(models.Model):
 
 
 ## prototype inheritance
+
+### model
+
+```python
+class PrototypeInheritance(models.Model):
+    _name = "demo.prototype"
+    _description = "PrototypeInheritance"
+    _inherit = ["mail.thread"]
+
+    # 'demo.prototype' 擁有 'mail.thread'(父類別) 的所有特性,
+    #  mail.thread 提供 message_follower_ids ,message_ids 等 fields 可使用
+    # 在這裡面的修改, 都不會去影響到 'mail.thread'(父類別).
+
+    test_field = fields.Char("test_field")
+```
+
+### security
+
+```csv title="security/ir.model.access.csv"
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_twturbiks_inheritance_demo_prototype,twturbiks_inheritance.demo_prototype,model_demo_prototype,base.group_user,1,1,1,1
+```
+
+### view
+
+```xml
+    <!-- explicit list view definition -->
+
+    <record id="view_tree_demo_prototype_tutorial" model="ir.ui.view">
+      <field name="name">Demo Prototype List</field>
+      <field name="model">demo.prototype</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="test_field" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- explicit form view definition -->
+
+    <record id="view_form_demo_prototype_tutorial" model="ir.ui.view">
+      <field name="name">Demo Prototype Form</field>
+      <field name="model">demo.prototype</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="test_field" />
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="message_ids" widget="mail_thread" />
+          </div>
+        </form>
+      </field>
+    </record>
+```
+
+### manifest
+
+```python
+    "data": [
+        "security/ir.model.access.csv",
+        "views/PrototypeInheritance_view.xml",
+        ...
+    ],
+```
 
 ## delegation inheritance
 
