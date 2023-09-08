@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="twturbiks_singleton.list">
+      <field name="name">twturbiks_singleton list</field>
+      <field name="model">twturbiks_singleton.twturbiks_singleton</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="twturbiks_singleton.action_window">
+      <field name="name">twturbiks_singleton window</field>
+      <field name="res_model">twturbiks_singleton.twturbiks_singleton</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="twturbiks_singleton.action_server">
+      <field name="name">twturbiks_singleton server</field>
+      <field name="model_id" ref="model_twturbiks_singleton_twturbiks_singleton"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="twturbiks_singleton" id="twturbiks_singleton.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="twturbiks_singleton.menu_1" parent="twturbiks_singleton.menu_root"/>
+    <menuitem name="Menu 2" id="twturbiks_singleton.menu_2" parent="twturbiks_singleton.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="twturbiks_singleton.menu_1_list" parent="twturbiks_singleton.menu_1"
+              action="twturbiks_singleton.action_window"/>
+    <menuitem name="Server to list" id="twturbiks_singleton" parent="twturbiks_singleton.menu_2"
+              action="twturbiks_singleton.action_server"/>
+-->
+  </data>
+</odoo>
