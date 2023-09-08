@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
-# from odoo import models, fields, api
+import logging
+
+from odoo import api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 
-# class twturbiks_singleton(models.Model):
-#     _name = 'twturbiks_singleton.twturbiks_singleton'
-#     _description = 'twturbiks_singleton.twturbiks_singleton'
+class DemoActionsSingleton(models.Model):
+    _name = "demo.actions.singleton"
+    _description = "Demo Actions Singleton"
 
-#     name = fields.Char()
-#     value = fields.Integer()
-#     value2 = fields.Float(compute="_value_pc", store=True)
-#     description = fields.Text()
-#
-#     @api.depends('value')
-#     def _value_pc(self):
-#         for record in self:
-#             record.value2 = float(record.value) / 100
+    name = fields.Char("Description", required=True)
+
+    def action_demo(self):
+        # 這邊的 self 會是選中的 record , 如果選中的 records 數量不為 0 或 1 則會報錯。
+        self.ensure_one()
+        _logger.warning("=== CALL action_demo ===")
