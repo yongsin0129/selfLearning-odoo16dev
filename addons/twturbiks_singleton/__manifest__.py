@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    "name": "twturbiks_first_demo",
+    "name": "twturbiks_singleton",
     "summary": """
         Short (1 phrase/line) summary of the module's purpose, used as
         subtitle on modules listing or apps.openerp.com""",
@@ -16,18 +16,11 @@
     "version": "0.1",
     "license": "LGPL-3",
     # any module necessary for this one to work correctly
-    "depends": ["base", "mail"],
+    "depends": ["base"],
     # always loaded
-    "data": [
-        "security/security.xml",
-        "security/ir.model.access.csv",
-        "views/views.xml",
-        "views/templates.xml",
-        "views/twturbiks_first_demo_template.xml",
-        "reports/report.xml",
-    ],
+    "data": ["security/ir.model.access.csv", "views/views.xml"],
     # only loaded in demonstration mode
     "demo": [
-        "demo/demo.xml",
+        # "demo/demo.xml",
     ],
 }
