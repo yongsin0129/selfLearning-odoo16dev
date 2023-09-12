@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_twturbiks_hierarchy_twturbiks_hierarchy,twturbiks_hierarchy.twturbiks_hierarchy,model_twturbiks_hierarchy_twturbiks_hierarchy,base.group_user,1,1,1,1
+access_twturbiks_hierarchy_main,twturbiks_hierarchy.main,model_demo_hierarchy,base.group_user,1,1,1,1

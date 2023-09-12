@@ -1,60 +1,49 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="twturbiks_hierarchy.list">
-      <field name="name">twturbiks_hierarchy list</field>
-      <field name="model">twturbiks_hierarchy.twturbiks_hierarchy</field>
+    <record id="view_tree_demo_hierarchy" model="ir.ui.view">
+      <field name="name">Demo Hierarchy List</field>
+      <field name="model">demo.hierarchy</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
+          <field name="name" />
+          <field name="active" />
+          <field name="parent_id" />
+          <field name="parent_name" />
         </tree>
       </field>
     </record>
--->
 
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="twturbiks_hierarchy.action_window">
-      <field name="name">twturbiks_hierarchy window</field>
-      <field name="res_model">twturbiks_hierarchy.twturbiks_hierarchy</field>
-      <field name="view_mode">tree,form</field>
-    </record>
--->
-
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="twturbiks_hierarchy.action_server">
-      <field name="name">twturbiks_hierarchy server</field>
-      <field name="model_id" ref="model_twturbiks_hierarchy_twturbiks_hierarchy"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
+    <record
+      id="view_form_demo_hierarchy" model="ir.ui.view">
+      <field name="name">Demo Hierarchy Form</field>
+      <field name="model">demo.hierarchy</field>
+      <field name="arch" type="xml">
+        <form string="Demo Hierarchy">
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="active" />
+              <field name="parent_id" />
+              <field name="parent_name" />
+            </group>
+            <notebook>
+              <page string="Hierarchy">
+                <field name="child_ids" mode="kanban">
+                  <form string="Contact / Address">
+                    <sheet>
+                      <field name="parent_id" invisible="1" />
+                      <hr />
+                      <group>
+                        <field name="name" string="Contact Name" />
+                      </group>
+                    </sheet>
+                  </form>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
       </field>
     </record>
--->
-
-    <!-- Top menu item -->
-<!--
-    <menuitem name="twturbiks_hierarchy" id="twturbiks_hierarchy.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="twturbiks_hierarchy.menu_1" parent="twturbiks_hierarchy.menu_root"/>
-    <menuitem name="Menu 2" id="twturbiks_hierarchy.menu_2" parent="twturbiks_hierarchy.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="twturbiks_hierarchy.menu_1_list" parent="twturbiks_hierarchy.menu_1"
-              action="twturbiks_hierarchy.action_window"/>
-    <menuitem name="Server to list" id="twturbiks_hierarchy" parent="twturbiks_hierarchy.menu_2"
-              action="twturbiks_hierarchy.action_server"/>
--->
   </data>
 </odoo>
