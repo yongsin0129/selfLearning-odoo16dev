@@ -71,3 +71,10 @@ password = "2c99029148d7b03bbfe2310210316716cf0d76aa"
 沈弘哲大大 [如何使用 python xmlrpc 連接 odoo-12](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/master/xml-rpc-odoo)
 
 沈弘哲大大 [如何使用 python xmlrpc 連接 odoo-14](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/14.0/xml-rpc-odoo)
+
+## 其他第三方工具
+多數都是從 xmlrpc 衍生出來的
+
+https://github.com/OCA/odoorpc
+
+https://github.com/tinyerp/erppeek
