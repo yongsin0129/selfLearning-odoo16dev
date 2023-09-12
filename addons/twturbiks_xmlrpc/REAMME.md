@@ -47,6 +47,25 @@ m2x 寫法
 (6, 0, [IDs])          replace the list of linked IDs (like using (5) then (4,ID) for each ID in the list of IDs)
 ```
 
+##  Developer API Keys
+
+產生一組  Developer API Keys
+
+1. 登入 odoo 
+2. 右上角 (My Preferences)
+3. account security -> NEW API KEY
+
+e.g. 
+`2c99029148d7b03bbfe2310210316716cf0d76aa`
+
+
+```
+url = "http://0.0.0.0:8069"
+db = "DBname"
+username = "admin"
+password = "2c99029148d7b03bbfe2310210316716cf0d76aa"
+
+```
 ## 參考資料 
 
 沈弘哲大大 [如何使用 python xmlrpc 連接 odoo-12](https://github.com/twtrubiks/odoo-demo-addons-tutorial/tree/master/xml-rpc-odoo)
