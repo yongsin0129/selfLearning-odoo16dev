@@ -31,8 +31,10 @@ class LibraryBook(models.Model):
 
     description = fields.Html('Description')
 
+    cost_price = fields.Float('Book Cost', digits='Book Price')  # Optional precision digits='Book Price'
+
     out_of_print = fields.Boolean('Out of Print?')
-    
+
     """本方法用于自定义记录的显示名称"""
     def name_get(self):
         result = []
