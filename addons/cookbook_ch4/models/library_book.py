@@ -2,6 +2,7 @@ from odoo import api, fields, models
 
 
 class LibraryBook(models.Model):
+    # 1 定义模型表示及排序
     _name = "library.book"
     _description = "Library Book"
     _order = "date_release desc, name"
@@ -16,6 +17,7 @@ class LibraryBook(models.Model):
     pages = fields.Integer("Number of Pages")
     notes = fields.Text("Internal Notes")
 
+    # 2 向模型添加数据字段
     short_name = fields.Char("Short Title", required=True)
     date_release = fields.Date("Release Date")
     date_updated = fields.Datetime("Last Updated")
@@ -27,9 +29,8 @@ class LibraryBook(models.Model):
 
     description = fields.Html("Description")
 
-    cost_price = fields.Float(
-        "Book Cost", digits="Book Price"
-    )  # Optional precision digits='Book Price'
+    # 3 使用可配置精度的浮点字段
+    cost_price = fields.Float("Book Cost", digits="Book Price")
 
     out_of_print = fields.Boolean("Out of Print?")
 
