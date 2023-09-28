@@ -163,3 +163,14 @@ class ResPartner(models.Model):
         string="Authored Books",
         # relation='library_book_res_partner_rel' # optional
     )
+
+    # 11 使用继承向模型添加功能
+    ### <!-- views 要新增欄位到 res.partner -->
+    count_books = fields.Integer(
+        "Number of Authored Books", compute="_compute_count_books"
+    )
+
+    @api.depends("authored_book_ids")
+    def _compute_count_books(self):
+        for r in self:
+            r.count_books = len(r.authored_book_ids)

@@ -76,4 +76,18 @@
       </search>
     </field>
   </record>
+
+
+  <!-- 新增欄位到 res.partner -->
+  <record id="res_partner_view_form_custom" model="ir.ui.view">
+    <field name="name">res.partner.view.form.custom</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form" />
+    <field name="arch" type="xml">
+      <field name="vat" position="after">
+        <field name="count_books" />
+        <field name="authored_book_ids" />
+      </field>
+    </field>
+  </record>
 </odoo>
