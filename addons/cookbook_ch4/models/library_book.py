@@ -120,6 +120,7 @@ class LibraryBook(models.Model):
             book.date_release = d
 
     ### 进行搜索的逻辑
+    ### 有定義才可以在 shell 中用這段 : self.env['library.book'].search([('age_days','>=',0)])
     def _search_age(self, operator, value):
         today = fields.Date.today()
         value_days = timedelta(days=value)
