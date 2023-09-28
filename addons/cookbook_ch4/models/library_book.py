@@ -2,10 +2,26 @@ from datetime import timedelta
 
 from odoo import api, fields, models
 
+# 14 使用抽象模型实现可复用模型功能
+"""
+必須放最上放，下面需要繼承的 class，才能成功執行 
+"""
+
+
+class BaseArchive(models.AbstractModel):
+    _name = "base.archive"
+    _description = "AbstractModel"
+    active = fields.Boolean(default=True)
+
+    def do_archive(self):
+        for record in self:
+            record.active = not record.active
+
 
 class LibraryBook(models.Model):
     # 1 定义模型表示及排序
     _name = "library.book"
+    _inherit = ["base.archive"]  # 14
     _description = "Library Book"
     _order = "date_release desc, name"
     _rec_name = "short_name"
@@ -180,7 +196,8 @@ class ResPartner(models.Model):
 class LibraryMember(models.Model):
     _name = "library.member"
     _inherits = {"res.partner": "partner_id"}
-    partner_id = fields.Many2one("res.partner", ondelete="cascade")
+    _description = "library.member"
+    partner_id = fields.Many2one("res.partner", required=1, ondelete="cascade")
 
     date_start = fields.Date("Member Since")
     date_end = fields.Date("Termination Date")
