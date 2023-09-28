@@ -59,6 +59,11 @@ class LibraryBook(models.Model):
         domain=[],
     )
 
+    # 9 暴露存储在其它模型中的关联字段
+    publisher_city = fields.Char(
+        "Publisher City", related="publisher_id.city", readonly=True
+    )
+
     # 6 向模型添加等级
     ### 向图书分配一个分类
     category_id = fields.Many2one("library.book.category")
