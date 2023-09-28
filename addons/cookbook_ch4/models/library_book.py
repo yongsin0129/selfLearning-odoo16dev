@@ -19,6 +19,14 @@ class LibraryBook(models.Model):
     pages = fields.Integer("Number of Pages")
     notes = fields.Text("Internal Notes")
 
+    ###本方法用于自定义记录的显示名称
+    def name_get(self):
+        result = []
+        for record in self:
+            rec_name = "%s (%s)" % (record.name, record.date_release)
+            result.append((record.id, rec_name))
+        return result
+
     # 2 向模型添加数据字段
     short_name = fields.Char("Short Title", required=True)
     date_release = fields.Date("Release Date")
@@ -59,11 +67,6 @@ class LibraryBook(models.Model):
         domain=[],
     )
 
-    # 9 暴露存储在其它模型中的关联字段
-    publisher_city = fields.Char(
-        "Publisher City", related="publisher_id.city", readonly=True
-    )
-
     # 6 向模型添加等级
     ### 向图书分配一个分类
     category_id = fields.Many2one("library.book.category")
@@ -96,21 +99,6 @@ class LibraryBook(models.Model):
         compute_sudo=False,  # optional
     )
 
-    # 10 使用引用字段添加动态关联
-    ref_doc_id = fields.Reference(
-        selection="_referencable_models", string="Reference Document"
-    )
-
-    """本方法用于自定义记录的显示名称"""
-
-    def name_get(self):
-        result = []
-        for record in self:
-            rec_name = "%s (%s)" % (record.name, record.date_release)
-            result.append((record.id, rec_name))
-        return result
-
-    # 8 向模型添加计算字段
     ### 计算逻辑
     @api.depends("date_release")
     def _compute_age(self):
@@ -146,6 +134,16 @@ class LibraryBook(models.Model):
         new_op = operator_map.get(operator, operator)
         return [("date_release", new_op, value_date)]
 
+    # 9 暴露存储在其它模型中的关联字段
+    publisher_city = fields.Char(
+        "Publisher City", related="publisher_id.city", readonly=True
+    )
+
+    # 10 使用引用字段添加动态关联
+    ref_doc_id = fields.Reference(
+        selection="_referencable_models", string="Reference Document"
+    )
+
     # 10 使用引用字段添加动态关联
     @api.model
     def _referencable_models(self):
@@ -153,7 +151,7 @@ class LibraryBook(models.Model):
         return [(x.model, x.name) for x in models]
 
 
-# 5 向模型添加关联字段
+# 5 向模型添加关联字段 - 新增一個 class
 class ResPartner(models.Model):
     _inherit = "res.partner"
     published_book_ids = fields.One2many(
