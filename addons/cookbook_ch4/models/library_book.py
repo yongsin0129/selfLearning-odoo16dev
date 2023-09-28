@@ -96,6 +96,11 @@ class LibraryBook(models.Model):
         compute_sudo=False,  # optional
     )
 
+    # 10 使用引用字段添加动态关联
+    ref_doc_id = fields.Reference(
+        selection="_referencable_models", string="Reference Document"
+    )
+
     """本方法用于自定义记录的显示名称"""
 
     def name_get(self):
@@ -140,6 +145,12 @@ class LibraryBook(models.Model):
         }
         new_op = operator_map.get(operator, operator)
         return [("date_release", new_op, value_date)]
+
+    # 10 使用引用字段添加动态关联
+    @api.model
+    def _referencable_models(self):
+        models = self.env["ir.model"].search([("field_id.name", "=", "message_ids")])
+        return [(x.model, x.name) for x in models]
 
 
 # 5 向模型添加关联字段
