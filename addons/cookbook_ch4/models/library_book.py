@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import api, fields, models
 
 
@@ -79,6 +81,16 @@ class LibraryBook(models.Model):
             if record.date_release and record.date_release > fields.Date.today():
                 raise models.ValidationError("Release date must be in the past")
 
+    # 8 向模型添加计算字段
+    age_days = fields.Float(
+        string="Days Since Release",
+        compute="_compute_age",
+        inverse="_inverse_age",
+        search="_search_age",
+        store=False,  # optional
+        compute_sudo=False,  # optional
+    )
+
     """本方法用于自定义记录的显示名称"""
 
     def name_get(self):
@@ -87,6 +99,41 @@ class LibraryBook(models.Model):
             rec_name = "%s (%s)" % (record.name, record.date_release)
             result.append((record.id, rec_name))
         return result
+
+    # 8 向模型添加计算字段
+    ### 计算逻辑
+    @api.depends("date_release")
+    def _compute_age(self):
+        today = fields.Date.today()
+        for book in self:
+            if book.date_release:
+                delta = today - book.date_release
+                book.age_days = delta.days
+            else:
+                book.age_days = 0
+
+    ### 写入计算字段的逻辑
+    def _inverse_age(self):
+        today = fields.Date.today()
+        for book in self.filtered("date_release"):
+            d = today - timedelta(days=book.age_days)
+            book.date_release = d
+
+    ### 进行搜索的逻辑
+    def _search_age(self, operator, value):
+        today = fields.Date.today()
+        value_days = timedelta(days=value)
+        value_date = today - value_days
+        # 运算符转换：
+        # age_days > value -> date < value_date
+        operator_map = {
+            ">": "<",
+            ">=": "<=",
+            "<": ">",
+            "<=": ">=",
+        }
+        new_op = operator_map.get(operator, operator)
+        return [("date_release", new_op, value_date)]
 
 
 # 5 向模型添加关联字段
