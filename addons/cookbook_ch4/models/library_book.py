@@ -39,11 +39,23 @@ class LibraryBook(models.Model):
         "Retail Price",
         # optional: currency_field='currency_id' (default),
     )
-    # 同一頁面雙貨幣
+    ##### 同一頁面雙貨幣
     currency_id1 = fields.Many2one("res.currency", string="Currency1")
     currency_id2 = fields.Many2one("res.currency", string="Currency2")
     retail_price1 = fields.Monetary("Retail Price1", currency_field="currency_id1")
     retail_price2 = fields.Monetary("Retail Price2", currency_field="currency_id2")
+
+    # 5 向模型添加关联字段
+
+    ### 出版社
+    publisher_id = fields.Many2one(
+        "res.partner",
+        string="Publisher",
+        # optional:
+        ondelete="set null",
+        context={},
+        domain=[],
+    )
 
     """本方法用于自定义记录的显示名称"""
 
@@ -53,3 +65,17 @@ class LibraryBook(models.Model):
             rec_name = "%s (%s)" % (record.name, record.date_release)
             result.append((record.id, rec_name))
         return result
+
+
+# 5 向模型添加关联字段
+class ResPartner(models.Model):
+    _inherit = "res.partner"
+    published_book_ids = fields.One2many(
+        "library.book", "publisher_id", string="Published Books"
+    )
+
+    authored_book_ids = fields.Many2many(
+        "library.book",
+        string="Authored Books",
+        # relation='library_book_res_partner_rel' # optional
+    )
