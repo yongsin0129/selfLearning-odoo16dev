@@ -61,6 +61,24 @@ class LibraryBook(models.Model):
     ### 向图书分配一个分类
     category_id = fields.Many2one("library.book.category")
 
+    # 7 向模型添加约束验证
+    ### 数据库约束
+    _sql_constraints = [
+        ("name_uniq", "UNIQUE(name)", "Book title must be unique."),
+        (
+            "positive_page",
+            "CHECK(pages = 0 OR pages>0)",
+            "No. of pages must be positive",
+        ),
+    ]
+
+    ### Python代码约束
+    @api.constrains("date_release")
+    def _check_release_date(self):
+        for record in self:
+            if record.date_release and record.date_release > fields.Date.today():
+                raise models.ValidationError("Release date must be in the past")
+
     """本方法用于自定义记录的显示名称"""
 
     def name_get(self):

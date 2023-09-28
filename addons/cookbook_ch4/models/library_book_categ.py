@@ -11,7 +11,7 @@ class BookCategory(models.Model):
     ### 特别的等级支持
     _parent_store = True
     _parent_name = "parent_id"  # optional if field is 'parent_id'
-    parent_path = fields.Char(index=True)
+    parent_path = fields.Char(index=True, unaccent=False)
 
     parent_id = fields.Many2one(
         "library.book.category",
