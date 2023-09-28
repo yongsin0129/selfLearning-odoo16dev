@@ -19,8 +19,10 @@ Description related to library.
     "depends": ["base"],
     # always loaded
     "data": [
+        "security/groups.xml",
         "security/ir.model.access.csv",
         "views/library_book.xml",
+        "views/library_book_categ.xml",
     ],
     # only loaded in demonstration mode
     "demo": [

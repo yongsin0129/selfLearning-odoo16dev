@@ -57,6 +57,10 @@ class LibraryBook(models.Model):
         domain=[],
     )
 
+    # 6 向模型添加等级
+    ### 向图书分配一个分类
+    category_id = fields.Many2one("library.book.category")
+
     """本方法用于自定义记录的显示名称"""
 
     def name_get(self):
