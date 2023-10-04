@@ -1,7 +1,7 @@
-from datetime import timedelta
-
+from dateutil.relativedelta import relativedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import float_compare, float_is_zero
 
 
 class EstateProperty(models.Model):
@@ -12,13 +12,25 @@ class EstateProperty(models.Model):
     _description = "房屋信息数据"
     _order = "id desc"
 
+    _sql_constraints = [
+        ("check_expected_price", "CHECK(expected_price > 0)",
+         "The expected price must be strictly positive"),
+        ("check_selling_price", "CHECK(selling_price >= 0)",
+         "The offer price must be positive"),
+    ]
+
+    # ---------------------------------------- Default Methods ------------------------------------
+
+    def default_date_availability(self):
+        return fields.Date.context_today(self) + relativedelta(months=3)
+
     # --------------------------------------- Fields Declaration ----------------------------------
 
     name = fields.Char(string="名称", required=True)
     description = fields.Text(string="描述")
     postcode = fields.Char(string="邮编")
     date_availability = fields.Date(
-        string="到期时间", default=lambda self: fields.Datetime.now() + timedelta(days=90), copy=False)
+        string="到期时间", default=lambda self: self.default_date_availability(), copy=False)
     expected_price = fields.Float(string="期望价格", required=True)
     selling_price = fields.Float(string="销售价格", copy=False, readonly=True)
     bedrooms = fields.Integer(string="房间数量", default=2)
@@ -85,30 +97,30 @@ class EstateProperty(models.Model):
 
     # ----------------------------------- Constrains and Onchanges --------------------------------
 
-    # @api.constrains("expected_price", "selling_price")
-    # def _check_price_difference(self):
-    #     for prop in self:
-    #         if (
-    #             not float_is_zero(prop.selling_price, precision_rounding=0.01)
-    #             and float_compare(prop.selling_price, prop.expected_price * 90.0 / 100.0, precision_rounding=0.01) < 0
-    #         ):
-    #             raise ValidationError(
-    #                 "The selling price must be at least 90% of the expected price! "
-    #                 + "You must reduce the expected price if you want to accept this offer."
-    #             )
+    @api.constrains("expected_price", "selling_price")
+    def _check_price_difference(self):
+        for prop in self:
+            if (
+                not float_is_zero(prop.selling_price, precision_rounding=0.01)
+                and float_compare(prop.selling_price, prop.expected_price * 90.0 / 100.0, precision_rounding=0.01) < 0
+            ):
+                raise ValidationError(
+                    "The selling price must be at least 90% of the expected price! "
+                    + "You must reduce the expected price if you want to accept this offer."
+                )
 
     @api.onchange("garden")
     def _onchange_garden(self):
         if self.garden:
             self.garden_area = 10
             self.garden_orientation = "N"
-        else:
-            self.garden_area = 0
-            self.garden_orientation = False
             # onchanges方法可以返回一个非阻塞的警告信息 : 如下例子
             return {'warning': {
                     'title': _("Warning"),
                     'message': ('This option is not supported for Authorize.net')}}
+        else:
+            self.garden_area = 0
+            self.garden_orientation = False
 
     # ---------------------------------------- Action Methods -------------------------------------
 
