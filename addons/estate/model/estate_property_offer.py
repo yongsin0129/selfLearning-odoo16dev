@@ -45,21 +45,21 @@ class EstatePropertyOffer(models.Model):
     )
 
     # Computed
-    # date_deadline = fields.Date(
-    #     string="Deadline", compute="_compute_date_deadline", inverse="_inverse_date_deadline")
+    date_deadline = fields.Date(
+        string="Deadline", compute="_compute_date_deadline", inverse="_inverse_date_deadline")
 
     # ---------------------------------------- Compute methods ------------------------------------
 
-    # @api.depends("create_date", "validity")
-    # def _compute_date_deadline(self):
-    #     for offer in self:
-    #         date = offer.create_date.date() if offer.create_date else fields.Date.today()
-    #         offer.date_deadline = date + relativedelta(days=offer.validity)
+    @api.depends("create_date", "validity")
+    def _compute_date_deadline(self):
+        for offer in self:
+            date = offer.create_date.date() if offer.create_date else fields.Date.today()
+            offer.date_deadline = date + relativedelta(days=offer.validity)
 
-    # def _inverse_date_deadline(self):
-    #     for offer in self:
-    #         date = offer.create_date.date() if offer.create_date else fields.Date.today()
-    #         offer.validity = (offer.date_deadline - date).days
+    def _inverse_date_deadline(self):
+        for offer in self:
+            date = offer.create_date.date() if offer.create_date else fields.Date.today()
+            offer.validity = (offer.date_deadline - date).days
 
     # ------------------------------------------ CRUD Methods -------------------------------------
 

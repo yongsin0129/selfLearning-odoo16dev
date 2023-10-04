@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from odoo import fields, models
+from odoo import _, api, fields, models
 
 
 class EstateProperty(models.Model):
@@ -21,7 +21,7 @@ class EstateProperty(models.Model):
     expected_price = fields.Float(string="期望价格", required=True)
     selling_price = fields.Float(string="销售价格", copy=False, readonly=True)
     bedrooms = fields.Integer(string="房间数量", default=2)
-    living_area = fields.Text(string="居住面积")
+    living_area = fields.Integer(string="居住面积")
     facades = fields.Integer(string="朝向")
     garage = fields.Boolean(string="是否带车库")
     garden = fields.Boolean(string="是否带花园")
@@ -58,3 +58,53 @@ class EstateProperty(models.Model):
     tag_ids = fields.Many2many("estate.property.tag", string="Tags")
     offer_ids = fields.One2many(
         "estate.property.offer", "property_id", string="Offers")
+
+    # Computed
+    total_area = fields.Integer(
+        "Total Area (sqm)",
+        compute="_compute_total_area",
+        help="Total area computed by summing the living area and the garden area",
+    )
+
+    best_price = fields.Float(
+        "Best Offer", compute="_compute_best_price", help="Best offer received")
+
+    # ---------------------------------------- Compute methods ------------------------------------
+
+    @api.depends("living_area", "garden_area")
+    def _compute_total_area(self):
+        for prop in self:
+            prop.total_area = prop.living_area + prop.garden_area
+
+    @api.depends("offer_ids.price")
+    def _compute_best_price(self):
+        for prop in self:
+            prop.best_price = max(prop.offer_ids.mapped(
+                "price")) if prop.offer_ids else 0.0
+
+    # ----------------------------------- Constrains and Onchanges --------------------------------
+
+    # @api.constrains("expected_price", "selling_price")
+    # def _check_price_difference(self):
+    #     for prop in self:
+    #         if (
+    #             not float_is_zero(prop.selling_price, precision_rounding=0.01)
+    #             and float_compare(prop.selling_price, prop.expected_price * 90.0 / 100.0, precision_rounding=0.01) < 0
+    #         ):
+    #             raise ValidationError(
+    #                 "The selling price must be at least 90% of the expected price! "
+    #                 + "You must reduce the expected price if you want to accept this offer."
+    #             )
+
+    @api.onchange("garden")
+    def _onchange_garden(self):
+        if self.garden:
+            self.garden_area = 10
+            self.garden_orientation = "N"
+        else:
+            self.garden_area = 0
+            self.garden_orientation = False
+            # onchanges方法可以返回一个非阻塞的警告信息 : 如下例子
+            # return {'warning': {
+            #         'title': _("Warning"),
+            #         'message': ('This option is not supported for Authorize.net')}}
