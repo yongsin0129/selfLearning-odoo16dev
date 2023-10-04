@@ -59,7 +59,7 @@ class EstateProperty(models.Model):
         copy=False,
         default="new",
     )
-    active = fields.Boolean("Active", default=False)
+    active = fields.Boolean("Active", default=True)
 
     # Relational
     property_type_id = fields.Many2one(
@@ -121,6 +121,13 @@ class EstateProperty(models.Model):
         else:
             self.garden_area = 0
             self.garden_orientation = False
+
+    # ------------------------------------------ CRUD Methods -------------------------------------
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_if_new_or_canceled(self):
+        if not set(self.mapped("state")) <= {"new", "canceled"}:
+            raise UserError("Only new and canceled properties can be deleted.")
 
     # ---------------------------------------- Action Methods -------------------------------------
 
