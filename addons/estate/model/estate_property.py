@@ -1,7 +1,12 @@
+# 初始化 logger
+import logging
+
 from dateutil.relativedelta import relativedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_compare, float_is_zero
+
+_logger = logging.getLogger(__name__)
 
 
 class EstateProperty(models.Model):
@@ -123,11 +128,19 @@ class EstateProperty(models.Model):
             self.garden_orientation = False
 
     # ------------------------------------------ CRUD Methods -------------------------------------
+    # 类继承自Model，Model提供了 create(), read(), write() and unlink()
+    # Model api : Method decorators https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/backend/orm.html#module-odoo.api
+    # Model ORM : Common ORM methods https://www.odoo.com/documentation/16.0/zh_CN/developer/reference/backend/orm.html#common-orm-methods
 
     @api.ondelete(at_uninstall=False)
     def _unlink_if_new_or_canceled(self):
         if not set(self.mapped("state")) <= {"new", "canceled"}:
             raise UserError("Only new and canceled properties can be deleted.")
+
+    @api.ondelete(at_uninstall=False)
+    def foo(self):
+        # info、debug、error、warning、critical
+        _logger.critical('---- hello world----->  \n')
 
     # ---------------------------------------- Action Methods -------------------------------------
 
