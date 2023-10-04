@@ -5,7 +5,11 @@
     <field name="name">estate.property.tree</field>
     <field name="model">estate.property</field>
     <field name="arch" type="xml">
-      <tree string="Properties">
+      <tree string="Properties"
+        decoration-info="state == 'offer_received'"
+        decoration-success="state in ('offer_accepted')"
+        decoration-muted="state == 'sold'"
+        decoration-danger="state=='canceled'">
         <field name="name" />
         <field name="postcode" />
         <field name="bedrooms" />
@@ -13,6 +17,7 @@
         <field name="expected_price" />
         <field name="selling_price" />
         <field name="date_availability" optional="hide" />
+        <field name="state" invisible="1" />
       </tree>
     </field>
   </record>
@@ -25,13 +30,14 @@
       <form>
         <header>
           <button name="action_sold" type="object" string="Sold"
-            states="new,offer_received,offer_accepted" />
-          <!-- <button name="action_sold" type="object" string="Sold" states="offer_accepted"
-            class="oe_highlight" /> -->
-          <button name="action_cancel" type="object" string="Cancel"
             states="new,offer_received" />
+          <button name="action_sold" type="object" string="Sold" states="offer_accepted"
+            class="oe_highlight" />
+          <button name="action_cancel" type="object" string="Cancel"
+            states="new,offer_received,offer_accepted" />
           <field name="state" widget="statusbar"
-            statusbar_visible="new,offer_received,offer_accepted,sold" />
+            statusbar_visible="new,offer_received,offer_accepted,sold"
+            options="{'clickable': True}" />
         </header>
         <sheet>
           <div class="oe_title">
@@ -120,6 +126,7 @@
     <field name="name">estate properties</field>
     <field name="res_model">estate.property</field>
     <field name="view_mode">tree,form</field>
+    <field name="context">{'search_default_available': 1}</field>
   </record>
 
 
