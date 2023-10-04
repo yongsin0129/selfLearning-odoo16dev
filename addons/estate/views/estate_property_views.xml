@@ -37,11 +37,11 @@
             <h1>
               <field name="name" />
             </h1>
-            <!-- <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" /> -->
+            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
           </div>
           <group>
             <group>
-              <!-- <field name="property_type_id" options="{'no_create': True, 'no_edit': True}" /> -->
+              <field name="property_type_id" options="{'no_create': True, 'no_edit': True}" />
               <field name="postcode" />
               <field name="date_availability" />
             </group>
@@ -68,18 +68,18 @@
                 </group>
               </group>
             </page>
-            <!-- <page string="Offers">
+            <page string="Offers">
               <field name="offer_ids"
                 attrs="{'readonly': [('state', 'in', ('offer_accepted', 'sold', 'canceled'))]}" />
-            </page> -->
-            <!-- <page string="Other Info">
+            </page>
+            <page string="Other Info">
               <group>
                 <group>
                   <field name="user_id" />
                   <field name="buyer_id" />
                 </group>
               </group>
-            </page> -->
+            </page>
           </notebook>
         </sheet>
       </form>
@@ -93,7 +93,7 @@
     <field name="arch" type="xml">
       <search>
         <field name="name" />
-        <!-- <field name="property_type_id" /> -->
+        <field name="property_type_id" />
         <field name="postcode" />
         <field name="expected_price" />
         <field name="bedrooms" />
