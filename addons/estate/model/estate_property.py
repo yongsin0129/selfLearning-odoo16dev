@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 
 class EstateProperty(models.Model):
@@ -105,6 +106,18 @@ class EstateProperty(models.Model):
             self.garden_area = 0
             self.garden_orientation = False
             # onchanges方法可以返回一个非阻塞的警告信息 : 如下例子
-            # return {'warning': {
-            #         'title': _("Warning"),
-            #         'message': ('This option is not supported for Authorize.net')}}
+            return {'warning': {
+                    'title': _("Warning"),
+                    'message': ('This option is not supported for Authorize.net')}}
+
+    # ---------------------------------------- Action Methods -------------------------------------
+
+    def action_sold(self):
+        if "canceled" in self.mapped("state"):
+            raise UserError("Canceled properties cannot be sold.")
+        return self.write({"state": "sold"})
+
+    def action_cancel(self):
+        if "sold" in self.mapped("state"):
+            raise UserError("Sold properties cannot be canceled.")
+        return self.write({"state": "canceled"})

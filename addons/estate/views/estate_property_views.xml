@@ -24,11 +24,12 @@
     <field name="arch" type="xml">
       <form>
         <header>
-          <!-- <button name="action_sold" type="object" string="Sold" states="new,offer_received" />
-          <button name="action_sold" type="object" string="Sold" states="offer_accepted"
-            class="oe_highlight" />
+          <button name="action_sold" type="object" string="Sold"
+            states="new,offer_received,offer_accepted" />
+          <!-- <button name="action_sold" type="object" string="Sold" states="offer_accepted"
+            class="oe_highlight" /> -->
           <button name="action_cancel" type="object" string="Cancel"
-            states="new,offer_received,offer_accepted" /> -->
+            states="new,offer_received" />
           <field name="state" widget="statusbar"
             statusbar_visible="new,offer_received,offer_accepted,sold" />
         </header>
@@ -65,6 +66,7 @@
                   <field name="garden_orientation" attrs="{'invisible': [('garden', '=', False)]}" />
                   <field name="total_area" />
                   <field name="active" />
+                  <field name="state" />
                 </group>
               </group>
             </page>
