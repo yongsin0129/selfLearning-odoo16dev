@@ -12,6 +12,7 @@ Description related to library.
     'category': 'Uncategorized',
     'version': '14.0.1',
     'depends': ['base'],
+    "license": "LGPL-3",
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
@@ -20,7 +21,7 @@ Description related to library.
     ],
     'assets': {
         'web.assets_backend': [
-            'cookbook_ch16_owl/static/src/js/component.js',
+            'owl2-learning/static/src/js/component.js',
         ],
     },
     # 'demo': ['demo.xml'],
