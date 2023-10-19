@@ -2,7 +2,6 @@
 
 import { registry } from '@web/core/registry'
 
-"use strict"
 const { Component, xml } = owl
 
 class MyComponent extends Component {
