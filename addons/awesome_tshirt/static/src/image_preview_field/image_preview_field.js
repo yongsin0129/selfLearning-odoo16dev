@@ -11,6 +11,9 @@ ImagePreviewField.supportedTypes = ["char"]
 ImagePreviewField.template = xml/* xml */`
     <t t-name="awesome_tshirt.ImagePreviewField" owl="1">
         <CharField t-props="props"/>
+        <t t-if="props.value.length === 0">
+            <p class="text-danger">MISSING TSHIRT DESIGN</p>
+        </t>
         <img t-att-src="props.value"/>
     </t>
 `
