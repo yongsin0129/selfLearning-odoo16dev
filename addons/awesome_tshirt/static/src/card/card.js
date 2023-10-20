@@ -6,7 +6,7 @@ export class Card extends Component { }
 
 Card.template = xml/* xml */`
     <div>
-        <div class="card" style="width: 18rem;">
+        <div class="card" style="width: 18rem;" t-att-class="props.className">
             <div class="card-body">
                 <t t-if="props.slots.title">
                     <h5 class="card-title"><t t-slot="title"/></h5>
@@ -23,6 +23,10 @@ Card.props = {
     shape: {
       default: Object,
       title: { type: Object, optional: true },
-    },
+    }
+  },
+  className: {
+    type: String,
+    optional: true,
   },
 }

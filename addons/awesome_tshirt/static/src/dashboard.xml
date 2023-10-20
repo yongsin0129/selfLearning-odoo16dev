@@ -11,9 +11,20 @@
             </t>            
         </Layout>
 
+        <!-- call 下面的 template -->
         <t t-call="awesome_tshirt.clientaction.statistics" />
+
+        <div class="m-3">
+            <Card className="'w-50'">
+                <t t-set-slot="title">Shirt orders by size</t>
+                <PieChart data="statistics['orders_by_size']" label="'Shirt orders by size'" />
+            </Card>
+        </div>
     </t>
 
+
+    <!-- 待 call 的 template -->
+    <!-- loop render Card component -->
     <t t-name="awesome_tshirt.clientaction.statistics" owl="1">
         <div class="d-flex flex-nowrap">
             <div t-foreach="keyToString" t-as="key" t-key="key" class="m-2">
