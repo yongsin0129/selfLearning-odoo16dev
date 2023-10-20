@@ -29,6 +29,14 @@ export class PieChart extends Component {
         this.chart.destroy()
       }
     })
+
+  }
+
+  onPieClick (ev, chartElem) {
+    if (!chartElem[0]) return
+
+    const clickedIndex = chartElem[0]._index
+    this.props.onPieClick(this.labels[clickedIndex])
   }
 
   renderChart () {
@@ -41,11 +49,14 @@ export class PieChart extends Component {
         labels: this.labels,
         datasets: [
           {
-            label: this.props.label,
+            label: this.env._t(this.props.label),
             data: this.data,
             backgroundColor: this.color,
           },
         ],
+      },
+      options: {
+        onClick: this.onPieClick.bind(this),
       },
     })
   }
@@ -60,3 +71,8 @@ PieChart.template = xml/* xml */`
         </div>
     </div>
 `
+PieChart.props = {
+  data: { type: Object },
+  label: { type: String },
+  onPieClick: { type: Function },
+}
