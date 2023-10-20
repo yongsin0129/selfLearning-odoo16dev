@@ -2,16 +2,16 @@
 
 import { registry } from "@web/core/registry"
 
-import { Component } from "@odoo/owl"
+import { Component, markup } from "@odoo/owl"
 
 class OrderWarningWidget extends Component {
   get warnings () {
     const warningsList = []
     if (this.props.record.data.image_url.length === 0) {
-      warningsList.push("There is no image")
+      warningsList.push(markup("There is no <b> image </b>"))
     }
     if (this.props.record.data.amount > 100) {
-      warningsList.push("Add promotional material")
+      warningsList.push(markup("Add promotional <b> material </b>"))
     }
     return warningsList
   }
