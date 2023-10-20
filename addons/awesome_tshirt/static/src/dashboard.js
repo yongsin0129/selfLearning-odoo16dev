@@ -1,13 +1,13 @@
 /** @odoo-module **/
+import { Component, useSubEnv, onWillStart } from "@odoo/owl"
 
-import { registry } from "@web/core/registry"
-import { Layout } from "@web/search/layout"
 import { getDefaultConfig } from "@web/views/view"
-import { useService } from "@web/core/utils/hooks"
+import { Layout } from "@web/search/layout"
+import { registry } from "@web/core/registry"
 import { Domain } from "@web/core/domain"
+import { useService } from "@web/core/utils/hooks"
 
 import { Card } from "./card/card"
-const { Component, useSubEnv, onWillStart } = owl
 
 class AwesomeDashboard extends Component {
   setup () {
@@ -21,7 +21,7 @@ class AwesomeDashboard extends Component {
     })
 
     this.action = useService("action")
-    this.rpc = useService("rpc")
+    this.tshirtService = useService("tshirtService")
 
     this.display = {
       controlPanel: { "top-right": false, "bottom-right": false },
@@ -35,7 +35,7 @@ class AwesomeDashboard extends Component {
     }
 
     onWillStart(async () => {
-      this.statistics = await this.rpc("/awesome_tshirt/statistics")
+      this.statistics = await this.tshirtService.loadStatistics()
     })
 
   }

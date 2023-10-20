@@ -20,6 +20,7 @@
 
     'category': 'Productivity',
     'version': '0.1',
+    "license": "LGPL-3",
     'application': True,
     'installable': True,
 
