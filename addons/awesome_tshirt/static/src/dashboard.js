@@ -1,5 +1,5 @@
 /** @odoo-module **/
-import { Component, useSubEnv, onWillStart } from "@odoo/owl"
+import { Component, useSubEnv, useState } from "@odoo/owl"
 
 import { getDefaultConfig } from "@web/views/view"
 import { Layout } from "@web/search/layout"
@@ -23,7 +23,8 @@ class AwesomeDashboard extends Component {
     })
 
     this.action = useService("action")
-    this.tshirtService = useService("tshirtService")
+    const tshirtService = useService("tshirtService")
+    this.statistics = useState(tshirtService.statistics)
 
     this.display = {
       controlPanel: { "top-right": false, "bottom-right": false },
@@ -37,11 +38,6 @@ class AwesomeDashboard extends Component {
       nb_new_orders: this.env._t("Number of new orders this month"),
       total_amount: this.env._t("Total amount of new orders this month"),
     }
-
-    onWillStart(async () => {
-      this.statistics = await this.tshirtService.loadStatistics()
-    })
-
   }
 
   openCustomerView () {
