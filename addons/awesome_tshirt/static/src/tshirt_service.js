@@ -19,5 +19,5 @@ export const tshirtService = {
     }
   },
 }
-
+debugger
 registry.category("services").add("tshirtService", tshirtService)

@@ -8,7 +8,8 @@ const { Component, onWillStart } = owl
 
 export class StatSystray extends Component {
   setup () {
-    this.statService = useService("statistics")
+    debugger
+    this.statService = useService("tshirtService")
     this.action = useService("action")
 
     onWillStart(async () => {
