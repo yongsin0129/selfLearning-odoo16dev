@@ -17,7 +17,7 @@
             <t t-call="awesome_tshirt.clientaction.statistics" />
 
             <div class="m-3">
-                <Card className="'w-75'">
+                <Card className="'w-50'">
                     <t t-set-slot="title">Shirt orders by size</t>
                     <PieChart 
                         data="statistics['orders_by_size']" 
