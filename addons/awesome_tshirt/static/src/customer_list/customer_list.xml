@@ -14,6 +14,8 @@
                             <label class="form-check-label" for="flexCheckDefault">
                                 Active customers
                             </label>
+                            <Pager offset="pager.offset" limit="pager.limit" total="pager.total"
+                                onUpdate.bind="onUpdatePager" />
                         </div>
                     </td>
                 </tr>
