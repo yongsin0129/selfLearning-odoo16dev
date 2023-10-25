@@ -10,6 +10,7 @@ import { sprintf } from "@web/core/utils/strings"
 
 import { Card } from "./card/card"
 import { PieChart } from "./pie_chart/pie_chart"
+import { CustomerAutocomplete } from "./customer_autocomplete/customer_autocomplete"
 
 class AwesomeDashboard extends Component {
   setup () {
@@ -76,7 +77,7 @@ class AwesomeDashboard extends Component {
   }
 }
 
-AwesomeDashboard.components = { Layout, Card, PieChart }
+AwesomeDashboard.components = { Layout, Card, PieChart, CustomerAutocomplete }
 AwesomeDashboard.template = "awesome_tshirt.clientaction"
 
 registry.category("actions").add("awesome_tshirt.dashboard", AwesomeDashboard)
