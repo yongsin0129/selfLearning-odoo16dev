@@ -63,7 +63,6 @@ export class CustomerAutocomplete extends Component {
   }
 
   onSelect (option) {
-    debugger
     this.openOrdersFromCustomer(option.res_id, option.label)
   }
 }

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: skip-file
 {
     'name': "Awesome Shirt",
 
@@ -41,6 +42,13 @@
     'assets': {
         'web.assets_backend': [
             'awesome_tshirt/static/src/**/*',
+            ('remove', 'awesome_tshirt/static/src/dashboard/**/*'),
         ],
+        'awesome_tshirt.dashboard': [
+            # To include bootstrap scss variables
+            ("include", 'web._assets_helpers'),
+            ('include', 'web._assets_backend_helpers'),
+            'awesome_tshirt/static/src/dashboard/**/*',
+        ]
     }
 }
