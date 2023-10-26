@@ -42,6 +42,7 @@
     'assets': {
         'web.assets_backend': [
             'awesome_tshirt/static/src/**/*',
+            'awesome_tshirt/static/tests/**/*',
             ('remove', 'awesome_tshirt/static/src/dashboard/**/*'),
         ],
         'awesome_tshirt.dashboard': [
@@ -49,6 +50,10 @@
             ("include", 'web._assets_helpers'),
             ('include', 'web._assets_backend_helpers'),
             'awesome_tshirt/static/src/dashboard/**/*',
-        ]
+        ],
+        'web.order_tests': [
+            ("include", 'web.assets_frontend'),
+            'awesome_tshirt/static/tests/**/*',
+        ],
     }
 }
