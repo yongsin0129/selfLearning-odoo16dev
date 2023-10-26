@@ -6,9 +6,13 @@
 
         <div t-att-class="props.className" t-on-click="onClick">
 
-            <img t-if="props.image[props.imageField]" class="img-thumbnail" t-att-src="props.image[props.imageField]"/>
-            <div t-else="" class="p-5 bg-white border"></div>
-            
+            <img t-if="props.image[props.imageField]"
+                class="img-thumbnail"
+                t-att-src="props.image[props.imageField]"
+                t-ref="tooltip" />
+                
+            <div t-else="" class="p-5 bg-white border" t-ref="tooltip"></div>
+            <t t-esc="att2" />
         </div>
 
     </t>
