@@ -19,16 +19,20 @@
     "depends": ["base"],
     # always loaded
     "data": [
-        "security/ir.model.access.csv",
         "security/res_student_group.xml",
+        "security/ir.model.access.csv",
+
         "views/views.xml",
         "views/templates.xml",
         "views/menu.xml",
+
         "reports/res_student_report.xml",
+
         "data/res_student.xml",
         "data/res.student.csv",
         "data/student_paperformat.xml",
         "data/res_student_cron.xml",
+
         "views/res_company_views.xml",
     ],
     # only loaded in demonstration mode
