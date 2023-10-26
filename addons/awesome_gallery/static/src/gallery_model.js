@@ -13,15 +13,20 @@ export class GalleryModel {
     this.limit = limit
     this.tooltipField = tooltipField
     this.keepLast = new KeepLast()
+    this.pager = { offset: 0, limit: limit }
   }
 
   async load () {
 
-    const { records } = await this.keepLast.add(
-      this.orm.webSearchRead(this.resModel, this.domain, [this.imageField, this.tooltipField], {
-        limit: this.limit,
-      })
+    const { length, records } = await this.keepLast.add(
+      this.orm.webSearchRead(this.resModel, this.domain, [this.imageField, this.tooltipField],
+        {
+          limit: this.pager.limit,
+          offset: this.pager.offset,
+        })
     )
+
+    this.recordsLength = length
 
     switch (this.fields[this.tooltipField].type) {
       case "many2one":
