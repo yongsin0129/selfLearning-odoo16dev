@@ -16,7 +16,6 @@ QUnit.module("Components", (hooks) => {
 
     await mount(Counter, target)
 
-    debugger
     assert.strictEqual(target.querySelector("p[Id=test-p1]").innerHTML, "Counter: 1")
 
     await click(target, ".btn-primary")
