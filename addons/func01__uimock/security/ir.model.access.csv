@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_func01__uimock_func01__uimock,func01__uimock.func01__uimock,model_func01__uimock_func01__uimock,base.group_user,1,1,1,1
