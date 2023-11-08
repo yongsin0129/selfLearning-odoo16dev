@@ -12,5 +12,6 @@
     "ondelete",
     "shcool",
     "Uncategorized"
-  ]
+  ],
+  "python.languageServer": "None"
 }
