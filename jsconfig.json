@@ -6,9 +6,6 @@
     "paths": {
       "@web/*": [
         "./odoo-17.0/addons/web/static/src/*"
-      ],
-      "@odoo/owl/*": [
-        "/odoo-17.0/addons/web/static/lib/owl/owl.js"
       ]
     }
   }
