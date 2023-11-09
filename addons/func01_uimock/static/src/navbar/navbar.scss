@@ -1,0 +1,19 @@
+.o_main_navbar {
+
+  .toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    color: #293445;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+
+}

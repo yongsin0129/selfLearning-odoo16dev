@@ -26,7 +26,15 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        # 'views/views.xml',
-        # 'views/templates.xml',
-    ]
+    ],
+
+    # assets
+    'assets': {
+        'web.assets_backend': [
+            'func01_uimock/static/src/navbar/navbar.js',
+            'func01_uimock/static/src/navbar/navbar.scss',
+            'func01_uimock/static/src/navbar/navbar.xml',
+
+        ]
+    }
 }
