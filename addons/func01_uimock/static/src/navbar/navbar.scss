@@ -1,5 +1,7 @@
 .o_main_navbar {
 
+  background: #ffffff;
+
   .toggle-icon {
     display: flex;
     align-items: center;
@@ -13,6 +15,12 @@
 
     &:hover {
       background-color: #f5f5f5;
+    }
+
+    svg {
+      path {
+        fill: blue
+      }
     }
   }
 
