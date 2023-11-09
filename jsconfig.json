@@ -1,0 +1,15 @@
+{
+  // jsconfig 是給 vscode 對 javascript 的設定
+  // paths 一般是用來改變引入的路徑，可以用簡短的路徑取代長的
+  // 路徑後面一定要加 *，表示包含所有
+  "compilerOptions": {
+    "paths": {
+      "@web/*": [
+        "./odoo-17.0/addons/web/static/src/*"
+      ],
+      "@odoo/owl/*": [
+        "/odoo-17.0/addons/web/static/lib/owl/owl.js"
+      ]
+    }
+  }
+}
