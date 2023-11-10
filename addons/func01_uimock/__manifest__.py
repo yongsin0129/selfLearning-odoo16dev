@@ -31,6 +31,13 @@
     # assets
     'assets': {
         'web.assets_backend': [
+
+            # webclient
+            'func01_uimock/static/src/webclient/webclient.js',
+            'func01_uimock/static/src/webclient/webclient.scss',
+            'func01_uimock/static/src/webclient/webclient.xml',
+
+            # navbar
             'func01_uimock/static/src/navbar/navbar.js',
             'func01_uimock/static/src/navbar/navbar.scss',
             'func01_uimock/static/src/navbar/navbar.xml',
