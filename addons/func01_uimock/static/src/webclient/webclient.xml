@@ -2,6 +2,7 @@
 <templates xml:space="preserve">
 
     <t t-name="func01_uimock.WebClient">
+        <SideBar />
         <t t-if="!state.fullscreen">
             <NavBar/>
         </t>

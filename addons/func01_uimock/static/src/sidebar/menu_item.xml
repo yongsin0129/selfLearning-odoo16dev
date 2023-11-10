@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+
+    <t t-name="func01_uimock.sidebar_menu_item" owl="1">
+        <t t-if="!menu.childrenTree.length">
+            <li>
+                <a class="menu_link" t-att-href="_get_menu_item_href(menu)" t-on-click="
+                (event) => this._on_menu_item_click(menu, event)">
+                    <t t-call="func01_uimock.menu_icon" />
+                    <span class="menu_name" t-attf-style="padding-left: {{ this._get_indent(menu) }}">
+                        <t t-esc="menu.name"/>
+                    </span>
+                </a>
+            </li>
+        </t>
+        <t t-else="">
+            <li>
+                <a class="menu_link has-arrow" t-att-href="_get_menu_item_href(menu)" 
+                    t-att-class="{'active': menu.open &amp;&amp; menu.level == 0}"
+                    t-on-click="(event) => this._toggle_sub_menu(menu, event)" href="#">
+                    <t t-call="func01_uimock.menu_icon" />
+                    <span class="menu_name" t-attf-style="padding-left:{{ this._get_indent(menu) }}">
+                        <t t-esc="menu.name"/>
+                    </span>
+                </a>
+                <ul class="sub_menu">
+                    <t t-foreach="menu.childrenTree" t-as="sub_menu" t-key="sub_menu.id">
+                        <SidebarMenuItem 
+                            menu="sub_menu" 
+                            sidebar_sm="props.sidebar_sm" 
+                            menu_item_click="props.menu_item_click"
+                            menu_item_toggled="props.menu_item_toggled" />
+                    </t>
+                </ul>
+            </li>
+        </t>
+    </t>
+
+    <t t-name="func01_uimock.menu_icon" owl="1">
+        <span class="menu-icon" t-if="menu.level == 0">
+            <img t-if="menu.webIconData" class="o-app-icon " t-attf-src="data:image/png;bas6e4,{{menu.webIconData}}"/>
+        </span>
+    </t>
+
+</templates>

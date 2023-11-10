@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+
+    <t t-name="func01_uimock.sidebar" owl="1">
+        <div class="d-flex flex-column sidebar_menu" t-on-mouseenter="_on_sidebar_enter" t-on-mouseleave="_on_sidebar_leave">
+            <div class="header">
+                <!-- logo --> 
+                <div class="logo-wrapper d-flex align-items-center justify-content-center" 
+                    t-att-class="{'small': state.sidebar_mode=='sidebar_sm'}" 
+                    t-on-click.prevent="on_logo_click">
+                    <!-- company logo here  -->
+                    <img class="img-responsive mx-auto logo" t-att-src="logo_url" alt="Logo"/>
+                    <!-- logon sm -->
+                    <!-- <img class="img-responsive mx-auto logo-sm" t-att-src="logo_url_small"
+                    alt="Logo"/> -->
+                </div>
+            </div>
+            <div class="sidebar_scroller flex-fill">
+                <ul>
+                    <t t-foreach="state.apps || []" t-as="app" t-key="app.id">
+                        <SidebarMenuItem 
+                            menu="app" 
+                            sidebar_sm="state.sidebar_sm" 
+                            menu_item_click="() => this._on_menu_item_click(app)"
+                            menu_item_toggled="() => this._on_menu_item_toggled(app)" />
+                    </t>
+                </ul>
+            </div>
+            <!-- <SidebarFooter sidebar_sm="state.sidebar_sm" /> -->
+        </div>
+    </t>
+
+</templates>
