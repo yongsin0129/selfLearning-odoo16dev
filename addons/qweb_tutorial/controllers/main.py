@@ -13,7 +13,8 @@ class QwebTutorials(http.Controller):
         def some_function():
             return "returning string  from a function"
 
-        some_model = http.request.env['sale.order'].sudo().search([])
+        some_model = http.request.env['sale.order'].search([])
+        some_model_sudo = http.request.env['sale.order'].sudo().search([])
 
         data = {
             'string': 'QWEB Tutorials',
@@ -21,15 +22,10 @@ class QwebTutorials(http.Controller):
             'some_float': 10.05,
             'boolean': True,
             'some_list': [1, 2, 3, 4, 5],
-            'some_dict': {'any_key': "any_value"},
+            'some_dict': {'any_key': "any_value", 'key1': 'value1'},
             'some_function': some_function(),
             'model': some_model,
-            'html': '<h3>This is an HTML value!</h3> Added by attacker <script>alert("Do something!!")</script>',
-            'html_escape': '<h3>This is an HTML value!</h3> %s'
-                           % html_escape('Added by attacker <script>alert("Do something!!")</script>'),
-            'html_sanitize': '<h3>This is an HTML value!</h3> %s'
-                           % html_sanitize('Added by attacker <script>alert("Do something!!")</script>'),
-            'markup': Markup('<h3>This is an HTML value!</h3> %s')
-                      % 'Added by attacker <script>alert("Do something!!")</script>',
+            'model_sudo': some_model_sudo,
         }
-        return http.request.render("qweb_tutorial.somePythonTemplate", data)
+
+        return http.request.render("qweb_tutorial.somePythonTemplate",  data)
