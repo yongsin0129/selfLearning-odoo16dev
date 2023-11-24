@@ -30,7 +30,7 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="security-tab"
+                                <button class="nav-link" id="security-tab"
                                     data-bs-toggle="tab"
                                     data-bs-target="#security-tab-pane" type="button" role="tab"
                                     aria-controls="security-tab-pane" aria-selected="true">Security
@@ -146,7 +146,7 @@
 
 
                                 <!-- Qweb t-set 定義變數 -->
-                                <h3 class="py-3">Setting Variables</h3>
+                                <h3 class="py-3">Setting Variables : t-set , t-value</h3>
                                 <t t-set="string_value" t-value="'Some Variable'" />
                                 <t t-set="string_literals_value"
                                     t-valuef="Some Literal Variable - {{string}}" />
@@ -210,7 +210,7 @@
                                 <!-- <t t-debug=""></t> -->
 
                                 <!-- Qweb condition : t-if t-else t-elif -->
-                                <h3 class="py-3">Conditional</h3>
+                                <h3 class="py-3">Conditional : t-if t-else t-elif</h3>
                                 <table class="table table-striped table-sm border">
                                     <tbody>
                                         <tr>
@@ -234,7 +234,7 @@
 
 
                                 <!-- Qweb 迴圈 : t-foreach t-as -->
-                                <h3 class="py-3">Looping</h3>
+                                <h3 class="py-3">Looping : t-foreach t-as</h3>
                                 <table class="table table-striped table-sm border">
                                     <tbody>
                                         <tr>
@@ -265,7 +265,8 @@
                                                     </li>
                                                 </ul>
 
-                                                <p>List length:<span t-out="list_length" /></p>
+                                                <p>List length:<span
+                                                        t-out="list_length" /></p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -281,8 +282,107 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
 
+
+                            <!-- Attributes -->
+                            <div class="tab-pane fade show" id="attributes-tab-pane" role="tabpanel"
+                                aria-labelledby="attributes-tab" tabindex="0">
+                                <h3 class="py-3">Attributes : t-att , t-attf</h3>
+                                <table class="table table-striped table-sm border">
+                                    <tbody>
+                                        <tr>
+                                            <th>Expression : t-att-href</th>
+                                            <td>
+                                                <p>Email:<!-- t-att 裡面是一個表達式 -->
+                                                    <a
+                                                        t-att-href="user_id.partner_id.email">
+                                                        <span t-out="user_id.partner_id.email" />
+                                                    </a>
+                                                </p>
+                                                <p>Email:<!-- 表達式中可用字串 + % 來做動態顯示 -->
+                                                    <a
+                                                        t-att-href="'mailto:%s' % user_id.partner_id.email">
+                                                        <span t-out="user_id.partner_id.email" />
+                                                    </a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Literals : t-attf-href</th>
+                                            <td>
+                                                <p>Email: <!-- t-attf 裡面是一個文字版，用 {{ 變數 }} -->
+                                                    <a
+                                                        t-attf-href="mailto:{{ user_id.partner_id.email }}">
+                                                        <span t-out="user_id.partner_id.email" />
+                                                    </a>
+                                                </p>
+                                                <p>Email: <!-- t-attf 裡面是一個文字版，用 #{ 變數 } -->
+                                                    <a
+                                                        t-attf-href="mailto:#{ user_id.partner_id.email }">
+                                                        <span t-out="user_id.partner_id.email" />
+                                                    </a>
+                                                </p>
+
+                                                <!-- t-attf 裡面是一個文字版，也可以寫判斷式 -->
+                                                <p> 'btn-info' if request.session.uid else
+                                                    'btn-danger' : <button
+                                                        t-attf-class="btn {{ 'btn-info' if request.session.uid else 'btn-danger'}}">
+                                                    Status</button>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Mapping : 一次添加多個 att 到 tag 中</th>
+                                            <td>
+                                                <p> email: <a
+                                                        t-att="{
+                                                        'href': user_id.partner_id.email,
+                                                        'title': '%s email' % user_id.partner_id.name
+                                                    }">
+                                                        <span t-out="user_id.partner_id.email" />
+                                                    </a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Pairing : 因為 t-att 使用一定要成對 ex : t-aff-foo</th>
+                                            <td>
+                                                <div class="form-check">
+
+                                                    <!-- 使用 array 比較前 , 後 value -->
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="" id="flexCheckDefault"
+                                                        disabled="disabled"
+                                                        t-att="[('checked' if request.session.uid else ''), 'checked']" />
+                                                    <label class="form-check-label"
+                                                        for="flexCheckDefault">
+                                                        Is logged-in?
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Pairing : 使用 mapping 寫法</th>
+                                            <td>
+                                                <div class="form-check">
+                                                    <!-- 不使用比較 , input 直接給 checked 屬性 -->
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="" id="flexCheckDefault"
+                                                        disabled="disabled"
+                                                        t-att="{'checked': 'checked' if request.session.uid else ''}" />
+                                                    <label class="form-check-label"
+                                                        for="flexCheckDefault">
+                                                        Is logged-in?
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
 
                     </div>
                 </div>
