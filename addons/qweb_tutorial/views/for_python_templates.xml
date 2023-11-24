@@ -45,7 +45,7 @@
                             <!-- 基本型別的使用方法 -->
                             <div class="tab-pane fade show" id="basics-tab-pane" role="tabpanel"
                                 aria-labelledby="basics-tab" tabindex="0">
-                                <h3 class="py-3">Data Output</h3>
+                                <h3 class="py-3">Data Output : t-out</h3>
                                 <table class="table table-striped table-sm border">
                                     <tbody>
                                         <tr>
@@ -382,12 +382,144 @@
                             </div>
 
 
+                            <!-- Sub-Templates -->
+                            <div class="tab-pane fade show" id="subtemplates-tab-pane"
+                                role="tabpanel"
+                                aria-labelledby="subtemplates-tab" tabindex="0">
+                                <h3 class="py-3">Sub-Templates : t-call , t-set </h3>
+                                <table class="table table-striped table-sm border">
+                                    <tbody>
+                                        <tr>
+                                            <th>Static Template</th>
+                                            <td>
+                                                <t t-call="qweb_tutorial.static_template" />
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Dynamic Template</th>
+                                            <td>
+                                                <!-- 上面這個模版會載入全域變數 -->
+                                                <t t-set="article_title" t-valuef="Global Variable" />
+                                                <t t-call="qweb_tutorial.dynamic_template" />
+                                                <br />
+
+
+                                                <!-- 下面這個模版會載入區域變數 -->
+                                                <t t-call="qweb_tutorial.dynamic_template">
+                                                    <t t-set="article_title"
+                                                        t-valuef="Scoped Variable" />
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Passing Children Elements : 記得寫 t-out="0"</th>
+                                            <td>
+                                                <t t-call="qweb_tutorial.dynamic_template">
+                                                    <t t-set="article_title"
+                                                        t-valuef="Scoped Variable" />
+
+                                                    <p> This is a content as a children elements.<br />
+                                                        <small>Date:
+                                                        November 2023</small>
+                                                    </p>
+
+                                                    <t t-call="qweb_tutorial.static_template" />
+                                                    <br />
+                                                </t>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <th>Mimic OWL Slots : 只是模仿，非 owl slot 用法 <br /> t-slot 是
+                                                owl 的系統，不是 qweb <br /> owl 中的 t-slot 為定義 slot 位置，
+                                                傳參的方法為 t-set-slot </th>
+                                            <td>
+
+                                                <!-- call 模版後，佈局就會照模版的格式，這邊只是傳參 -->
+                                                <t t-call="qweb_tutorial.slots_template">
+
+                                                    <!-- body -->
+                                                    <t t-set="article_body">
+                                                        <p> This is a content as a children
+                                                            elements.<br />
+                                                            <small>Date: November
+                                                                2023</small>
+                                                        </p>
+
+                                                        <t t-call="qweb_tutorial.static_template" />
+                                                        <br />
+                                                    </t>
+
+                                                    <!-- buttons -->
+                                                    <t t-set="article_buttons">
+                                                        <button class="btn btn-sm btn-primary">Learn
+                                                            More</button>
+                                                        <button class="btn btn-sm btn-primary">Learn
+                                                            More</button>
+                                                    </t>
+
+                                                    <!-- title -->
+                                                    <t t-set="article_title">
+                                                        <h3>Children Elements</h3>
+                                                    </t>
+
+                                                    <!-- default content -->
+                                                    <p class="text-warning">Any default content</p>
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
                         </div>
 
                     </div>
                 </div>
             </div>
         </t>
+    </template>
+
+
+    <!-- other templates -->
+
+    <!-- static_template -->
+    <template id="static_template" name="Static Template">
+        <div class="alert alert-info">
+            This is a static template.
+        </div>
+    </template>
+
+    <!-- dynamic_template -->
+    <template id="dynamic_template" name="Dynamic Template">
+        <article class="bg-light p-3 border shadow">
+            <h3 t-out="article_title" />
+            <p class="text-muted">
+                <small>This is a dynamic template</small>
+            </p>
+            <!-- 如果 template 裡面沒有放預設值的位置，則 content as a children elements 就不會出現 -->
+            <t t-out="0" />
+            <!-- 這邊使用 t-slot-default 沒有作用，因為這是 OWL 的 key word， Qweb 中要使用 t-out -->
+            <button class="btn btn-sm btn-primary">Learn More</button>
+        </article>
+    </template>
+
+    <!-- mimic slots_template -->
+    <!-- 這邊的 t-out=foo , 很像 OWL 中的 t-slot=foo2 -->
+    <!-- 傳參的方式就是用  t-set=foo ,  很像 t-set-slot=foo2 -->
+    <template id="slots_template" name="Slots Template">
+        <article class="bg-light p-3 border shadow">
+            <t t-out="article_title" />
+            <t t-out="article_body" />
+            <!-- 如果 template 裡面沒有放預設值的位置，則 content as a children elements 就不會出現 -->
+            <t t-out="0" />
+            <t t-out="article_buttons" />
+        </article>
     </template>
 
 </odoo>
