@@ -489,8 +489,19 @@
                                             <td>
                                                 <!-- 如果不是 admin 就看不到這個 div , admin 的身份會是
                                                 base.group_system , 源碼會用 _has_group 去檢查-->
+                                                <!-- 常見群組 -->
+                                                <!-- 1. base.group_user:
+                                                這個群組是給一般用戶使用的，通常用於定義普通用戶的權限，如訪問一般功能模組。 -->
+                                                <!-- 2. base.group_public:
+                                                這個群組表示公眾用戶，通常用於開放給未登錄用戶訪問的內容，不需要特殊登錄即可看到的權限。 -->
+                                                <!-- 3. base.group_multi_company:
+                                                這個群組通常用於支持多公司設置的情況，具有跨公司的權限管理。 -->
+                                                <!-- 4. base.group_portal: 這個群組通常用於 Odoo
+                                                公共訪問權限，例如客戶自助入口或者客戶入口等。 -->
+                                                <t t-debug="" />
                                                 <div t-groups="base.group_system"
                                                     class="alert alert-danger">
+
                                                     <h4>For Administrator Only , admin 的身份會是
                                                         base.group_system</h4>
                                                 </div>

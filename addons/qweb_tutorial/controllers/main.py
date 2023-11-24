@@ -13,7 +13,7 @@ class QwebTutorials(http.Controller):
         def some_function():
             return "returning string  from a function"
 
-        some_model = http.request.env['sale.order'].search([])
+        some_model = http.request.env['sale.order'].sudo().search([])  # 不加 sudo ，則 public 無法訪問這個 model
         some_model_sudo = http.request.env['sale.order'].sudo().search([])
 
         data = {
