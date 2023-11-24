@@ -477,8 +477,87 @@
                             </div>
 
 
-                        </div>
+                            <!-- Security -->
+                            <div class="tab-pane fade show active" id="security-tab-pane"
+                                role="tabpanel"
+                                aria-labelledby="security-tab" tabindex="0">
+                                <h3 class="py-3">Security : t-group , t-out , t-raw</h3>
+                                <table class="table table-striped table-sm border">
+                                    <tbody>
+                                        <tr>
+                                            <th>Using Groups : t-group</th>
+                                            <td>
+                                                <!-- 如果不是 admin 就看不到這個 div , admin 的身份會是
+                                                base.group_system , 源碼會用 _has_group 去檢查-->
+                                                <div t-groups="base.group_system"
+                                                    class="alert alert-danger">
+                                                    <h4>For Administrator Only , admin 的身份會是
+                                                        base.group_system</h4>
+                                                </div>
 
+                                                <!-- 任何人都可以看到的 div -->
+                                                <div>
+                                                    For Public User
+                                                </div>
+                                            </td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <th>Using Escape : t-out , t-raw <br />
+                                                <br />
+                                                <p>t-out
+                                                    會跳脫 html </p>
+                                                <p>t-raw 不會跳脫 html 所以會被攻擊，可配合後端使用
+                                                html_escape(),html_sanitize(),mark()</p>
+                                                <t
+                                                    t-out="description1" />
+                                                <p>The value of attribute
+                                                "t-out" associated with an element type "t" must
+                                                    not
+                                                    contain the '&lt;'
+                                                character.xml(LessthanInAttValue)</p>
+                                            </th>
+                                            <td>
+                                                <h3>使用 t-out</h3>
+                                                <t t-out="html" />
+                                                <br />
+                                                <br />
+                                                <t t-out="html_escape" />
+                                                <br />
+                                                <br />
+                                                <t t-out="html_sanitize" />
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <h3>使用 t-raw</h3>
+                                                <!-- <t t-raw="html" /> 這個會被 script 攻擊 -->
+                                                <t t-raw="html_escape" />
+                                                <br />
+                                                <br />
+                                                <t t-raw="html_sanitize" />
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Using Markup : 推薦作法</th>
+                                            <td>
+                                                <h3>使用 t-out="markup()" , markup過的 HTML 不會被 out
+                                                    掉，也可避免攻擊</h3>
+                                                <t t-out="markup" />
+                                                <br />
+                                                <br />
+                                                <h3>使用 t-out="str( markup() )"</h3>
+                                                <t t-out="str(markup)" />
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
                     </div>
                 </div>
             </div>

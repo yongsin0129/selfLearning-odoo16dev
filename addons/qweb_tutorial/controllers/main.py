@@ -26,6 +26,19 @@ class QwebTutorials(http.Controller):
             'some_function': some_function(),
             'model': some_model,
             'model_sudo': some_model_sudo,
+
+            'html': '<h5>This is an HTML value! 傳參數無處理 </h5> Added by attacker <script>alert("Do something!!")</script>',
+
+            'html_escape': '<h5>This is an HTML value! 傳參數使用 html_escape() 處理 </h5> %s'
+                           % html_escape('Added by attacker <script>alert("Do something!!")</script>'),
+
+            'html_sanitize': '<h5>This is an HTML value! 傳參數使用 html_sanitize() 處理</h5> %s'
+                           % html_sanitize('Added by attacker <script>alert("Do something!!")</script>'),
+
+            'markup': Markup('<h5>This is an HTML value! 傳參數使用 Markup() 處理</h5> %s')
+                      % 'Added by attacker <script>alert("Do something!!")</script>',
+
+            'description1': '直接用 t-out=" <h5> title </h5> " 會出現錯誤 ，需要 t-out="variable" , 變數內放 HTML 才可行'
         }
 
         return http.request.render("qweb_tutorial.somePythonTemplate",  data)
