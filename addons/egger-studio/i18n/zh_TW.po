@@ -60,4 +60,4 @@ msgstr "已完成的歷史訂單"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment_confirmation_status
 msgid "<b>Communication: </b>"
-msgstr "<b>付款指標(管理員參考指標)： </b>"
+msgstr "<b>付款指標(管理員專用)： </b>"

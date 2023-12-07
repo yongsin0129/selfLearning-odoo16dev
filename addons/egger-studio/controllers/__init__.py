@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
 
-from . import controllers
+from . import CheckoutSkipAddressCheck
+from . import CustomerPortal

@@ -15,6 +15,7 @@ class CheckoutSkipAddressCheck(WebsiteSale):
     # 不使用 return super().checkout(**post)
     # 直接 copy 原版的 code ， 再改為裡面的內容 ( skip address check )
     # @http.route(['/shop/checkout'], type='http', auth="public", website=True, sitemap=False)
+    @http.route()
     def checkout(self, **post):
         _logger.info('********************** CheckoutSkipAddressCheck **************************')
         # 获取订单
@@ -52,6 +53,7 @@ class CheckoutSkipAddressCheck(WebsiteSale):
 
    # 定义确认订单函数
    # @http.route(['/shop/confirm_order'], type='http', auth="public", website=True, sitemap=False)
+    @http.route()
     def confirm_order(self, **post):
         # 获取订单
         order = request.website.sale_get_order()
@@ -76,6 +78,7 @@ class CheckoutSkipAddressCheck(WebsiteSale):
         return request.redirect("/shop/payment")
 
     # @http.route('/shop/payment', type='http', auth='public', website=True, sitemap=False)
+    @http.route()
     def shop_payment(self, **post):
         order = request.website.sale_get_order()
         redirection = self.checkout_redirection(order)
@@ -92,6 +95,7 @@ class CheckoutSkipAddressCheck(WebsiteSale):
         return request.render("egger-studio.payment_skipAddressCheck", render_values)
 
     # @http.route(['/shop/confirmation'], type='http', auth="public", website=True, sitemap=False)
+    @http.route()
     def shop_payment_confirmation(self, **post):
         """ End of checkout process controller. Confirmation is basically seing
         the status of a sale.order. State at this point :

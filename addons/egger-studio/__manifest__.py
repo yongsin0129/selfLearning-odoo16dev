@@ -24,10 +24,15 @@
     "data": [
         "security/ir.model.access.csv",
 
+        # 商頁購物流程的頁面
         "views/payment_skipAddressCheck.xml",
         "views/checkout.xml",
         "views/confirmation.xml",
-        "views/payment_confirmation_status.xml"
+        "views/payment_confirmation_status.xml",
+
+        # 會員查看訂單的頁面
+        "views/sale_order_portal_template.xml",
+        "views/sale_order_portal_content.xml"
     ],
 
     # only loaded in demonstration mode
