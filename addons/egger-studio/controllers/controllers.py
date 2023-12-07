@@ -14,6 +14,7 @@ class CheckoutSkipAddressCheck(WebsiteSale):
 
     # 不使用 return super().checkout(**post)
     # 直接 copy 原版的 code ， 再改為裡面的內容 ( skip address check )
+    # @http.route(['/shop/checkout'], type='http', auth="public", website=True, sitemap=False)
     def checkout(self, **post):
         _logger.info('********************** CheckoutSkipAddressCheck **************************')
         # 获取订单
@@ -50,6 +51,7 @@ class CheckoutSkipAddressCheck(WebsiteSale):
         return request.render("website_sale.checkout", values)
 
    # 定义确认订单函数
+   # @http.route(['/shop/confirm_order'], type='http', auth="public", website=True, sitemap=False)
     def confirm_order(self, **post):
         # 获取订单
         order = request.website.sale_get_order()
@@ -73,6 +75,7 @@ class CheckoutSkipAddressCheck(WebsiteSale):
         # 返回支付页面
         return request.redirect("/shop/payment")
 
+    # @http.route('/shop/payment', type='http', auth='public', website=True, sitemap=False)
     def shop_payment(self, **post):
         order = request.website.sale_get_order()
         redirection = self.checkout_redirection(order)
@@ -87,6 +90,25 @@ class CheckoutSkipAddressCheck(WebsiteSale):
             render_values.pop('tokens', '')
 
         return request.render("egger-studio.payment_skipAddressCheck", render_values)
+
+    # @http.route(['/shop/confirmation'], type='http', auth="public", website=True, sitemap=False)
+    def shop_payment_confirmation(self, **post):
+        """ End of checkout process controller. Confirmation is basically seing
+        the status of a sale.order. State at this point :
+
+         - should not have any context / session info: clean them
+         - take a sale.order id, because we request a sale.order and are not
+           session dependant anymore
+        """
+        sale_order_id = request.session.get('sale_last_order_id')
+        if sale_order_id:
+            order = request.env['sale.order'].sudo().browse(sale_order_id)
+            values = self._prepare_shop_payment_confirmation_values(order)
+            return request.render("egger-studio.confirmation", values)
+        else:
+            return request.redirect('/shop')
+
+
 # ********************************* 筆記 :  使用 super **********************************************
 
 

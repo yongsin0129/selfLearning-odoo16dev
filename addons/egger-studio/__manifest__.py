@@ -24,7 +24,10 @@
     "data": [
         "security/ir.model.access.csv",
 
-        "views/payment_skipAddressCheck.xml"
+        "views/payment_skipAddressCheck.xml",
+        "views/checkout.xml",
+        "views/confirmation.xml",
+        "views/payment_confirmation_status.xml"
     ],
 
     # only loaded in demonstration mode
