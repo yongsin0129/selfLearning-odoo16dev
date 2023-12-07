@@ -6,6 +6,7 @@
     'sequence': -1,
     'description': """QWEB Tutorial""",
     'category': 'Website',
+    "license": "LGPL-3",
     'depends': ['web', 'website', 'sale'],
     'data': [
         'views/for_python_templates.xml',
