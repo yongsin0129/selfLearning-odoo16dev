@@ -1,9 +1,10 @@
 odoo-16.0/
 odoo-17.0/
 addons/example
-.vscode/launch.json
-config/
 addons-3rd/
+config/
+.vscode/launch.json
+jsconfig.json
 
 node_modules/
 package-lock.json
