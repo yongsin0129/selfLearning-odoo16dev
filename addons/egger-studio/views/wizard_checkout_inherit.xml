@@ -1,0 +1,50 @@
+<odoo>
+  <template id="wizard_checkout_noHyperLink" name="wizard checkout no hyperLink"
+    inherit_id="website_sale.wizard_checkout">
+
+    <xpath expr="//div[@id='wizard-step10']/.." position="replace">
+      <div id="wizard-step10"
+        t-att-class="'progress-wizard-step %s' % (step == 10 and 'active' or step&gt;10 and 'complete' or 'disabled')">
+        <div class="progress-wizard-bar d-none d-md-block" />
+        <span class="progress-wizard-dot d-none d-md-inline-block"></span>
+        <div class="text-center progress-wizard-steplabel">訂購商品</div>
+      </div>
+    </xpath>
+
+    <xpath expr="//div[@id='wizard-step20']/.." position="replace">
+
+      <div id="wizard-step20"
+        t-att-class="'progress-wizard-step %s' % (step == 20 and 'active' or step&gt;20 and 'complete' or
+    'disabled')">
+        <div class="progress-wizard-bar d-none d-md-block" />
+        <span class="progress-wizard-dot d-none d-md-inline-block"></span>
+        <div class="text-center progress-wizard-steplabel">地址<div>(免填)</div></div>
+      </div>
+
+    </xpath>
+
+    <xpath expr="//div[@id='wizard-step20']" position="after">
+
+      <div id="wizard-step30"
+        t-att-class="'progress-wizard-step %s' % (step == 30 and 'active' or step&gt;30 and 'complete' or
+    'disabled')">
+        <div class="progress-wizard-bar d-none d-md-block" />
+        <span class="progress-wizard-dot d-none d-md-inline-block"></span>
+        <div class="text-center progress-wizard-steplabel">訂購人資訊<div>(登入會員免填)</div></div>
+      </div>
+
+    </xpath>
+
+    <xpath expr="//div[@id='wizard-step40']/.." position="replace">
+
+      <div id="wizard-step40"
+        t-att-class="'progress-wizard-step %s' % (step == 40 and 'active' or step&gt;40 and 'complete' or
+    'disabled')">
+        <div class="progress-wizard-bar d-none d-md-block" />
+        <span class="progress-wizard-dot d-none d-md-inline-block"></span>
+        <div class="text-center progress-wizard-steplabel">確認訂單</div>
+      </div>
+
+    </xpath>
+  </template>
+</odoo>

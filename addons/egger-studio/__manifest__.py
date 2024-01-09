@@ -29,6 +29,7 @@
         "views/checkout.xml",
         "views/confirmation.xml",
         "views/payment_confirmation_status.xml",
+        "views/wizard_checkout_inherit.xml",
 
         # 會員查看訂單的頁面
         "views/sale_order_portal_template.xml",
