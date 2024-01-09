@@ -71,7 +71,10 @@ class CheckoutSkipAddressCheck(WebsiteSale):
         request.website.sale_get_order(update_pricelist=True)
         # 检查是否有额外的步骤
         extra_step = request.website.viewref('website_sale.extra_info_option')
-        if extra_step.active:
+
+        # 如果是 public user 則 request.session.uid = none , (db:res.user 裡面 ID=4)
+        # 所以 not request.session.uid 表示 "訪客身份"
+        if extra_step.active and not request.session.uid:
             return request.redirect("/shop/extra_info")
 
         # 返回支付页面
